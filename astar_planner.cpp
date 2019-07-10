@@ -41,8 +41,13 @@ int main(int argc, char **argv){
             if(input_map == NULL){
               ROS_ERROR_STREAM("map input is empty");
               break;
-            }
+            } 
             
+            //Set dimensions and bounds for the input map
+            map_length = input_map.height;
+            map_width = input_map.width;
+            ompl::base::RealVectorBounds map_bounds(2);
+            map_bounds.setLow(0, 
             
             
               
