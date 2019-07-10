@@ -28,6 +28,8 @@ int main(int argc, char **argv){
     CarSetupComHandle com_handle = CarSetupComHandle(argc, argv, node_name);
     com_handle.SimpleSetup();
     
+    while(ros::ok()){
+        //Check if the message was updated
 
     
 
