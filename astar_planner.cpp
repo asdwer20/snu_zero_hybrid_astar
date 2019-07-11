@@ -47,7 +47,17 @@ int main(int argc, char **argv){
             map_length = input_map.height;
             map_width = input_map.width;
             ompl::base::RealVectorBounds map_bounds(2);
-            map_bounds.setLow(0, 
+            map_bounds.setLow(0, -map_length);
+            map_bounds.setLow(1, -map_width);
+            map_bounds.setHigh(0. map_length);
+            map_bounds.setHigh(1, map_width);
+            
+            //Setup state validity checker using the isStateValid function within 
+            //CarSetupComHandle header
+            state_space_type.setBounds(map_bounds);
+            ompl::base::SpaceInformation *space_info = state_space.getSpaceInformation().get();
+            state_space.setStateValidityChecker([input_map, seq, space_info](const ompl::base::State *state)
+            
             
             
               
