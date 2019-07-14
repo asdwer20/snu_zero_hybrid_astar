@@ -76,6 +76,8 @@ int main(){
   std::bool PATH_FOUND = false;
   std::bool NO_PATH = false;
 
+  //because we do not know the wheel base calculation, the max steering angle
+  //has not been placed under consideration
   drive_distance = sqrt(2)+0.1;
   max_steering_angle = pi/4;
   std::vector<float> heading_changes = [pi/4, 0, -pi/4];
@@ -108,12 +110,15 @@ int main(){
       float current_y = current_state[3];
       float current_theta = current_state[4];
 
+      //calculate next state for this iteration of heading change
       float next_x = current_x + drive_distance*cos(heading_changes[i]);
       float next_y = current_y + drive_distance*sin(heading_changes[i]);
       float next_theta = current_theta + heading_changes[i];
 
       discrete_next = return_discrete(next_x, next_y).push_back(next_theta);
 
+      //if the state is valid, then calculate heuristics for the path, add to
+      //the open vector
       if(valid_state_check(map_input, discrete next)){
         //calculate cost of this new path using heuristics
       }
