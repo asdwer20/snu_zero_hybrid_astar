@@ -1,6 +1,5 @@
 #include <ros/ros.h>
 #include <iostream>
-#include <queue>
 #include <vector>
 
 #include "stdlib.h"
@@ -28,13 +27,13 @@ std::bool valid_state_check(std::vector<std::vector<int>> map, std::vector<int> 
 }
 
 //euclidean distance from state to goal
-std::float heuristic_distance(int x, int y, vector<int> goal){
+float heuristic_distance(int x, int y, vector<int> goal){
   distance = sqrt((goal[0]-x)^2 + (goal[1]-y)^2);
   return distance;
 }
 
 //converts continuous (float) to discrete (int)
-std::vector<int> return_discrete(std::float x, std::float y){
+std::vector<int> return_discrete(float x, float y){
   x_dis = round(x);
   y_dis = roound(y);
 
@@ -69,8 +68,9 @@ int main(){
     [0, 0, 1, 1, 1, 1, 1, 1, 0, 0] ];
 
   //define goal states
-  std::vector<int> start_state = [0, 0, 0] //[x, y, theta (in rad)]
-  std::vector<int> goal_state = [map_input.size() - 1, map_input.size()-1, -pi/2)];
+  //[x, y, theta (in rad)]
+  std::vector<int> start_state = [0, 0, 0];
+  std::vector<int> goal_state = [map_input.size() - 1, map_input.size()-1, -pi/2];
   std::vector<std::vector<int>> path = [];
 
   std::bool PATH_FOUND = false;
@@ -78,9 +78,10 @@ int main(){
 
   //because we do not know the wheel base calculation, the max steering angle
   //has not been placed under consideration
-  drive_distance = sqrt(2)+0.1;
-  max_steering_angle = pi/4;
+  float = drive_distance = sqrt(2)+0.1;
+  float = max_steering_angle = pi/4;
   std::vector<float> heading_changes = [pi/4, 0, -pi/4];
+  int expansion = 0;
 
   //state vector definition: [cost, expansion number, x, y, orientation, orientation from previous node]
   std::vector<float> current_state = [0, 0, start_state[0], start_state[1], start_state[2], 0];
@@ -105,7 +106,7 @@ int main(){
       PATH_FOUND = true;
       break;
     }
-    for(std::int i = 0; i < heading_changes.size();i++ ){
+    for(int i = 0; i < heading_changes.size();i++ ){
       float current_x = current_state[2];
       float current_y = current_state[3];
       float current_theta = current_state[4];
@@ -120,7 +121,13 @@ int main(){
       //if the state is valid, then calculate heuristics for the path, add to
       //the open vector
       if(valid_state_check(map_input, discrete next)){
+        expansion++;
+
         //calculate cost of this new path using heuristics
+        float heuristic = heuristic_distance(next_x, next_y, goal_state) + drive_distance;
+        std::vector<float> next_state = [heuristic, expansion, next_x, next_y, next_theta, i];
+
+        open.push_back(next_state);
       }
     }
   }
