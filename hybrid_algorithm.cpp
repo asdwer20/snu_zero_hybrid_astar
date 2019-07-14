@@ -18,6 +18,7 @@
 //  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
 //  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0] ]
 
+//compares state to map to find if there is an obstacle
 std::bool valid_state_check(std::vector<std::vector<int>> map, std::vector<int> state){
   if(map[state[1]][state[2]] == 1){
     return false;
@@ -26,11 +27,13 @@ std::bool valid_state_check(std::vector<std::vector<int>> map, std::vector<int> 
   }
 }
 
+//euclidean distance from state to goal
 std::float heuristic_distance(int x, int y, vector<int> goal){
   distance = sqrt((goal[0]-x)^2 + (goal[1]-y)^2);
   return distance;
 }
 
+//converts continuous (float) to discrete (int)
 std::vector<int> return_discrete(std::float x, std::float y){
   x_dis = round(x);
   y_dis = roound(y);
@@ -40,11 +43,14 @@ std::vector<int> return_discrete(std::float x, std::float y){
   return discrete_coord;
 }
 
-std::bool compare_vectors(const vector<int>& v1, const vector<int>& v2){
+//comparison function for the sort function below and compares
+//the first item of two vectors
+std::bool compare_vectors(const vector<float>& v1, const vector<float>& v2){
   return v1[0] < v2[0];
 }
 
-std::vector<std::vector<int>> sort(std::vector<std::vector<int>> input){
+//sort function for a vector of vectors
+std::vector<std::vector<float>> sort(std::vector<std::vector<float>> input){
   std::sort(input.begin(), input.end(), compare_vectors);
   return input;
 }
