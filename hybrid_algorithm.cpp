@@ -120,10 +120,10 @@ int main(){
 
       //if the state is valid, then calculate heuristics for the path, add to
       //the open vector
-      if(valid_state_check(map_input, discrete next)){
+      if(valid_state_check(map_input, discrete_next) && closed.contains(discrete_next) == false){
         expansion++;
 
-        //calculate cost of this new path using heuristics
+        //calculate cost of this new path using heuristics (changeable)
         float heuristic = heuristic_distance(next_x, next_y, goal_state) + drive_distance;
         std::vector<float> next_state = [heuristic, expansion, next_x, next_y, next_theta, i];
 
