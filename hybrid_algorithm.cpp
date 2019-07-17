@@ -54,6 +54,23 @@ std::vector<std::vector<float>> sort(std::vector<std::vector<float>> input){
   return input;
 }
 
+//print path found
+void print_path(std::vector<float> end, std::vector<float> start, std::vector<float> heading_changes, float drive_distance){
+  bool FINISHED = false;
+  std::vector<std::vector<float>> path = [];
+  std::vector<float> state = end;
+  path.push_back(end);
+
+  //start point
+  float x1 = end[2];
+  float y1 = end[3];
+  float theta1 = end[4];
+  float turn = end[5];
+
+  while(FINISHED == false){
+    
+  }
+}
 int main(){
   std::vector<std::vector<int>> map_input =
   [ [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
