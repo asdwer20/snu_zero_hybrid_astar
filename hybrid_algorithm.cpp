@@ -66,9 +66,19 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
   float y1 = end[3];
   float theta1 = end[4];
   float turn = end[5];
-
+  
+  float x2 = 0;
+  float y2 = 0;
+  float theta2 = 0;
+ 
   while(FINISHED == false){
+    x2 = x1 - drive_distance*cos(turn);
+    y2 = y1 - drive_distance*sin(turn);
+    theta2 = theta1 - turn;
     
+    state[2] = x2;
+    state[3] = y2;
+    state[
   }
 }
 int main(){
