@@ -58,14 +58,16 @@ std::vector<std::vector<float>> sort(std::vector<std::vector<float>> input){
 void print_path(std::vector<float> end, std::vector<float> start, std::vector<float> heading_changes, float drive_distance){
   bool FINISHED = false;
   std::vector<std::vector<float>> path = [];
-  std::vector<float> state = end;
-  path.push_back(end);
-
+ 
   //start point
   float x1 = end[2];
   float y1 = end[3];
   float theta1 = end[4];
   float turn = end[5];
+  
+  std::vector<float> state = [x1, y1, theta1, turn];
+  
+  path.push_back(state);
   
   float x2 = 0;
   float y2 = 0;
@@ -76,9 +78,18 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
     y2 = y1 - drive_distance*sin(turn);
     theta2 = theta1 - turn;
     
-    state[2] = x2;
-    state[3] = y2;
-    state[
+    state[0] = x2;
+    state[1] = y2;
+    state[2] = theta2;
+    
+    path.push_back(state);
+    
+    if(x2 == start[2] && y2 == start[3] && theta2 == start[4]){
+      FINISHED = true;
+    }
+    x1 = x2;
+    y1 = y2;
+    theta1 = theta2;
   }
 }
 int main(){
