@@ -17,8 +17,7 @@ int main(int argc, char **argv){
         
     //Setting up StateSpace using the OMPL Library
     //The space is a Reeds Shepps State Space with a custom planner setup
-    ompl::base::StateSpacePtr state_space_type(new ompl::base::ReedsSheppStateSpace);
-    ompl_geo::SimpleSetup state_space(state_space_type);
+    ompl::base::StateSpacePtr state_space(new ompl::base::SE2StateSpace);
     
     //Get map date from Nodehandle
     std::string map_id;
