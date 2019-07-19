@@ -4,19 +4,6 @@
 
 #include "stdlib.h"
 
-
-//assume for the sake of the argument that the grid is given as the following map
-//[ [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-//  [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-//  [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-//  [0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-//  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-//  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-//  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
-//  [0, 0, 1, 1, 1, 1, 1, 1, 0, 0] ]
-
 //compares state to map to find if there is an obstacle
 std::bool valid_state_check(std::vector<std::vector<int>> map, std::vector<int> state){
   if(map[state[1]][state[2]] == 1){
@@ -55,42 +42,46 @@ std::vector<std::vector<float>> sort(std::vector<std::vector<float>> input){
 }
 
 //print path found
-void print_path(std::vector<float> end, std::vector<float> start, std::vector<float> heading_changes, float drive_distance){
+void print_path(std::vector<float> end, std::vector<float> start, std::vector<float> heading_changes, float drive_distance, std::vector<std::vector<float>> heading_map){
   bool FINISHED = false;
   std::vector<std::vector<float>> path = [];
- 
+
   //start point
   float x1 = end[2];
   float y1 = end[3];
   float theta1 = end[4];
   float turn = end[5];
-  
+
   std::vector<float> state = [x1, y1, theta1, turn];
-  
+
   path.push_back(state);
-  
+
   float x2 = 0;
   float y2 = 0;
   float theta2 = 0;
- 
+
   while(FINISHED == false){
     x2 = x1 - drive_distance*cos(turn);
     y2 = y1 - drive_distance*sin(turn);
     theta2 = theta1 - turn;
-    
+
     state[0] = x2;
     state[1] = y2;
     state[2] = theta2;
-    
+
     path.push_back(state);
-    
-    if(x2 == start[2] && y2 == start[3] && theta2 == start[4]){
-      FINISHED = true;
-    }
+
+    std::vector<int> discrete = return_discrete(x2, y2);
     x1 = x2;
     y1 = y2;
     theta1 = theta2;
+    turn = heading_map[discrete[0]][discrete[1]];
+
+    if(turn == 0){
+      FINISHED = true;
+    }
   }
+  cout << "the path found is: " << path;
 }
 int main(){
   std::vector<std::vector<int>> map_input =
@@ -105,6 +96,7 @@ int main(){
     [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
     [0, 0, 1, 1, 1, 1, 1, 1, 0, 0] ];
 
+  std::vector<std::vector<float>> heading_change_map = map_input;
   //define goal states
   //[x, y, theta (in rad)]
   std::vector<int> start_state = [0, 0, 0];
@@ -116,16 +108,16 @@ int main(){
 
   //because we do not know the wheel base calculation, the max steering angle
   //has not been placed under consideration
-  float = drive_distance = sqrt(2)+0.1;
-  float = max_steering_angle = pi/4;
+  float drive_distance = sqrt(2)+0.1;
+  float max_steering_angle = pi/4;
   std::vector<float> heading_changes = [pi/4, 0, -pi/4];
   int expansion = 0;
 
   //state vector definition: [cost, expansion number, x, y, orientation, orientation from previous node]
   std::vector<float> current_state = [0, 0, start_state[0], start_state[1], start_state[2], 0];
 
-  std::vector<std::vector<float>> open = [];
-  std::vector<std::vector<float>> closed = [];
+  std::vector<std::vector<int>> open = [];
+  std::vector<std::vector<int>> closed = [];
   open.push_back(current_state);
 
   while(open.empty()== false){
