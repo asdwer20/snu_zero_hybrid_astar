@@ -77,7 +77,7 @@ void print_1Dvector(std::vector<float> input) {
 	std::cout << std::endl;
 }
 //print path found
-void print_path(std::vector<float> end, std::vector<float> start, std::vector<float> heading_changes, float drive_distance, std::vector<std::vector<float>> heading_map) {
+void print_path(std::vector<float> end, std::vector<float> start, std::vector<float> heading_changes, float drive_distance, std::vector<std::vector<float>> heading_map, std::vector<std::vector<float>> display) {
 	bool FINISHED = false;
 	float turn_index = 0;
 	std::vector<std::vector<float>> path = {};
@@ -98,6 +98,7 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
 	float x2 = 0;
 	float y2 = 0;
 	float theta2 = 0;
+	std::vector<float> discrete = {};
 
 	while (FINISHED == false) {
 		theta2 = theta1 - turn;
@@ -108,10 +109,14 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
 		state[0] = x2;
 		state[1] = y2;
 		state[2] = theta2;
-
+	
+		std::cout << std::endl;
 		path.push_back(state);
 
-		std::vector<float> discrete = return_discrete(x2, y2);
+		discrete = return_discrete(x2, y2);
+		print_1Dvector(discrete);
+		display[discrete[0]][discrete[1]] = 8;
+
 		x1 = x2;
 		y1 = y2;
 		theta1 = theta2;
@@ -121,33 +126,67 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
 		if (x1 == start[0] && y1 == start[1]) {
 			FINISHED = true;
 		}
+		else if (x1 < 0 && y1 < 0) {
+			FINISHED = true;
+		}
 	}
 	std::cout << "the path found is: \n";
 
 	print_2Dvector(path);
+	print_2Dvector(display);
 
 }
 
 /* ACTUAL CODE STARTS FROM HERE */
 int main() {
-	//std::vector<std::vector<float>> map_input =
-	//{ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 1, 1, 0, 0, 0, 0} };
-
 	std::vector<std::vector<float>> map_input =
-	{ {0, 0, 0, 0, 0},
-	  {0, 0, 0, 0, 0},
-	  {0, 0, 1, 0, 0},
-	  {0, 0, 0, 0, 0},
-	  {0, 0, 0, 0, 0} };
+	{ {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} };
+
+	//std::vector<std::vector<float>> map_input =
+	//{ {0, 0, 0, 0, 0},
+	//  {0, 0, 0, 0, 0},
+	//  {0, 0, 1, 0, 0},
+	//  {0, 0, 0, 0, 0},
+	//  {0, 0, 0, 0, 0} };
 
 	//create and empty heading change map
 	std::vector<std::vector<float>> heading_change_map = map_input;
@@ -163,17 +202,21 @@ int main() {
 			expansion_map[i][j] = 0;
 		}
 	}
+
+	//create display change map
+	std::vector<std::vector<float>> display_map = map_input;
+
 	//define goal states
 	//[x, y, theta (in rad)]
 	std::vector<float> start_state = { 0, 0, 0 };
-	std::vector<float> goal_state = { 4, 4, -pi / 2 };
+	std::vector<float> goal_state = { 36, 36, -pi / 2 };
 
 	bool PATH_FOUND = false;
 	bool NO_PATH = false;
 
 	//because we do not know the wheel base calculation, the max steering angle
 	//has not been placed under consideration
-	float drive_distance = sqrt(2);
+	float drive_distance = sqrt(2)+0.005;
 	float max_steering_angle = pi / 4;
 	std::vector<float> heading_changes = { pi / 4, 0, -pi / 4 };
 	float expansion = 0;
@@ -187,19 +230,19 @@ int main() {
 	float cost = current_state[0];
 
 	//DEBUG PURPOSES
-	std::cout << "current state: ";
-	print_1Dvector(current_state);
-	std::cout << "open vector:";
-	print_2Dvector(open);
-	std::cout << "closed vector: ";
-	print_2Dvector(closed);
+	//std::cout << "current state: ";
+	//print_1Dvector(current_state);
+	//std::cout << "open vector:";
+	//print_2Dvector(open);
+	//std::cout << "closed vector: ";
+	//print_2Dvector(closed);
 
 	while (open.empty() == false) {
 		//sort the open list to increasing order
 		open = sort_vectors(open);
 		//examine the lowest cost state
-		std::cout << "open vector: \n";
-		print_2Dvector(open);
+		//std::cout << "open vector: \n";
+		//print_2Dvector(open);
 		//std::cout << "closed vector: ";
 		//print_2Dvector(closed);
 		current_state = open.back();
@@ -211,8 +254,12 @@ int main() {
 
 		//if  the next point is within the goal state
 		if (dis_coord[0] == goal_state[0] && dis_coord[1] == goal_state[1]) {
+			//std::cout << std::endl;
+			//print_2Dvector(heading_change_map);
+			//std::cout << std::endl;
+			//print_2Dvector(expansion_map);
 			std::cout << "path found: ";
-			print_path(current_state, start_state, heading_changes, drive_distance, heading_change_map);
+			print_path(current_state, start_state, heading_changes, drive_distance, heading_change_map, display_map);
 			PATH_FOUND = true;
 			break;
 		}
@@ -243,8 +290,6 @@ int main() {
 			}
 		}
 	}
-	std::cout << std::endl;
-	print_2Dvector(expansion_map);
 
 	if (PATH_FOUND == false) {
 		std::cout << "no path exists";
