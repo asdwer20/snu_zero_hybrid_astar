@@ -31,7 +31,7 @@ std::vector<float> return_discrete(float x, float y) {
 	float x_dis = round(x);
 	float y_dis = round(y);
 
-	std::vector<float> discrete_coord = { x_dis,y_dis };
+	std::vector<float> discrete_coord = { x_dis, y_dis };
 
 	return discrete_coord;
 }
@@ -100,9 +100,10 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
 	float theta2 = 0;
 
 	while (FINISHED == false) {
-		x2 = x1 - drive_distance * cos(turn);
-		y2 = y1 - drive_distance * sin(turn);
 		theta2 = theta1 - turn;
+		x2 = x1 - drive_distance * cos(theta1);
+		y2 = y1 - drive_distance * sin(theta1);
+		
 
 		state[0] = x2;
 		state[1] = y2;
@@ -155,10 +156,16 @@ int main() {
 			heading_change_map[i][j] = 0;
 		}
 	}
-
+	//create and empty expansion change map
+	std::vector<std::vector<float>> expansion_map = map_input;
+	for (int i = 0; i < expansion_map.size(); i++) {
+		for (int j = 0; j < expansion_map[i].size(); j++) {
+			expansion_map[i][j] = 0;
+		}
+	}
 	//define goal states
 	//[x, y, theta (in rad)]
-	std::vector<float> start_state = { 0, 0, pi/2 };
+	std::vector<float> start_state = { 0, 0, 0 };
 	std::vector<float> goal_state = { 4, 4, -pi / 2 };
 
 	bool PATH_FOUND = false;
@@ -215,9 +222,9 @@ int main() {
 			float current_theta = current_state[4];
 
 			//calculate next state for this iteration of heading change
-			float next_x = current_x + drive_distance * cos(heading_changes[i]);
-			float next_y = current_y + drive_distance * sin(heading_changes[i]);
 			float next_theta = current_theta + heading_changes[i];
+			float next_x = current_x + drive_distance * cos(next_theta);
+			float next_y = current_y + drive_distance * sin(next_theta);
 
 			std::vector<float> discrete_next = return_discrete(next_x, next_y);
 			discrete_next.push_back(next_theta);
@@ -231,12 +238,13 @@ int main() {
 				float heuristic = heuristic_distance(next_x, next_y, goal_state[0], goal_state[1]) + drive_distance + cost;
 				std::vector<float> next_state = {heuristic, expansion, next_x, next_y, next_theta, i };
 				heading_change_map[discrete_next[0]][discrete_next[1]] = i;
+				expansion_map[discrete_next[0]][discrete_next[1]] = expansion;
 				open.push_back(next_state);
 			}
 		}
 	}
 	std::cout << std::endl;
-	print_2Dvector(heading_change_map);
+	print_2Dvector(expansion_map);
 
 	if (PATH_FOUND == false) {
 		std::cout << "no path exists";
