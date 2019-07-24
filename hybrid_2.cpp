@@ -5,7 +5,6 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-
 #include "stdlib.h"
 
 
@@ -63,7 +62,7 @@ bool vector_contains(std::vector<std::vector<float>> input, std::vector<float> i
 	return FOUND;
 }
 
-void print_2Dvector(std::vector<std::vector<float>> input) {
+template<typename T> void print_2Dvector(std::vector<std::vector<T>> input) {
 	if (input.empty()) {
 		std::cout <<"empty \n";
 	} else for (int i = 0; i < input.size(); i++) {
@@ -74,9 +73,26 @@ void print_2Dvector(std::vector<std::vector<float>> input) {
 	}
 }
 
-void print_1Dvector(std::vector<float> input) {
+template<typename T> void print_2Dvector_fancy(std::vector<std::vector<T>> input) {
+	char fancy = '_';
+	if (input.empty()) {
+		std::cout <<"empty \n";
+	} else for (int i = 0; i < input.size(); i++) {
+		for (int j = 0; j < input[i].size(); j++) {
+			if (input[i][j] == 0) fancy = '_';
+			else if (input[i][j] == 1) fancy = 'X';
+			else if (input[i][j] == 2) fancy = '?';
+			else if (input[i][j] == 3) fancy = '!';
+			else if (input[i][j] == 8) fancy = '@';
+			std::cout << fancy << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+
+template<typename T> void print_1Dvector(std::vector<T> input) {
 	for (int i = 0; i < input.size(); i++) {
-		std::cout << " " << input[i] << "' ";
+		std::cout << "'" << input[i] << "' ";
 	}
 	std::cout << std::endl;
 }
@@ -89,37 +105,33 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
 	//start point
 	float x1 = end[2];
 	float y1 = end[3];
-
+	float x2 = 0;
+	float y2 = 0;
+	float theta2 = 0;
+	std::vector<float> discrete = {};
 	std::vector<float> discrete_coor = lattice_reg(x1, y1);
 	float theta1 = end[4];
 	turn_index = heading_map[discrete_coor[0]][discrete_coor[1]];
 	float turn = heading_changes[turn_index];
 
 	std::vector<float> state = { x1, y1, theta1 };
-
 	path.push_back(state);
-
-	float x2 = 0;
-	float y2 = 0;
-	float theta2 = 0;
-	std::vector<float> discrete = {};
+	discrete = lattice_reg(x1, y1);
+	print_1Dvector(discrete);
 
 	while (FINISHED == false) {
 		theta2 = theta1 - turn;
 		x2 = x1 - drive_distance * cos(theta1);
 		y2 = y1 - drive_distance * sin(theta1);
-		
 
 		state[0] = x2;
 		state[1] = y2;
 		state[2] = theta2;
-	
-		std::cout << std::endl;
-		path.push_back(state);
 
+		path.push_back(state);
 		discrete = lattice_reg(x2, y2);
 		print_1Dvector(discrete);
-		display[discrete[0]][discrete[1]] = 8;
+		if (display[discrete[0]][discrete[1]] != 2 && display[discrete[0]][discrete[1]] != 3) display[discrete[0]][discrete[1]] = 8;
 
 		x1 = x2;
 		y1 = y2;
@@ -131,10 +143,11 @@ void print_path(std::vector<float> end, std::vector<float> start, std::vector<fl
 			FINISHED = true;
 		}
 	}
-	std::cout << "the path found is: \n";
-
+	std::cout << "\n* State Chronicle : " << std::endl;
+	std::cout << "[x] [y] [theta]\n";
 	print_2Dvector(path);
-	print_2Dvector(display);
+	std::cout << "\n* Journey on Map (@ = on) : \n";
+	print_2Dvector_fancy(display);
 
 }
 
@@ -205,13 +218,15 @@ int main() {
 		}
 	}
 
-	//create display change map
-	std::vector<std::vector<float>> display_map = map_input;
-
 	//define goal states
 	//[x, y, theta (in rad)]
 	std::vector<float> start_state = { 0, 0, 0 };
 	std::vector<float> goal_state = { 38, 38, -pi / 2 };
+
+	//create display change map
+	std::vector<std::vector<float>> display_map = map_input;
+	display_map[start_state[0]][start_state[1]] = 2;
+	display_map[goal_state[0]][goal_state[1]] = 3;
 
 	bool PATH_FOUND = false;
 	bool NO_PATH = false;
@@ -231,10 +246,11 @@ int main() {
 	open.push_back(current_state);
 	float cost = current_state[0];
 	int c = 0;
+	std::cout << "['open' size / 'close' size]" << std::endl;
 
 	while (open.empty() == false) {
 		c++;
-		std::cout << open.size() << "    " << closed.size() << std::endl;
+		std::cout << "[" << open.size() << "   /   " << closed.size() << "]" << std::endl;
 		//sort the open list to increasing order
 		open = sort_vectors(open);
 		//examine the lowest cost state
@@ -252,7 +268,8 @@ int main() {
 
 		//if  the next point is within the goal state
 		if (dis_coord[0] == goal_state[0] && dis_coord[1] == goal_state[1]) {
-			std::cout << "path found: ";
+			std::cout << "\n* Lattice Path : " << std::endl;
+			std::cout << "[x] [y]" << std::endl;
 			print_path(current_state, start_state, heading_changes, drive_distance, heading_change_map, display_map);
 			PATH_FOUND = true;
 			break;
@@ -286,6 +303,6 @@ int main() {
 	}
 
 	if (PATH_FOUND == false) {
-		std::cout << "no path exists";
+		std::cout << "No Path Exists";
 	}
 }
