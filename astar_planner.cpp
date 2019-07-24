@@ -1,3 +1,6 @@
+// astar_planer.cpp
+
+// libraries
 #include "ros/ros.h"
 #include <string>
 #include <iostream>
@@ -10,14 +13,15 @@
 #include "ompl/geometric/planner.h"
 #include "carsetupcomhandle.h"
 
-
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
 int main(int argc, char **argv){
     std::string node_name = "hybrid_astar_planner";
-    ros::init(argc, argv);
-    ros::NodeHandle node_handle;
+    ob::StateSpacePtr space(std::make_shared<ob::ReedsSheppStateSpace>());
+    og::SimpleSetup ss(space);
+    ros::init(argc, argv, node_name);
+    ros::NodeHandle nh;
         
     //Setting up StateSpace using the OMPL Library
     //The space is a Reeds Shepps State Space with a custom planner setup
