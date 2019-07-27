@@ -1,11 +1,12 @@
 #include "ros/ros.h"
-#include "carsetupcomhandle.h"
+#include "carsetupcomhandle2.h"
 
 #include <string>
 #include <iostream>
 #include <functional>
 #include <cmath>
 #include <ompl/base/spaces/ReedsSheppStateSpace.h>
+#include <ompl/base/spaces/DubinsStateSpace.h>
 #include <ompl/base/ScopedState.h>
 #include <ompl/geometric/SimpleSetup.h>
 
@@ -13,8 +14,8 @@ namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
 int main (int argc, char **argv) {
-    std::string nn = "planner_019";
-    ob::StateSpacePtr space(std::make_shared<ob::ReedsSheppStateSpace>());
+    std::string nn = "planner_020";
+    ob::StateSpacePtr space(std::make_shared<ob::DubinsStateSpace>());
     og::SimpleSetup ss(space);
     ros::init(argc, argv, nn);
     
