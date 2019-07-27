@@ -261,11 +261,6 @@ int main() {
 		//add the examining state to the closed set
 		closed.push_back(dis_coord);
 
-		//if (c % 50 == 0) {
-		//	print_2Dvector(expansion_map);
-		//}
-
-
 		//if  the next point is within the goal state
 		if (dis_coord[0] == goal_state[0] && dis_coord[1] == goal_state[1]) {
 			std::cout << "\n* Lattice Path : " << std::endl;
