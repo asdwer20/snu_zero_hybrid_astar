@@ -224,7 +224,7 @@ namespace ompl {
                     }
                 }
             }
-            
+
             if(!isvalid) {
                 double x = node->state->as<base::SE2StateSpace::StateType>()->getX();
                 double y = node->state->as<base::SE2StateSpace::StateType>()->getY();
@@ -289,7 +289,7 @@ namespace ompl {
         return true;
     }
 
-    
+
     double doRRT::DOMoveLength(double potential, Eigen::Vector3d pvector) {
         return res_;
     }
