@@ -8,7 +8,7 @@ namepsace ompl{
       specs_.approximateSolutions = true;
       specs_.optimizingPaths = true;
       specs_.canReportIntermediateSolutions = false;
-      specs_.
+
       drive_distance = 
     }
     planner_code::~hybrid_astar(void){
@@ -31,11 +31,11 @@ namepsace ompl{
 
       //Initialize Start States
       base::State *start = pdef_->getStartState(pdef_->getStartStateCount()-1);
-
+      si->setStateValidityChecker(const validity_checker) //implement a state validity checker
 
       //While termination condition is false, run the planner
       while(ptc() == false){ 
-
+        start->
       }
     }
 
