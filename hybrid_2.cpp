@@ -196,13 +196,6 @@ int main() {
 	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 	  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} };
 
-	//std::vector<std::vector<float>> map_input =
-	//{ {0, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 0},
-	//  {0, 0, 1, 0, 0},
-	//  {0, 0, 0, 0, 0},
-	//  {0, 0, 0, 0, 0} };
-
 	//create and empty heading change map
 	std::vector<std::vector<float>> heading_change_map = map_input;
 	for (int i = 0; i < heading_change_map.size(); i++) {
