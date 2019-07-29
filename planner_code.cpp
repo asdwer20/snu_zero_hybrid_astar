@@ -9,6 +9,9 @@ namepsace ompl{
       specs_.optimizingPaths = true;
       specs_.canReportIntermediateSolutions = false;
 
+      heading_changes = {-pi/4, 0, pi/4};
+      open = {}; //a vector? of vector<base::State>
+      closed = {} //same as above
       drive_distance = sqrt(2);
     }
     planner_code::~hybrid_astar(void){
@@ -32,10 +35,11 @@ namepsace ompl{
       //Initialize Start States
       base::State *start = pdef_->getStartState(pdef_->getStartStateCount()-1);
       si->setStateValidityChecker(const validity_checker) //implement a state validity checker
-
+      
+      
       //While termination condition is false, run the planner
       while(ptc() == false){
-        start->
+        open.start->
       }
     }
 
