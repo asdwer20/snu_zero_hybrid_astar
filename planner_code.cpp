@@ -41,14 +41,14 @@ namepsace ompl{
       //paths instead of just single points
       base::Path *current_path;
       current_path->append(start);
-      current_path->cost = euclidian_distance(start) + current_path->length;
+      current_path->cost = euclidean_distance(start) + current_path->length;
 
       open.pushback(start);
       cost = current_path->cost; //should we use optimizationobjective??
 
       base::State *current_state = start;
       base::State *discrete_state;
-
+      base::State *next_state;
       //While termination condition is false, run the planner
       while(ptc() == false){
         if(open->getStateCount() == 0){
@@ -57,15 +57,28 @@ namepsace ompl{
           break;
         } 
         sort_vectors(open); //sort path based on the heuristic distance 
+        current_path = open.back();
+        current_state = current_path->getState(current_path->getStateCount()-1);
         open.pop_back();
-        discrete_state->setXY() = return_discrete(current_state->getX(), current_state->getY());
+        discrete_state->setXY(return_discrete(current_state->getX(), current_state->getY()));
         closed->append(discrete_state);
 
         //Condition of the current state examined is the goal state
         if(*current_state == *discrete_state){ //the specific details of this condition must be defined
           //i.e. if the definition of the goal state is an area, how that area will be definied 
           //can result in the change of the comparator here
-
+          current_path->print(std::ostream &out);
+          ptc() = true;
+          std::cout << "path found";
+          break;
+        }
+        for(int i = 0; i < heading_changes.size()-1; i++){
+          next_state->setX(current_state->getX() + drive_distance*cos(current_state->getYaw()));
+          next_state->setYaw(current_state->getYaw()+heading_changes[i]);
+        }
+        if(isValid(next_state) && vector_contains(closed, next_state) == false){
+          heuristic = euclidean_distance(next_state, goal) + drive_distance;
+          open->push_back(next_state);
         }
       }
     }
