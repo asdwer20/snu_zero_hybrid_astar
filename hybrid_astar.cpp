@@ -6,7 +6,7 @@
 #include "hybrid_astar.h"
 
 namespace ompl{
-    hybrid_astar::hybrid_astar(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
+    hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
       specs_.optimizingPaths = true;
       specs_.canReportIntermediateSolutions = false;
@@ -16,8 +16,8 @@ namespace ompl{
       closed = {} //same as above
       drive_distance = sqrt(2);
     }
-    hybrid_astar::~hybrid_astar(void){
-      hybrid_astar::destructor();
+    hybridASTAR::~hybridASTAR(void){
+      hybridASTAR::destructor();
     }
 
     base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc){

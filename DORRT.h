@@ -1,5 +1,5 @@
-#ifndef HYBRIDASTAR
-#define HYBRIDASTAR
+#ifndef DORRT
+#define DORRT
 
 #include <ompl/base/Planner.h>
 #include <ompl/datastructures/NearestNeighbors.h>
@@ -10,16 +10,15 @@
 #include <ompl/base/spaces/ReedsSheppStateSpace.h>
 #include <chrono>
 #include <ctime>
-//#include "magneticmodel.h"
-//#include "potentialmodel.h"
+#include "magneticmodel.h"
+#include "potentialmodel.h"
 
 namespace ompl {
     
-    class hybridASTAR : public base::Planner {
+    class doRRT : public base::Planner {
         public :
-        //hybridASTAR(const control::SpaceInformationPtr &si, const MagneticModelPtr &mm, const PotentialModelPtr &pm);
-        hybridASTAR(const control::SpaceInformationPtr &si);
-        ~hybridASTAR(void) override;
+        doRRT(const control::SpaceInformationPtr &si, const MagneticModelPtr &mm, const PotentialModelPtr &pm);
+        ~doRRT(void) override;
         base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc) override;
 
         void setPotMax(double max) {
@@ -176,7 +175,7 @@ namespace ompl {
         base::StateSpacePtr sp_;
         
     };
-    typedef std::shared_ptr<hybridASTAR> hybridASTARPtr;
+    typedef std::shared_ptr<doRRT> doRRTPtr;
 }
 
 #endif
