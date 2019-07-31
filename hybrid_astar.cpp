@@ -1,9 +1,11 @@
 #include <ompl/base/Planner.h>
-
+#include <cmath>
+#include <ompl/control/PathControl.h>
+#include <ompl/util/RandomNumbers.h>
 #include "CarSetupComHandle.h"
 #include "hybrid_astar.h"
 
-namepsace ompl{
+namespace ompl{
     hybrid_astar::hybrid_astar(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
       specs_.optimizingPaths = true;
