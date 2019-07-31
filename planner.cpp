@@ -72,8 +72,8 @@ int main (int argc, char **argv) {
     oc::SpaceInformationPtr si(std::make_shared<oc::SpaceInformation>(sspace, cspace));
     oc::SimpleSetup ss(si);
     //for calculating forces
-    MagneticModelPtr mm(std::make_shared<MagneticModel>());
-    PotentialModelPtr pm(std::make_shared<PotentialModel>());
+    //MagneticModelPtr mm(std::make_shared<MagneticModel>());
+    //PotentialModelPtr pm(std::make_shared<PotentialModel>());
     //ob::ProblemDefinitionPtr pdef(std::make_shared<ob::ProblemDefinition>(si));
     ros::init(argc, argv, nn);
 
@@ -97,7 +97,8 @@ int main (int argc, char **argv) {
     comh.SetTopicPub <visualization_msgs::MarkerArray> (MagneticFieldTopic);
     comh.SetTopicPub <visualization_msgs::MarkerArray> (PotentialFieldTopic);
     //*/
-    ompl::doRRTPtr pl(std::make_shared<ompl::doRRT>(si, mm, pm));
+    // doRRT code
+    //ompl::doRRTPtr pl(std::make_shared<ompl::doRRT>(si, mm, pm));
     while(ros::ok()) {
         if(CarSetupComHandle::isUpdatedMap()) {
             ss.clear();
