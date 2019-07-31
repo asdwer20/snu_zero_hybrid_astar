@@ -3,6 +3,7 @@
 //#include "DORRT.h"
 //#include "magneticmodel.h"
 //#include "potentialmodel.h"
+#include "hybrid_astar.h"
 #include "visualization_msgs/MarkerArray.h"
 #include "geometry_msgs/PoseArray.h"
 #include <string>
@@ -71,10 +72,10 @@ int main (int argc, char **argv) {
     oc::ControlSpacePtr cspace(std::make_shared<oc::RealVectorControlSpace>(sspace, 2));
     oc::SpaceInformationPtr si(std::make_shared<oc::SpaceInformation>(sspace, cspace));
     oc::SimpleSetup ss(si);
-    //for calculating forces
+    ///for calculating forces
     //MagneticModelPtr mm(std::make_shared<MagneticModel>());
     //PotentialModelPtr pm(std::make_shared<PotentialModel>());
-    //ob::ProblemDefinitionPtr pdef(std::make_shared<ob::ProblemDefinition>(si));
+    ///ob::ProblemDefinitionPtr pdef(std::make_shared<ob::ProblemDefinition>(si));
     ros::init(argc, argv, nn);
 
     double MaxVel = 1.0;
@@ -90,7 +91,8 @@ int main (int argc, char **argv) {
     bool withgear = false;
     CarSetupComHandle comh = CarSetupComHandle(argc, argv, nn);
     comh.SimpleSetup();
-    comh.SetTopicPub <geometry_msgs::PoseArray> ("/tree");
+    //comh.SetTopicPub <geometry_msgs::PoseArray> ("/tree");
+    comh.SetTopicPub <geometry_msgs::PoseArray> ("/astar");
     /*<--Testing Fields
     std::string MagneticFieldTopic = "/MagneticField";
     std::string PotentialFieldTopic = "/PotentialField";
@@ -99,6 +101,7 @@ int main (int argc, char **argv) {
     //*/
     // doRRT code
     //ompl::doRRTPtr pl(std::make_shared<ompl::doRRT>(si, mm, pm));
+    ompl::hybridASTARPtr pl(std::make_shared<ompl::hybridASTAR>(si));
     while(ros::ok()) {
         if(CarSetupComHandle::isUpdatedMap()) {
             ss.clear();
