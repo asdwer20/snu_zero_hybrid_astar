@@ -1,8 +1,8 @@
 #include "ros/ros.h"
 #include "carsetupcomhandle.h"
 #include "DORRT.h"
-#include "magneticmodel.h"
-#include "potentialmodel.h"
+//#include "magneticmodel.h"
+//#include "potentialmodel.h"
 #include "visualization_msgs/MarkerArray.h"
 #include "geometry_msgs/PoseArray.h"
 #include <string>
@@ -18,7 +18,7 @@
 #include <ompl/base/objectives/PathLengthOptimizationObjective.h>
 #include <ompl/base/spaces/RealVectorBounds.h>
 #include "core_msgs/ActiveNode.h"
-
+#include <ompl/base/spaces/DubinsStateSpace.h>
 
 
 namespace ob = ompl::base;
