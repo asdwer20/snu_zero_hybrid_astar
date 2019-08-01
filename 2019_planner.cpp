@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <cmath>
+#include <ompl/base/objectives/PathLengthOptimizationObjective.h>
+#include <ompl/base/spaces/RealVectorBounds.h>
 
 #include "ompl/base/spaces/ReedsSheppStateSpace.h"
 #include "ompl/geometric/SimpleSetup.h"
@@ -25,7 +27,7 @@ int main(int argc, char **argv){
         
     //Setting up StateSpace using the OMPL Library
     //The space is a Reeds Shepps State Space with a custom planner setup
-    ob::StateSpacePtr state_space(new ob::SE2StateSpace);
+    ob::SpaceInformation *space_info = space.getSpaceInformation().get();
     
     //Get map date from Nodehandle
     std::string map_id;
@@ -34,13 +36,17 @@ int main(int argc, char **argv){
     //Date input from Rviz
     CarSetupComHandle com_handle = CarSetupComHandle(argc, argv, node_name);
     com_handle.SimpleSetup();
+    comh.SetTopicPub<geometry_msgs::PoseArray>("/hybrid_astar");
+
+    //setting up planner 
+    ompl::hybridASTAR planner(std::make_shared<ompl::hybridASTAR>(si));
 
     int seq = 0;
     while(ros::ok()){
         //Check if the message was updated
         if(seq < CarSetupComHandle::GetLatestSeq()){
             //Clear the previous state space, update seq, acquire map
-            state_space.clear();
+            ss.clear();
             seq = CarSetupComHandle::GetLatestSeq();
             nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, seq); 
             
@@ -60,12 +66,11 @@ int main(int argc, char **argv){
             map_bounds.setHigh(1, map_width);
             
             //Setup state validity checker using the isStateValid function within 
-            //CarSetupComHandle header
-            state_space_type.setBounds(map_bounds);
-            ob::SpaceInformation *space_info = state_space.getSpaceInformation().get();
-            state_space.setStateValidityChecker([input_map, seq, space_info](const ob::State *state)
-            
-            
+            //CarSetupComHandle header and bounds
+            ss.setBounds(map_bounds);
+            ss.setStateValidityChecker([input_map, seq, space_info](const ob::State *state));
+
+            ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(si);
             
               
             
