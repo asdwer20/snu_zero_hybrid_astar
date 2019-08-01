@@ -1,4 +1,4 @@
-// astar_planer.cpp
+// astar_planner.cpp
 
 // libraries
 #include "ros/ros.h"
