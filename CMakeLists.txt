@@ -19,16 +19,12 @@ catkin_package(CATKIN_DEPENDS
 )
 set (SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/carsetupcomhandle.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/DORRT.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/magneticmodel.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/potentialmodel.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/hybrid_astar.cpp
 )
 
 set (HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/carsetupcomhandle.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/DORRT.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/magneticmodel.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/potentialmodel.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar.h
 )
 
 
@@ -40,5 +36,5 @@ include_directories(include include)
 find_package(OMPL REQUIRED)
 find_package(Eigen3 REQUIRED)
 
-add_executable(planner src/planner.cpp ${HEADERS} ${SOURCES})
+add_executable(planner src/2019_planner.cpp ${HEADERS} ${SOURCES})
 target_link_libraries(planner ${catkin_LIBRARIES} ${OMPL_LIBRARIES} ${Eigen3_LIBS})
