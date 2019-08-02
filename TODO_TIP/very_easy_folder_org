@@ -1,0 +1,6 @@
+How to organize folder
+1) go to zer2019/main_stream/decision/planner
+
+2) forget launch, script (fakemap is now useless. use 'monitor' instead)
+
+3) organize files in 'include' and 'src'

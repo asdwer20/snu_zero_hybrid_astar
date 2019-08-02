@@ -1,0 +1,6 @@
+How to catkin make well?
+1) In ~/catkin_ws/src, 'git clone https://github.com/ZEROSNU/zer2019.git'
+
+2) In ./zer2019, 'cm' (for catkin_make)
+
+3) Ta-da!
