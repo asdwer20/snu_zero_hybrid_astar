@@ -28,6 +28,8 @@ int main(int argc, char **argv){
     //Setting up StateSpace using the OMPL Library
     //The space is a Reeds Shepps State Space with a custom planner setup
     ob::SpaceInformation *space_info = space.getSpaceInformation().get();
+
+    ros::Subscriber activenode = nh.subscribe("active_nodes", 1000, activecb);
     
     //Get map date from Nodehandle
     std::string map_id;
