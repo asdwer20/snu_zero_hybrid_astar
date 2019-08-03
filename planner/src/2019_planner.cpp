@@ -9,6 +9,7 @@
 #include <ompl/base/spaces/RealVectorBounds.h>
 
 #include "ompl/base/spaces/ReedsSheppStateSpace.h"
+#include "ompl/base/spaces/DubinsStateSpace.h"
 #include "ompl/geometric/SimpleSetup.h"
 #include "ompl/geometric/ScopedState.h"
 #include "ompl/geometric/planner.h"
