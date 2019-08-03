@@ -24,6 +24,22 @@ void activecb(core_msgs::ActiveNode::ConstPtr msg) {
     bool kill = true;
     std::string nn = "path_planner";
     std::string monitor = "zero_monitor";
+    for (int i = 0; i < length ; i++) {
+        if (nn.compare(msg->active_nodes[i]) == 0) {
+            nodeactivation = true;
+            std::cout << "node activated" << std::endl;
+            return;
+        }
+        if (monitor.compare(msg->active_nodes[i]) == 0) {
+            kill = false;
+        }
+    }
+    nodeactivation = false;
+    if (kill) {
+        ros::shutdown();
+    }
+    std::cout << "node deactivated" << std::endl;
+    return;
 }
 
 int main(int argc, char **argv){
