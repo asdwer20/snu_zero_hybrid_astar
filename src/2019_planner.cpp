@@ -18,6 +18,14 @@
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
+bool nodeactivation = true;
+void activecb(core_msgs::ActiveNode::ConstPtr msg) {
+    int lenth = msg->active_nodes.size();
+    bool kill = true;
+    std::string nn = "path_planner";
+    std::string monitor = "zero_monitor";
+}
+
 int main(int argc, char **argv){
     std::string node_name = "hybrid_astar_planner";
     ob::StateSpacePtr space(std::make_shared<ob::ReedsSheppStateSpace>());
