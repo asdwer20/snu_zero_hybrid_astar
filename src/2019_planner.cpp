@@ -18,7 +18,9 @@
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
+// activeness
 bool nodeactivation = true;
+// callback for handling activeness
 void activecb(core_msgs::ActiveNode::ConstPtr msg) {
     int lenth = msg->active_nodes.size();
     bool kill = true;
@@ -53,6 +55,7 @@ int main(int argc, char **argv){
     //The space is a Reeds Shepps State Space with a custom planner setup
     ob::SpaceInformation *space_info = space.getSpaceInformation().get();
 
+    //Get activeness from active_nodes
     ros::Subscriber activenode = nh.subscribe("active_nodes", 1000, activecb);
     
     //Get map date from Nodehandle
