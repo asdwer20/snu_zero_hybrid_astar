@@ -9,7 +9,7 @@
 #include <ompl/base/spaces/RealVectorBounds.h>
 
 #include "ompl/base/spaces/ReedsSheppStateSpace.h"
-#include "ompl/base/spaces/DubinsStateSpace.h"
+#include "ompl/base/OptimizationObjective.h"
 #include "ompl/geometric/SimpleSetup.h"
 #include "ompl/geometric/ScopedState.h"
 #include "ompl/geometric/planner.h"
@@ -74,11 +74,14 @@ int main(int argc, char **argv){
     int seq = 0;
     while(ros::ok()){
         //Check if the message was updated
-        if(seq < CarSetupComHandle::GetLatestSeq()){
+        if(CarSetupComHandle::isUpdatedMap()){
             //Clear the previous state space, update seq, acquire map
             ss.clear();
-            seq = CarSetupComHandle::GetLatestSeq();
-            nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, seq); 
+            int gseq = CarSetupComHandle::GetLatestGoalSeq();
+            int mseq = CarSetupComHandle::GetLatestMapSeq();
+            int sseq = CarSetupComHandle::GetLatestStartSeq();
+
+            nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq); 
             
             //Error exception for empty map
             if(input_map == NULL){
@@ -95,18 +98,38 @@ int main(int argc, char **argv){
             map_bounds.setHigh(0. map_length);
             map_bounds.setHigh(1, map_width);
             
+            ob::ScopedStatePtr start = CarSetupComHandle::GetStart(space, map_id, sseq);
+            ob::ScopedStatePtr goal = CarSetupComHandle::GetGoal(space, map_id, gseq);
+
+            /*=================================== WORK ON FROM HERE ============================= */
             //Setup state validity checker using the isStateValid function within 
             //CarSetupComHandle header and bounds
             ss.setBounds(map_bounds);
-            ss.setStateValidityChecker([input_map, seq, space_info](const ob::State *state));
-
+            ss.setStateValidityChecker([input_map, mseq, space_info](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
+            
+            //setting up rest of the planner and the goal points
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(si);
-            
-              
-            
+            ss.setOptimizationObjective(obj);
+            planner->setup();
+            ss.setPlanner(planner)
+            ss.setStartAndGoalStates(*start, *goal);
+            ss.setup();
+
+            ob::Plannerstatus solved = ss.solve(1);
+            //=======================================UNTIL HERE =====================================
+            if(solved){
+                std::cout << "Path found" << std::endl;
+                ob::Path path = ss.getSolutionPath();
+                if(nodeactivation){
+                    comh.PublishPath(map_id, mseq, path);
+                }
+            } else {
+                std::cout << "No path found" << std::endl;
+            }
         }
+        
+        ros::spinOnce();
+    }
 
-
-    
-
+    return 0;
 }
