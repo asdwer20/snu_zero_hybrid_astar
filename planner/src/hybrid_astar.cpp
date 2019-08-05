@@ -2,11 +2,16 @@
 
 #include <ompl/base/Planner.h>
 #include <cmath>
-#include <ompl/control/PathControl.h>
 #include <ompl/util/RandomNumbers.h>
-#include "CarSetupComHandle.h"
+#include <ompl/tools/config/SelfConfig.h>
+#include <ompl/base/goals/GoalState.h>
+#include <ompl/base/ProblemDefinition.h>
+
+#include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
 
+//WORK ON: apparently when debugging, there is no definiton of pdef_ and checkValidity() function, which are both true, but for some reason
+//I cannot find the equivalents in the past code 
 namespace ompl{
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
@@ -15,11 +20,11 @@ namespace ompl{
 
       heading_changes = {-pi/4, 0, pi/4};
       open = {}; //a vector of vector<base::Path *> -> a path class contains cost
-      closed = {} //a vector of vector<base::State *>
+      closed = {}; //a vector of vector<base::State *>
       drive_distance = sqrt(2);
     }
     hybridASTAR::~hybridASTAR(void){
-      hybridASTAR::destructor();
+      hybridASTAR::freeMemory();
     }
 
     base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc){
@@ -27,9 +32,9 @@ namespace ompl{
       bool PATH_FOUND = false;
 
       //Initialize Goal States
-      base::Goal *goal = pdef_->getGoal().get()->as<base::GoalState()->getState();
+      base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); //WORKON: apparently the declaration in the line isnt corrent i.e. the <> ,(), placements
       if(pdef_->getStartStateCount() == 0){
-        OMPL_ERROR("%s: There are no valid initial states", getName().c_str());
+        OMPL_ERROR("%s: There are no valid initial states", getName().c_str()); //getName is not declared
         return base::PlannerStatus::INVALID_START;
       } else if(pdef_->getStartStateCount() > 1){
         OMPL_ERROR("%s: There are too many valid initial states", getName().c_star());
@@ -38,17 +43,15 @@ namespace ompl{
 
       //Initialize Start States
       base::State *start = pdef_->getStartState(pdef_->getStartStateCount()-1);
-      si->setStateValidityChecker(const validity_checker) //implement a state validity checker
-
 
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
       base::Path *current_path;
       base::Path *next_path;
-      current_path->append(start);
-      current_path->cost = euclidean_distance(start) + current_path->length;
+      current_path->append(start); //WORKON: append function does not exist?
+      current_path->cost = euclidean_distance(*start) + current_path->length;
 
-      open.pushback(start);
+      open.pushback(start); //WORKON: open not declared in this scope
       cost = current_path->cost; //should we use optimizationobjective??
 
       base::State *current_state = start;
@@ -124,5 +127,11 @@ namespace ompl{
       return FOUND;
     }
 
+     void hybridASTAR::freeMemory() {
+        current_path->clear();
+        next_path->clear();
+        open->clear();
+        closed->clear();
+    }
   }
 }

@@ -16,7 +16,8 @@ namespace ompl {
     
     class hybridASTAR : public base::Planner {
         public :
-        hybridASTAR(const control::SpaceInformationPtr &si);
+
+        hybridASTAR(const base::SpaceInformationPtr &si);
         ~hybridASTAR(void) override;
         base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc) override;
 
@@ -31,10 +32,11 @@ namespace ompl {
         std::vector<base::State *> closed;   
         std::vector<double> heading_changes;
 
-        bool vector_contains(std::vector<base::Sate *> input, base::State *item);
+        bool vector_contains(std::vector<base::State *> input, base::State *item);
 
         double drive_distance;
         double cost;
+        double pi = 3.14159265;
     
         float heuristic;
        

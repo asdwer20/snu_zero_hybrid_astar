@@ -7,12 +7,13 @@
 #include <cmath>
 #include <ompl/base/objectives/PathLengthOptimizationObjective.h>
 #include <ompl/base/spaces/RealVectorBounds.h>
+#include <ompl/base/Planner.h>
 
 #include "ompl/base/spaces/ReedsSheppStateSpace.h"
 #include "ompl/base/OptimizationObjective.h"
 #include "ompl/geometric/SimpleSetup.h"
-#include "ompl/geometric/ScopedState.h"
-#include "ompl/geometric/planner.h"
+#include <ompl/base/ProblemDefinition.h>
+#include <ompl/base/spaces/SE2StateSpace.h>
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
 
