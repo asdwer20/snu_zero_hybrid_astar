@@ -6,6 +6,8 @@
 #include <ompl/tools/config/SelfConfig.h>
 #include <ompl/base/goals/GoalState.h>
 #include <ompl/base/ProblemDefinition.h>
+#include <ompl/base/spaces/SE2StateSpace.h>
+#include <ompl/base/Path.h>
 
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
@@ -48,7 +50,7 @@ namespace ompl{
       //paths instead of just single points
       base::Path *current_path;
       base::Path *next_path;
-      current_path->append(start); //WORKON: append function does not exist?
+      current_path->as<geometric::PathGeometric>()->append(start); //WORKON: append function does not exist?
       current_path->cost = euclidean_distance(*start) + current_path->length;
 
       open.pushback(start); //WORKON: open not declared in this scope
@@ -59,18 +61,22 @@ namespace ompl{
       base::State *next_state;
       //While termination condition is false, run the planner
       while(ptc() == false){
-        if(open->getStateCount() == 0){
+        if(open->size() == 0){
           OMPL_ERROR("%s: There are no possible paths", getName().c_star());
           ptc() = true;
           break;
         } 
         sort_vectors(open); //sort path based on the heuristic distance 
         current_path = open.back();
-        current_state = current_path->getState(current_path->getStateCount()-1);
+        current_state = current_path->as<geometric::PathGeometric>()->getState(current_path->getStateCount()-1);
         open.pop_back();
         
-        std::vector<double> disc_coord = return_discrete(current_state->getX(), current_state->getY())
-        discrete_state->setXY(disc_coord[0], disc_coord[1]);
+        std::vector<double> disc_coord = return_discrete(
+          current_state->as<base::SE2StateSpace::StateType>()->getX(), 
+          current_state->as<base::SE2StateSpace::StateType>()->getY()
+        );
+
+        discrete_state->as<base::SE2StateSpace::StateType>()->setXY(disc_coord[0], disc_coord[1]);
 
         closed->append(discrete_state);
 
@@ -84,8 +90,13 @@ namespace ompl{
           break;
         }
         for(int i = 0; i < heading_changes.size()-1; i++){
-          next_state->setX(current_state->getX() + drive_distance*cos(current_state->getYaw()));
-          next_state->setYaw(current_state->getYaw()+heading_changes[i]);
+          next_state->as<base::SE2StateSpace::StateType>()->setX(
+            current_state->as<base::SE2StateSpace::StateType>()->getX() + 
+            drive_distance*cos(current_state->as<base::SE2StateSpace::StateType>()->getYaw())
+          );
+          next_state->as<base::SE2StateSpace::StateType>()->setYaw(
+            current_state->as<base::SE2StateSpace::StateType>()->getYaw()+heading_changes[i]
+          );
         }
         if(isValid(next_state) && vector_contains(closed, next_state) == false){
           heuristic = euclidean_distance(next_state, goal) + drive_distance;
@@ -97,11 +108,11 @@ namespace ompl{
     }
 
     double hybridASTAR::euclidean_distance(base::State *state, base::State *goal){
-      double x1 = state->getX();
-      double y1 = state->getY();
+      double x1 = state->as<base::SE2StateSpace::StateType>()->getX();
+      double y1 = state->as<base::SE2StateSpace::StateType>()->getY();
 
-      double goalx = goal->getX();
-      double goaly = goal->getY();
+      double goalx = goal->as<base::SE2StateSpace::StateType>()->getX();
+      double goaly = goal->as<base::SE2StateSpace::StateType>()->getY();
 
       return sqrt(pow(goalx-x1, 2) + pow(goaly- y1, 2));
 

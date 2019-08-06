@@ -6,8 +6,6 @@
 #include <ompl/base/Planner.h>
 #include <ompl/control/SpaceInformation.h>
 #include <ompl/base/State.h>
-#include <ompl/base/spaces/ReedsSheppStateSpace.h>
-#include <ompl/base/spaces/DubinsStateSpace.h>
 #include <vector>
 #include <cmath>
 
