@@ -30,6 +30,8 @@ namespace ompl {
         std::vector<base::State *> closed;   
         std::vector<double> heading_changes;
 
+        std::vector<base::Path *> sort_vectors(std::vector<base::Path *> input);
+        bool compare_path_costs(const base::Path &v1, const base::Path &v2);
         bool vector_contains(std::vector<base::State *> input, base::State *item);
 
         double drive_distance;

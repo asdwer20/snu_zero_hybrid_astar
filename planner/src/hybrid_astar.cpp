@@ -8,6 +8,7 @@
 #include <ompl/base/ProblemDefinition.h>
 #include <ompl/base/spaces/SE2StateSpace.h>
 #include <ompl/base/Path.h>
+#include <ompl/base/OptimizationObjective.h>
 
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
@@ -30,11 +31,11 @@ namespace ompl{
     }
 
     base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc){
-      checkValidity();
+      checkValidity(); //not declared in this scope
       bool PATH_FOUND = false;
 
       //Initialize Goal States
-      base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); //WORKON: apparently the declaration in the line isnt corrent i.e. the <> ,(), placements
+      base::State* goal = pdef_->getGoal().get()->as<base::GoalState>->getState(); //pdef_ not declared in this scope
       if(pdef_->getStartStateCount() == 0){
         OMPL_ERROR("%s: There are no valid initial states", getName().c_str()); //getName is not declared
         return base::PlannerStatus::INVALID_START;
@@ -48,14 +49,13 @@ namespace ompl{
 
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
+      base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si);
       base::Path *current_path;
       base::Path *next_path;
       current_path->as<geometric::PathGeometric>()->append(start); //WORKON: append function does not exist?
-      current_path->cost = euclidean_distance(*start) + current_path->length;
-
-      open.pushback(start); //WORKON: open not declared in this scope
-      cost = current_path->cost; //should we use optimizationobjective??
-
+      base::Cost path_cost = current_path->cost(obj);
+      open.pushback(start); //WORKON: open not decared in this scope
+      
       base::State *current_state = start;
       base::State *discrete_state;
       base::State *next_state;
@@ -66,9 +66,9 @@ namespace ompl{
           ptc() = true;
           break;
         } 
-        sort_vectors(open); //sort path based on the heuristic distance 
+        sort_vectors(*open); //sort path based on the heuristic distance 
         current_path = open.back();
-        current_state = current_path->as<geometric::PathGeometric>()->getState(current_path->getStateCount()-1);
+        current_state = current_path->as<geometric::PathGeometric>()->getState(current_path->as<geometric::PathGeometric>()->getStateCount()-1);
         open.pop_back();
         
         std::vector<double> disc_coord = return_discrete(
@@ -136,6 +136,15 @@ namespace ompl{
         }
       }
       return FOUND;
+    }
+
+    bool compare_path_costs(const base::Path &v1, const base::Path &v2) {
+	    return v1->as<geometric::PathGeometric>()->cost()->value() > v2->as<geometric::PathGeometric>()->cost()->value();
+    }
+
+    std::vector<base::Path *> hybridASTAR::sort_vectors(std::vector<base::Path *> input){
+        std::sort(input.begin(), input.endl(), compare_path_costs);
+        return input;
     }
 
      void hybridASTAR::freeMemory() {

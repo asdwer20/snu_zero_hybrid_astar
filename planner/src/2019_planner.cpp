@@ -109,7 +109,7 @@ int main(int argc, char **argv){
             ss.setStateValidityChecker([input_map, mseq, space_info](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
             
             //setting up rest of the planner and the goal points
-            ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(si);
+            ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
             ss.setOptimizationObjective(obj);
             planner->setup();
             ss.setPlanner(planner)
