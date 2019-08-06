@@ -1,0 +1,375 @@
+Base path: /home/hojoon/catkin_ws
+Source space: /home/hojoon/catkin_ws/src
+Build space: /home/hojoon/catkin_ws/build
+Devel space: /home/hojoon/catkin_ws/devel
+Install space: /home/hojoon/catkin_ws/install
+####
+#### Running command: "make cmake_check_build_system" in "/home/hojoon/catkin_ws/build"
+####
+-- Using CATKIN_DEVEL_PREFIX: /home/hojoon/catkin_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/kinetic
+-- This workspace overlays: /opt/ros/kinetic
+-- Using PYTHON_EXECUTABLE: /usr/bin/python
+-- Using Debian Python package layout
+-- Using empy: /usr/bin/empy
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/hojoon/catkin_ws/build/test_results
+-- Found gmock sources under '/usr/src/gmock': gmock will be built
+-- Found gtest sources under '/usr/src/gmock': gtests will be built
+-- Using Python nosetests: /usr/bin/nosetests-2.7
+-- catkin 0.7.18
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 15 packages in topological order:
+-- ~~  - beginner_tutorials
+-- ~~  - forward_camera
+-- ~~  - gps
+-- ~~  - imu_encoder
+-- ~~  - local_map_generator
+-- ~~  - mission_master
+-- ~~  - model_estimator
+-- ~~  - path_tracker
+-- ~~  - sign_camera
+-- ~~  - core_msgs
+-- ~~  - lidar
+-- ~~  - planner
+-- ~~  - serial_communicator
+-- ~~  - traffic_light
+-- ~~  - zero_monitor
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'beginner_tutorials'
+-- ==> add_subdirectory(beginner_tutorials)
+-- +++ processing catkin package: 'forward_camera'
+-- ==> add_subdirectory(zer2019 /main_stream/perception/forward_camera)
+-- +++ processing catkin package: 'gps'
+-- ==> add_subdirectory(zer2019 /main_stream/perception/gps)
+-- +++ processing catkin package: 'imu_encoder'
+-- ==> add_subdirectory(zer2019 /main_stream/perception/imu_encoder)
+-- +++ processing catkin package: 'local_map_generator'
+-- ==> add_subdirectory(zer2019 /main_stream/decision/local_map_generator)
+-- +++ processing catkin package: 'mission_master'
+-- ==> add_subdirectory(zer2019 /main_stream/decision/mission_master)
+-- +++ processing catkin package: 'model_estimator'
+-- ==> add_subdirectory(zer2019 /main_stream/motion/model_estimator)
+-- +++ processing catkin package: 'path_tracker'
+-- ==> add_subdirectory(zer2019 /main_stream/motion/path_tracker)
+-- +++ processing catkin package: 'sign_camera'
+-- ==> add_subdirectory(zer2019 /main_stream/perception/sign_camera)
+-- +++ processing catkin package: 'core_msgs'
+-- ==> add_subdirectory(zer2019 /core/core_msgs)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- core_msgs: 9 messages, 0 services
+-- +++ processing catkin package: 'lidar'
+-- ==> add_subdirectory(zer2019 /main_stream/perception/lidar)
+-- +++ processing catkin package: 'planner'
+-- ==> add_subdirectory(zer2019 /main_stream/decision/planner)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'serial_communicator'
+-- ==> add_subdirectory(zer2019 /main_stream/motion/serial_communicator)
+-- +++ processing catkin package: 'traffic_light'
+-- ==> add_subdirectory(zer2019 /main_stream/perception/traffic_light)
+-- +++ processing catkin package: 'zero_monitor'
+-- ==> add_subdirectory(zer2019 /core/zero_monitor)
+-- Configuring done
+CMake Warning (dev) at zer2019 /main_stream/motion/serial_communicator/CMakeLists.txt:26 (add_dependencies):
+  Policy CMP0046 is not set: Error on non-existent dependency in
+  add_dependencies.  Run "cmake --help-policy CMP0046" for policy details.
+  Use the cmake_policy command to set the policy and suppress this warning.
+
+  The dependency target "serial_communicator_generate_messages_cpp" of target
+  "serial_communicator_manual" does not exist.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Generating done
+-- Build files have been written to: /home/hojoon/catkin_ws/build
+####
+#### Running command: "make -j4 -l4" in "/home/hojoon/catkin_ws/build"
+####
+Scanning dependencies of target basic_shapes
+[  0%] Built target std_msgs_generate_messages_cpp
+[  1%] Building CXX object beginner_tutorials/CMakeFiles/basic_shapes.dir/src/basic_shapes.cpp.o
+[  1%] Built target _core_msgs_generate_messages_check_deps_ActiveNode
+[  1%] Built target _core_msgs_generate_messages_check_deps_MissionState
+[  1%] Built target _core_msgs_generate_messages_check_deps_VehicleState
+[  1%] Built target sensor_msgs_generate_messages_cpp
+[  1%] Built target geometry_msgs_generate_messages_cpp
+[  1%] Built target _core_msgs_generate_messages_check_deps_MotionState
+[  1%] Built target _core_msgs_generate_messages_check_deps_Curvature
+[  1%] Built target _core_msgs_generate_messages_check_deps_LightState
+[  1%] Built target _core_msgs_generate_messages_check_deps_VelocityLevel
+[  1%] Built target _core_msgs_generate_messages_check_deps_Control
+[  1%] Built target _core_msgs_generate_messages_check_deps_ImuSpeed
+[  1%] Built target std_msgs_generate_messages_nodejs
+[  1%] Built target sensor_msgs_generate_messages_nodejs
+[  1%] Built target std_msgs_generate_messages_lisp
+[  1%] Built target geometry_msgs_generate_messages_nodejs
+[  1%] Built target sensor_msgs_generate_messages_lisp
+[  1%] Built target geometry_msgs_generate_messages_lisp
+[  1%] Built target std_msgs_generate_messages_eus
+[  1%] Built target sensor_msgs_generate_messages_eus
+[  1%] Built target geometry_msgs_generate_messages_eus
+[  1%] Built target sensor_msgs_generate_messages_py
+[  1%] Built target std_msgs_generate_messages_py
+Scanning dependencies of target planner
+[  1%] Built target geometry_msgs_generate_messages_py
+[  5%] Built target serial_communicator_manual
+[ 21%] Built target core_msgs_generate_messages_cpp
+[ 23%] Building CXX object zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/src/2019_planner.cpp.o
+[ 40%] Built target core_msgs_generate_messages_nodejs
+[ 56%] Built target core_msgs_generate_messages_lisp
+[ 58%] Building CXX object zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/src/hybrid_astar.cpp.o
+[ 76%] Built target core_msgs_generate_messages_eus
+[ 94%] Built target core_msgs_generate_messages_py
+[ 94%] Built target core_msgs_generate_messages
+/home/hojoon/catkin_ws/src/beginner_tutorials/src/basic_shapes.cpp: In function ‘int main(int, char**)’:
+/home/hojoon/catkin_ws/src/beginner_tutorials/src/basic_shapes.cpp:10:31: error: ‘n’ was not declared in this scope
+   ros::Publisher marker_pub = n.advertise<visualization_msgs ::Marker>("visualization_marker", 1);
+                               ^
+/home/hojoon/catkin_ws/src/beginner_tutorials/src/basic_shapes.cpp:10:70: error: expected primary-expression before ‘>’ token
+   ros::Publisher marker_pub = n.advertise<visualization_msgs ::Marker>("visualization_marker", 1);
+                                                                      ^
+/home/hojoon/catkin_ws/src/beginner_tutorials/src/basic_shapes.cpp:14:52: error: expected ‘,’ or ‘;’ before ‘:’ token
+   uint32_t shape = visualization_msgs::Marker::CUBE:
+                                                    ^
+/home/hojoon/catkin_ws/src/beginner_tutorials/src/basic_shapes.cpp:76:1: error: expected ‘}’ at end of input
+ }
+ ^
+beginner_tutorials/CMakeFiles/basic_shapes.dir/build.make:62: recipe for target 'beginner_tutorials/CMakeFiles/basic_shapes.dir/src/basic_shapes.cpp.o' failed
+make[2]: *** [beginner_tutorials/CMakeFiles/basic_shapes.dir/src/basic_shapes.cpp.o] Error 1
+CMakeFiles/Makefile2:907: recipe for target 'beginner_tutorials/CMakeFiles/basic_shapes.dir/all' failed
+make[1]: *** [beginner_tutorials/CMakeFiles/basic_shapes.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp: In function ‘ompl::base::PlannerStatus ompl::solve(const ompl::base::PlannerTerminationCondition&)’:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:31:21: error: ‘checkValidity’ was not declared in this scope
+       checkValidity();
+                     ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:35:27: error: ‘pdef_’ was not declared in this scope
+       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); //WORKON: apparently the declaration in the line isnt corrent i.e. the <> ,(), placements
+                           ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:35:69: error: expected primary-expression before ‘>’ token
+       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); //WORKON: apparently the declaration in the line isnt corrent i.e. the <> ,(), placements
+                                                                     ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:35:71: error: expected primary-expression before ‘)’ token
+       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); //WORKON: apparently the declaration in the line isnt corrent i.e. the <> ,(), placements
+                                                                       ^
+In file included from /opt/ros/kinetic/include/ompl/base/ProjectionEvaluator.h:42:0,
+                 from /opt/ros/kinetic/include/ompl/base/StateSpace.h:43,
+                 from /opt/ros/kinetic/include/ompl/base/SpaceInformation.h:43,
+                 from /opt/ros/kinetic/include/ompl/base/Planner.h:40,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:3:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:37:69: error: ‘getName’ was not declared in this scope
+         OMPL_ERROR("%s: There are no valid initial states", getName().c_str()); //getName is not declared
+                                                                     ^
+/opt/ros/kinetic/include/ompl/util/Console.h:64:95: note: in definition of macro ‘OMPL_ERROR’
+ #define OMPL_ERROR(fmt, ...)  ompl::msg::log(__FILE__, __LINE__, ompl::msg::LOG_ERROR, fmt, ##__VA_ARGS__)
+                                                                                               ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:37:69: note: suggested alternative:
+         OMPL_ERROR("%s: There are no valid initial states", getName().c_str()); //getName is not declared
+                                                                     ^
+/opt/ros/kinetic/include/ompl/util/Console.h:64:95: note: in definition of macro ‘OMPL_ERROR’
+ #define OMPL_ERROR(fmt, ...)  ompl::msg::log(__FILE__, __LINE__, ompl::msg::LOG_ERROR, fmt, ##__VA_ARGS__)
+                                                                                               ^
+In file included from /opt/ros/kinetic/include/ros/ros.h:53:0,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/include/carsetupcomhandle.h:5,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:10:
+/opt/ros/kinetic/include/ros/this_node.h:46:32: note:   ‘ros::this_node::getName’
+ ROSCPP_DECL const std::string& getName();
+                                ^
+In file included from /opt/ros/kinetic/include/ompl/base/ProjectionEvaluator.h:42:0,
+                 from /opt/ros/kinetic/include/ompl/base/StateSpace.h:43,
+                 from /opt/ros/kinetic/include/ompl/base/SpaceInformation.h:43,
+                 from /opt/ros/kinetic/include/ompl/base/Planner.h:40,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:3:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:40:75: error: ‘getName’ was not declared in this scope
+         OMPL_ERROR("%s: There are too many valid initial states", getName().c_star());
+                                                                           ^
+/opt/ros/kinetic/include/ompl/util/Console.h:64:95: note: in definition of macro ‘OMPL_ERROR’
+ #define OMPL_ERROR(fmt, ...)  ompl::msg::log(__FILE__, __LINE__, ompl::msg::LOG_ERROR, fmt, ##__VA_ARGS__)
+                                                                                               ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:40:75: note: suggested alternative:
+         OMPL_ERROR("%s: There are too many valid initial states", getName().c_star());
+                                                                           ^
+/opt/ros/kinetic/include/ompl/util/Console.h:64:95: note: in definition of macro ‘OMPL_ERROR’
+ #define OMPL_ERROR(fmt, ...)  ompl::msg::log(__FILE__, __LINE__, ompl::msg::LOG_ERROR, fmt, ##__VA_ARGS__)
+                                                                                               ^
+In file included from /opt/ros/kinetic/include/ros/ros.h:53:0,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/include/carsetupcomhandle.h:5,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:10:
+/opt/ros/kinetic/include/ros/this_node.h:46:32: note:   ‘ros::this_node::getName’
+ ROSCPP_DECL const std::string& getName();
+                                ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:51:21: error: ‘class ompl::base::Path’ has no member named ‘append’
+       current_path->append(start); //WORKON: append function does not exist?
+                     ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:52:53: error: ‘euclidean_distance’ was not declared in this scope
+       current_path->cost = euclidean_distance(*start) + current_path->length;
+                                                     ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:54:7: error: ‘open’ was not declared in this scope
+       open.pushback(start); //WORKON: open not declared in this scope
+       ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:55:7: error: ‘cost’ was not declared in this scope
+       cost = current_path->cost; //should we use optimizationobjective??
+       ^
+In file included from /opt/ros/kinetic/include/ompl/base/ProjectionEvaluator.h:42:0,
+                 from /opt/ros/kinetic/include/ompl/base/StateSpace.h:43,
+                 from /opt/ros/kinetic/include/ompl/base/SpaceInformation.h:43,
+                 from /opt/ros/kinetic/include/ompl/base/Planner.h:40,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:3:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:63:65: error: ‘getName’ was not declared in this scope
+           OMPL_ERROR("%s: There are no possible paths", getName().c_star());
+                                                                 ^
+/opt/ros/kinetic/include/ompl/util/Console.h:64:95: note: in definition of macro ‘OMPL_ERROR’
+ #define OMPL_ERROR(fmt, ...)  ompl::msg::log(__FILE__, __LINE__, ompl::msg::LOG_ERROR, fmt, ##__VA_ARGS__)
+                                                                                               ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:63:65: note: suggested alternative:
+           OMPL_ERROR("%s: There are no possible paths", getName().c_star());
+                                                                 ^
+/opt/ros/kinetic/include/ompl/util/Console.h:64:95: note: in definition of macro ‘OMPL_ERROR’
+ #define OMPL_ERROR(fmt, ...)  ompl::msg::log(__FILE__, __LINE__, ompl::msg::LOG_ERROR, fmt, ##__VA_ARGS__)
+                                                                                               ^
+In file included from /opt/ros/kinetic/include/ros/ros.h:53:0,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/include/carsetupcomhandle.h:5,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:10:
+/opt/ros/kinetic/include/ros/this_node.h:46:32: note:   ‘ros::this_node::getName’
+ ROSCPP_DECL const std::string& getName();
+                                ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:64:17: error: lvalue required as left operand of assignment
+           ptc() = true;
+                 ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:67:26: error: ‘sort_vectors’ was not declared in this scope
+         sort_vectors(open); //sort path based on the heuristic distance 
+                          ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:69:39: error: ‘class ompl::base::Path’ has no member named ‘getState’
+         current_state = current_path->getState(current_path->getStateCount()-1);
+                                       ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:69:62: error: ‘class ompl::base::Path’ has no member named ‘getStateCount’
+         current_state = current_path->getState(current_path->getStateCount()-1);
+                                                              ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:72:73: error: ‘class ompl::base::State’ has no member named ‘getX’
+         std::vector<double> disc_coord = return_discrete(current_state->getX(), current_state->getY())
+                                                                         ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:72:96: error: ‘class ompl::base::State’ has no member named ‘getY’
+         std::vector<double> disc_coord = return_discrete(current_state->getX(), current_state->getY())
+                                                                                                ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:72:102: error: ‘return_discrete’ was not declared in this scope
+         std::vector<double> disc_coord = return_discrete(current_state->getX(), current_state->getY())
+                                                                                                      ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:75:9: error: ‘closed’ was not declared in this scope
+         closed->append(discrete_state);
+         ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:78:27: error: no match for ‘operator==’ (operand types are ‘ompl::base::State’ and ‘ompl::base::State’)
+         if(*current_state == *discrete_state){ //the specific details of this condition must be defined
+                           ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:81:44: error: expected primary-expression before ‘&’ token
+           current_path->print(std::ostream &out);
+                                            ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:81:45: error: ‘out’ was not declared in this scope
+           current_path->print(std::ostream &out);
+                                             ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:82:17: error: lvalue required as left operand of assignment
+           ptc() = true;
+                 ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:86:28: error: ‘heading_changes’ was not declared in this scope
+         for(int i = 0; i < heading_changes.size()-1; i++){
+                            ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:87:23: error: ‘class ompl::base::State’ has no member named ‘setX’
+           next_state->setX(current_state->getX() + drive_distance*cos(current_state->getYaw()));
+                       ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:87:43: error: ‘class ompl::base::State’ has no member named ‘getX’
+           next_state->setX(current_state->getX() + drive_distance*cos(current_state->getYaw()));
+                                           ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:87:52: error: ‘drive_distance’ was not declared in this scope
+           next_state->setX(current_state->getX() + drive_distance*cos(current_state->getYaw()));
+                                                    ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:87:86: error: ‘class ompl::base::State’ has no member named ‘getYaw’
+           next_state->setX(current_state->getX() + drive_distance*cos(current_state->getYaw()));
+                                                                                      ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:88:23: error: ‘class ompl::base::State’ has no member named ‘setYaw’
+           next_state->setYaw(current_state->getYaw()+heading_changes[i]);
+                       ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:88:45: error: ‘class ompl::base::State’ has no member named ‘getYaw’
+           next_state->setYaw(current_state->getYaw()+heading_changes[i]);
+                                             ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:90:30: error: ‘isValid’ was not declared in this scope
+         if(isValid(next_state) && vector_contains(closed, next_state) == false){
+                              ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:90:69: error: ‘vector_contains’ was not declared in this scope
+         if(isValid(next_state) && vector_contains(closed, next_state) == false){
+                                                                     ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:91:11: error: ‘heuristic’ was not declared in this scope
+           heuristic = euclidean_distance(next_state, goal) + drive_distance;
+           ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:91:62: error: ‘drive_distance’ was not declared in this scope
+           heuristic = euclidean_distance(next_state, goal) + drive_distance;
+                                                              ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:92:22: error: use of deleted function ‘ompl::base::Path& ompl::base::Path::operator=(const ompl::base::Path&)’
+           *next_path = *current_path; //this is done because the function passes by reference
+                      ^
+In file included from /opt/ros/kinetic/include/ompl/base/ProblemDefinition.h:42:0,
+                 from /opt/ros/kinetic/include/ompl/base/Planner.h:41,
+                 from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:3:
+/opt/ros/kinetic/include/ompl/base/Path.h:72:19: note: declared here
+             Path& operator=(const Path&) = delete;
+                   ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:93:22: error: ‘class ompl::base::Path’ has no member named ‘push_back’
+           next_path->push_back(next_state); 
+                      ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp: In member function ‘double ompl::hybridASTAR::euclidean_distance(ompl::base::State*, ompl::base::State*)’:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:100:26: error: ‘class ompl::base::State’ has no member named ‘getX’
+       double x1 = state->getX();
+                          ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:101:26: error: ‘class ompl::base::State’ has no member named ‘getY’
+       double y1 = state->getY();
+                          ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:103:28: error: ‘class ompl::base::State’ has no member named ‘getX’
+       double goalx = goal->getX();
+                            ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:104:28: error: ‘class ompl::base::State’ has no member named ‘getY’
+       double goaly = goal->getY();
+                            ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp: At global scope:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:110:25: error: prototype for ‘std::vector<double> ompl::hybridASTAR::return_discrete(double, double)’ does not match any in class ‘ompl::hybridASTAR’
+     std::vector<double> hybridASTAR::return_discrete(double x, double y){
+                         ^
+In file included from /home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:11:0:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/include/hybrid_astar.h:29:16: error: candidate is: double ompl::hybridASTAR::return_discrete(double, double)
+         double return_discrete(double x, double y);
+                ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp: In member function ‘bool ompl::hybridASTAR::vector_contains(std::vector<ompl::base::State*>, ompl::base::State*)’:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:121:30: error: base operand of ‘->’ has non-pointer type ‘std::vector<ompl::base::State*>’
+       for(int i = 0; i< input->size() -1; i++){
+                              ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp: In member function ‘void ompl::hybridASTAR::freeMemory()’:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:131:9: error: ‘current_path’ was not declared in this scope
+         current_path->clear();
+         ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:132:9: error: ‘next_path’ was not declared in this scope
+         next_path->clear();
+         ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:133:13: error: base operand of ‘->’ has non-pointer type ‘std::vector<ompl::base::Path*>’
+         open->clear();
+             ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:134:15: error: base operand of ‘->’ has non-pointer type ‘std::vector<ompl::base::State*>’
+         closed->clear();
+               ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp: At global scope:
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/hybrid_astar.cpp:137:1: error: expected declaration before ‘}’ token
+ }
+ ^
+zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/build.make:110: recipe for target 'zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/src/hybrid_astar.cpp.o' failed
+make[2]: *** [zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/src/hybrid_astar.cpp.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/2019_planner.cpp:26:15: error: variable or field ‘activecb’ declared void
+ void activecb(core_msgs::ActiveNode::ConstPtr msg) {
+               ^
+/home/hojoon/catkin_ws/src/zer2019 /main_stream/decision/planner/src/2019_planner.cpp:26:15: error: ‘core_msgs’ has not been declared
+zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/build.make:62: recipe for target 'zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/src/2019_planner.cpp.o' failed
+make[2]: *** [zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/src/2019_planner.cpp.o] Error 1
+CMakeFiles/Makefile2:2663: recipe for target 'zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/all' failed
+make[1]: *** [zer2019 /main_stream/decision/planner/CMakeFiles/planner.dir/all] Error 2
+Makefile:138: recipe for target 'all' failed
+make: *** [all] Error 2
+Invoking "make -j4 -l4" failed
+
