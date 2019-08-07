@@ -16,6 +16,7 @@
 #include <ompl/base/spaces/SE2StateSpace.h>
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
+#include "core_msgs/ActiveNode.h"
 
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
