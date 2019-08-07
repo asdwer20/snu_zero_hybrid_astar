@@ -19,6 +19,10 @@ namespace ompl {
         ~hybridASTAR(void) override;
         base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc) override;
 
+        double drive_distance = sqrt(2);
+        double cost;
+        double pi = 3.14159265;
+        
         void clear(void) override;
         void setup(void) override;
         void freeMemory();
@@ -28,15 +32,12 @@ namespace ompl {
 
         std::vector<base::Path *> open;
         std::vector<base::State *> closed;   
-        std::vector<double> heading_changes;
-
+        std::vector<double> heading_changes = {-pi/4, 0, pi/4};
         std::vector<base::Path *> sort_vectors(std::vector<base::Path *> input);
+        
         bool compare_path_costs(const base::Path &v1, const base::Path &v2);
         bool vector_contains(std::vector<base::State *> input, base::State *item);
-
-        double drive_distance;
-        double cost;
-        double pi = 3.14159265;
+        bool state_compare(base::State* input, base::State* goal);
     
         float heuristic;
        

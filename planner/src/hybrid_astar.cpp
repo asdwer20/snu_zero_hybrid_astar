@@ -9,6 +9,8 @@
 #include <ompl/base/spaces/SE2StateSpace.h>
 #include <ompl/base/Path.h>
 #include <ompl/base/OptimizationObjective.h>
+#include <ompl/base/objectives/PathLengthOptimizationObjective.h>
+#include <iostream>
 
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
@@ -21,10 +23,8 @@ namespace ompl{
       specs_.optimizingPaths = true;
       specs_.canReportIntermediateSolutions = false;
 
-      heading_changes = {-pi/4, 0, pi/4};
       open = {}; //a vector of vector<base::Path *> -> a path class contains cost
       closed = {}; //a vector of vector<base::State *>
-      drive_distance = sqrt(2);
     }
     hybridASTAR::~hybridASTAR(void){
       hybridASTAR::freeMemory();
@@ -49,44 +49,38 @@ namespace ompl{
 
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
-      base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si);
+      base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si); //si not defined this way? 
       base::Path *current_path;
       base::Path *next_path;
       current_path->as<geometric::PathGeometric>()->append(start); //WORKON: append function does not exist?
       base::Cost path_cost = current_path->cost(obj);
-      open.pushback(start); //WORKON: open not decared in this scope
+      open.pushback(current_path);
       
       base::State *current_state = start;
       base::State *discrete_state;
       base::State *next_state;
       //While termination condition is false, run the planner
-      while(ptc() == false){
+      while(ptc.eval() == false){
         if(open->size() == 0){
           OMPL_ERROR("%s: There are no possible paths", getName().c_star());
-          ptc() = true;
+          ptc.terminate();
           break;
         } 
-        sort_vectors(*open); //sort path based on the heuristic distance 
+        sort_vectors(open); //sort path based on the heuristic distance 
         current_path = open.back();
         current_state = current_path->as<geometric::PathGeometric>()->getState(current_path->as<geometric::PathGeometric>()->getStateCount()-1);
         open.pop_back();
         
-        std::vector<double> disc_coord = return_discrete(
-          current_state->as<base::SE2StateSpace::StateType>()->getX(), 
-          current_state->as<base::SE2StateSpace::StateType>()->getY()
-        );
+        std::vector<double> disc_coord = return_discrete(current_state->as<base::SE2StateSpace::StateType>()->getX(), current_state->as<base::SE2StateSpace::StateType>()->getY());
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(disc_coord[0], disc_coord[1]);
 
-        closed->append(discrete_state);
+        closed->pushback(discrete_state);
 
         //Condition of the current state examined is the goal state
-        if(*current_state == *discrete_state){ //the specific details of this condition must be defined
-          //i.e. if the definition of the goal state is an area, how that area will be definied 
-          //can result in the change of the comparator here
+        if(state_compare(current_state, goal)){ 
+          std::cout << "path found" << std::endl;
           current_path->print(std::ostream &out);
-          ptc() = true;
-          std::cout << "path found";
           break;
         }
         for(int i = 0; i < heading_changes.size()-1; i++){
@@ -98,7 +92,7 @@ namespace ompl{
             current_state->as<base::SE2StateSpace::StateType>()->getYaw()+heading_changes[i]
           );
         }
-        if(isValid(next_state) && vector_contains(closed, next_state) == false){
+        if(si->isValid(next_state) && vector_contains(closed, next_state) == false){
           heuristic = euclidean_distance(next_state, goal) + drive_distance;
           *next_path = *current_path; //this is done because the function passes by reference
           next_path->push_back(next_state); 
@@ -145,6 +139,22 @@ namespace ompl{
     std::vector<base::Path *> hybridASTAR::sort_vectors(std::vector<base::Path *> input){
         std::sort(input.begin(), input.endl(), compare_path_costs);
         return input;
+    }
+
+    bool state_compare(base::State *input, base::State *goal){
+      double x1 = input->as<base::SE2StateSpace::StateType>()->getX();
+      double y1 = input->as<base::SE2StateSpace::StateType>()->getY();
+      std::vector<double> dis_input = return_discrete(x1, y1);
+
+      double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
+      double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
+      std::vector<double> dis_goal = return_discrete(x_goal, y_goal);
+
+      if(dis_input == dis_goal){
+        return true;
+      } else {
+        return false;
+      }
     }
 
      void hybridASTAR::freeMemory() {
