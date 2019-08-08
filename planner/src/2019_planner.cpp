@@ -66,8 +66,8 @@ int main(int argc, char **argv){
     nh.getParam("/map_id", map_id);
     
     //Date input from Rviz
-    CarSetupComHandle com_handle = CarSetupComHandle(argc, argv, node_name);
-    com_handle.SimpleSetup();
+    CarSetupComHandle comh = CarSetupComHandle(argc, argv, node_name);
+    comh.SimpleSetup();
     comh.SetTopicPub<geometry_msgs::PoseArray>("/hybrid_astar");
 
     //setting up planner 
