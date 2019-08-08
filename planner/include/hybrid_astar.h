@@ -28,8 +28,8 @@ namespace ompl {
         void freeMemory();
 
         double euclidean_distance(base::State *state, base::State *goal);
-        double return_discrete(double x, double y);
-
+        
+        std::vector<double> return_discrete(double x, double y);
         std::vector<base::Path *> open;
         std::vector<base::State *> closed;   
         std::vector<double> heading_changes = {-pi/4, 0, pi/4};
