@@ -23,9 +23,6 @@ namespace ompl{
       specs_.approximateSolutions = true;
       specs_.optimizingPaths = true;
       specs_.canReportIntermediateSolutions = false;
-
-      open = {}; //a vector of vector<base::Path *> -> a path class contains cost
-      closed = {}; //a vector of vector<base::State *>
     }
     hybridASTAR::~hybridASTAR(void){
       hybridASTAR::freeMemory();
@@ -33,7 +30,10 @@ namespace ompl{
 
     base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc){
       checkValidity(); //not declared in this scope
-      bool PATH_FOUND = false;
+      bool PATH_FOUND = false;        
+      std::vector<base::Path *> open;
+      std::vector<base::State *> closed;   
+
 
       //Initialize Goal States
       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>->getState(); //pdef_ not declared in this scope
@@ -67,16 +67,18 @@ namespace ompl{
           ptc.terminate();
           break;
         } 
-        sort_vectors(open); //sort path based on the heuristic distance 
+        open = sort_vectors(*open); //sort path based on the heuristic distance (currently not working properly) 
         current_path = open.back();
         current_state = current_path->as<geometric::PathGeometric>()->getState(current_path->as<geometric::PathGeometric>()->getStateCount()-1);
         open.pop_back();
         
-        std::vector<double> disc_coord = return_discrete(current_state->as<base::SE2StateSpace::StateType>()->getX(), current_state->as<base::SE2StateSpace::StateType>()->getY());
+        double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
+        double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
+        std::vector<double> disc_coord = return_discrete(current_x, current_y);
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(disc_coord[0], disc_coord[1]);
 
-        closed->pushback(discrete_state);
+        closed.pushback(discrete_state);
 
         //Condition of the current state examined is the goal state
         if(state_compare(current_state, goal)){ 
@@ -134,11 +136,14 @@ namespace ompl{
     }
 
     bool compare_path_costs(const base::Path &v1, const base::Path &v2) {
-	    return v1->as<geometric::PathGeometric>()->cost()->value() > v2->as<geometric::PathGeometric>()->cost()->value();
+      double c1 = v1.as<geometric::PathGeometric>()->cost()->value();
+      double c2 = v2.as<geometric::PathGeometric>()->cost()->value();
+
+      return c1 > c2; 
     }
 
     std::vector<base::Path *> hybridASTAR::sort_vectors(std::vector<base::Path *> input){
-        std::sort(input.begin(), input.endl(), compare_path_costs);
+        std::sort(input.begin(), input.end(), compare_path_costs);
         return input;
     }
 
@@ -162,5 +167,4 @@ namespace ompl{
         open.clear();
         closed.clear();
     }
-  }
 }

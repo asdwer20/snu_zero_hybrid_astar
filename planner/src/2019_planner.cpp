@@ -58,10 +58,13 @@ int main(int argc, char **argv){
         
     //Setting up StateSpace using the OMPL Library
     //The space is a Reeds Shepps State Space with a custom planner setup
-    ob::SpaceInformation *space_info = space.getSpaceInformation().get();
+    ob::SpaceInformationPtr space_info(space);
 
     //Get activeness from active_nodes
     ros::Subscriber activenode = nh.subscribe("active_nodes", 1000, activecb);
+
+    //setup planner
+    ompl::hybridASTAR planner(std::make_shared<ompl::hybridASTAR>(si));
     
     //Get map date from Nodehandle
     std::string map_id;
@@ -71,10 +74,6 @@ int main(int argc, char **argv){
     CarSetupComHandle comh = CarSetupComHandle(argc, argv, node_name);
     comh.SimpleSetup();
     comh.SetTopicPub<geometry_msgs::PoseArray>("/hybrid_astar");
-
-    //setting up planner
-    //CAUTION!!! 'si' was not defined! 
-    ompl::hybridASTAR planner(std::make_shared<ompl::hybridASTAR>(si));
 
     int seq = 0;
     while(ros::ok()){
@@ -95,8 +94,8 @@ int main(int argc, char **argv){
             } 
             
             //Set dimensions and bounds for the input map
-            int map_length = input_map.height;
-            int map_width = input_map.width;
+            int map_length = input_map->height();
+            int map_width = input_map->width();
             ob::RealVectorBounds map_bounds(2);
             map_bounds.setLow(0, -map_length);
             map_bounds.setLow(1, -map_width);
@@ -109,8 +108,8 @@ int main(int argc, char **argv){
             /*=================================== WORK ON FROM HERE ============================= */
             //Setup state validity checker using the isStateValid function within 
             //CarSetupComHandle header and bounds
-            ss.setBounds(map_bounds);
-            ss.setStateValidityChecker([input_map, mseq, space_info](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
+            space->as<ob::SE2StateSpace::StateType>()->setBounds(map_bounds);
+            ss.setStateValidityChecker([map_id, mseq, space_info](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
             
             //setting up rest of the planner and the goal points
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
@@ -124,7 +123,7 @@ int main(int argc, char **argv){
             //=======================================UNTIL HERE =====================================
             if(solved){
                 std::cout << "Path found" << std::endl;
-                ob::Path path = ss.getSolutionPath();
+                ob::Path* path = ss.getSolutionPath();
                 if(nodeactivation){
                     comh.PublishPath(map_id, mseq, path);
                 }
