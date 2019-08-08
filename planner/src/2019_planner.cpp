@@ -17,6 +17,7 @@
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
 #include "core_msgs/ActiveNode.h"
+#include "geometry_msgs/PoseArray.h"
 
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
@@ -70,7 +71,8 @@ int main(int argc, char **argv){
     comh.SimpleSetup();
     comh.SetTopicPub<geometry_msgs::PoseArray>("/hybrid_astar");
 
-    //setting up planner 
+    //setting up planner
+    //CAUTION!!! 'si' was not defined! 
     ompl::hybridASTAR planner(std::make_shared<ompl::hybridASTAR>(si));
 
     int seq = 0;
@@ -92,8 +94,8 @@ int main(int argc, char **argv){
             } 
             
             //Set dimensions and bounds for the input map
-            map_length = input_map.height;
-            map_width = input_map.width;
+            int map_length = input_map.height;
+            int map_width = input_map.width;
             ob::RealVectorBounds map_bounds(2);
             map_bounds.setLow(0, -map_length);
             map_bounds.setLow(1, -map_width);
