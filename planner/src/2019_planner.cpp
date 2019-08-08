@@ -120,7 +120,7 @@ int main(int argc, char **argv){
             ss.setStartAndGoalStates(*start, *goal);
             ss.setup();
 
-            ob::Plannerstatus solved = ss.solve(1);
+            ob::PlannerStatus solved = ss.solve(1);
             //=======================================UNTIL HERE =====================================
             if(solved){
                 std::cout << "Path found" << std::endl;

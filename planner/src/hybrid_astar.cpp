@@ -11,6 +11,7 @@
 #include <ompl/base/OptimizationObjective.h>
 #include <ompl/base/objectives/PathLengthOptimizationObjective.h>
 #include <iostream>
+#include <ompl/tools/config/SelfConfig.h>
 
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
@@ -49,10 +50,10 @@ namespace ompl{
 
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
-      base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si); //si not defined this way? 
+      base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si); 
       base::Path *current_path;
       base::Path *next_path;
-      current_path->as<geometric::PathGeometric>()->append(start); //WORKON: append function does not exist?
+      current_path->as<geometric::PathGeometric>()->append(start); 
       base::Cost path_cost = current_path->cost(obj);
       open.pushback(current_path);
       
@@ -94,7 +95,7 @@ namespace ompl{
         }
         if(si->isValid(next_state) && vector_contains(closed, next_state) == false){
           heuristic = euclidean_distance(next_state, goal) + drive_distance;
-          *next_path = *current_path; //this is done because the function passes by reference
+          *next_path = *current_path; 
           next_path->push_back(next_state); 
           open->push_back(next_path);
         }
@@ -123,7 +124,7 @@ namespace ompl{
 
     bool hybridASTAR::vector_contains(std::vector<base::State *> input, base::State *item){
       bool FOUND = false;
-      for(int i = 0; i< input->size() -1; i++){
+      for(int i = 0; i< input.size() -1; i++){
         if(input[i] == item){
           FOUND = true;
           break;
@@ -158,10 +159,8 @@ namespace ompl{
     }
 
      void hybridASTAR::freeMemory() {
-        current_path->clear();
-        next_path->clear();
-        open->clear();
-        closed->clear();
+        open.clear();
+        closed.clear();
     }
   }
 }
