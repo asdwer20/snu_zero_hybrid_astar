@@ -8,6 +8,7 @@
 #include <ompl/base/objectives/PathLengthOptimizationObjective.h>
 #include <ompl/base/spaces/RealVectorBounds.h>
 #include <ompl/base/Planner.h>
+#include <ompl/base/SpaceInformation.h>
 
 #include "ompl/base/spaces/ReedsSheppStateSpace.h"
 #include "ompl/base/OptimizationObjective.h"
@@ -99,7 +100,7 @@ int main(int argc, char **argv){
             ob::RealVectorBounds map_bounds(2);
             map_bounds.setLow(0, -map_length);
             map_bounds.setLow(1, -map_width);
-            map_bounds.setHigh(0. map_length);
+            map_bounds.setHigh(0, map_length);
             map_bounds.setHigh(1, map_width);
             
             ob::ScopedStatePtr start = CarSetupComHandle::GetStart(space, map_id, sseq);
