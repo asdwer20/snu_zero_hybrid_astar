@@ -25,7 +25,7 @@ namespace og = ompl::geometric;
 bool nodeactivation = true;
 // callback for handling activeness
 void activecb(core_msgs::ActiveNode::ConstPtr msg) {
-    int lenth = msg->active_nodes.size();
+    int length = msg->active_nodes.size();
     bool kill = true;
     std::string nn = "path_planner";
     std::string monitor = "zero_monitor";
