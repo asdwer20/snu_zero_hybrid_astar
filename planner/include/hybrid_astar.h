@@ -17,8 +17,11 @@ namespace ompl {
 
         hybridASTAR(const base::SpaceInformationPtr &si);
         ~hybridASTAR(void) override;
+        
         base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc) override;
-
+        
+        int return_lowest_cost_path(std::vector<base::Path*> input, base::OptimizationObjectivePtr obj);
+       
         double drive_distance = sqrt(2);
         double cost;
         double pi = 3.14159265;

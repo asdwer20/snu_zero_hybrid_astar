@@ -51,7 +51,7 @@ void activecb(core_msgs::ActiveNode::ConstPtr msg) {
 
 int main(int argc, char **argv){
     std::string node_name = "hybrid_astar_planner";
-    ob::StateSpacePtr space(std::make_shared<ob::ReedsSheppStateSpace>());
+    ob::StateSpacePtr space(std::make_shared<ob::SE2StateSpace>());
     og::SimpleSetup ss(space);
     ros::init(argc, argv, node_name);
     ros::NodeHandle nh;
@@ -64,7 +64,7 @@ int main(int argc, char **argv){
     ros::Subscriber activenode = nh.subscribe("active_nodes", 1000, activecb);
 
     //setup planner
-    ompl::hybridASTAR planner(std::make_shared<ompl::hybridASTAR>(si));
+    ompl::hybridASTAR planner(std::make_shared<ompl::hybridASTAR>(space_info));
     
     //Get map date from Nodehandle
     std::string map_id;
@@ -94,8 +94,8 @@ int main(int argc, char **argv){
             } 
             
             //Set dimensions and bounds for the input map
-            int map_length = input_map->height();
-            int map_width = input_map->width();
+            int map_length = input_map->info.height;
+            int map_width = input_map->info.width;
             ob::RealVectorBounds map_bounds(2);
             map_bounds.setLow(0, -map_length);
             map_bounds.setLow(1, -map_width);
@@ -108,7 +108,7 @@ int main(int argc, char **argv){
             /*=================================== WORK ON FROM HERE ============================= */
             //Setup state validity checker using the isStateValid function within 
             //CarSetupComHandle header and bounds
-            space->as<ob::SE2StateSpace::StateType>()->setBounds(map_bounds);
+            space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
             ss.setStateValidityChecker([map_id, mseq, space_info](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
             
             //setting up rest of the planner and the goal points
