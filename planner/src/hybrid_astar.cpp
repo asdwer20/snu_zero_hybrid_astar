@@ -179,7 +179,11 @@ namespace ompl{
         return false;
       }
     }
-    
+    void hybridASTAR::setup(void) {
+        Planner::setup();
+        //mtree_.freeMemory();
+        //timeflags_.clear();
+    }
     void hybridASTAR::clear(void) {
 
     }
