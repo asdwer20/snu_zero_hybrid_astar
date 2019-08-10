@@ -64,7 +64,7 @@ int main(int argc, char **argv){
     ros::Subscriber activenode = nh.subscribe("active_nodes", 1000, activecb);
 
     //setup planner
-    ompl::hybridASTAR planner(std::make_shared<ompl::hybridASTAR>(space_info));
+    ompl::hybridASTARPtr planner(std::make_shared<ompl::hybridASTAR>(space_info));
     
     //Get map date from Nodehandle
     std::string map_id;
