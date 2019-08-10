@@ -58,7 +58,7 @@ int main(int argc, char **argv){
         
     //Setting up StateSpace using the OMPL Library
     //The space is a Reeds Shepps State Space with a custom planner setup
-    ob::SpaceInformationPtr space_info(space);
+    ob::SpaceInformationPtr space_info(std::make_shared<ob::SpaceInformation>(space));
 
     //Get activeness from active_nodes
     ros::Subscriber activenode = nh.subscribe("active_nodes", 1000, activecb);
