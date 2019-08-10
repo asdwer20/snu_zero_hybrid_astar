@@ -9,6 +9,7 @@
 #include <ompl/base/spaces/RealVectorBounds.h>
 #include <ompl/base/Planner.h>
 #include <ompl/base/SpaceInformation.h>
+#include <ompl/control/PathControl.h>
 
 #include "ompl/base/spaces/ReedsSheppStateSpace.h"
 #include "ompl/base/OptimizationObjective.h"
@@ -22,6 +23,7 @@
 
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
+namespace oc = ompl::control;
 
 // activeness
 bool nodeactivation = true;
@@ -123,7 +125,7 @@ int main(int argc, char **argv){
             //=======================================UNTIL HERE =====================================
             if(solved){
                 std::cout << "Path found" << std::endl;
-                ob::Path* path = ss.getSolutionPath();
+                oc::PathControl path = ss.getSolutionPath();
                 if(nodeactivation){
                     comh.PublishPath(map_id, mseq, path);
                 }
