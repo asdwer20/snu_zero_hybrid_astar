@@ -71,6 +71,9 @@ int main(int argc, char **argv){
     //Get map date from Nodehandle
     std::string map_id;
     nh.getParam("/map_id", map_id);
+
+    //withgear
+    bool withgear = false;
     
     //Date input from Rviz
     CarSetupComHandle comh = CarSetupComHandle(argc, argv, node_name);
@@ -125,9 +128,9 @@ int main(int argc, char **argv){
             //=======================================UNTIL HERE =====================================
             if(solved){
                 std::cout << "Path found" << std::endl;
-                oc::PathControl path = ss.getSolutionPath();
+                og::PathGeometric path = ss.getSolutionPath();
                 if(nodeactivation){
-                    comh.PublishPath(map_id, mseq, path);
+                    comh.PublishPath(map_id, mseq, path, withgear);
                 }
             } else {
                 std::cout << "No path found" << std::endl;
