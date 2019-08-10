@@ -179,7 +179,12 @@ namespace ompl{
         return false;
       }
     }
+    
+    void hybridASTAR::clear(void) {
 
-     void hybridASTAR::freeMemory() {
+    }
+    
+    void hybridASTAR::freeMemory() {
+
     }
 }
