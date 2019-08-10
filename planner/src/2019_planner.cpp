@@ -115,7 +115,7 @@ int main(int argc, char **argv){
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
             ss.setOptimizationObjective(obj);
             planner->setup();
-            ss.setPlanner(planner)
+            ss.setPlanner(planner);
             ss.setStartAndGoalStates(*start, *goal);
             ss.setup();
 
