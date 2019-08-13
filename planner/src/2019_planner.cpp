@@ -54,33 +54,38 @@ void activecb(core_msgs::ActiveNode::ConstPtr msg) {
 int main(int argc, char **argv){
     std::string node_name = "hybrid_astar_planner";
     ob::StateSpacePtr space(std::make_shared<ob::SE2StateSpace>());
-    og::SimpleSetup ss(space);
+    ob::SpaceInformationPtr space_info(std::make_shared<ob::SpaceInformation>(space));
+    og::SimpleSetup ss(space_info);
     ros::init(argc, argv, node_name);
     ros::NodeHandle nh;
         
     //Setting up StateSpace using the OMPL Library
-    //The space is a Reeds Shepps State Space with a custom planner setup
-    ob::SpaceInformationPtr space_info(std::make_shared<ob::SpaceInformation>(space));
+   
 
     //Get activeness from active_nodes
-    ros::Subscriber activenode = nh.subscribe("active_nodes", 1000, activecb);
+    ros::Subscriber activenode = nh.subscribe("/active_nodes", 1000, activecb);
 
     //setup planner
     ompl::hybridASTARPtr planner(std::make_shared<ompl::hybridASTAR>(space_info));
     
     //Get map date from Nodehandle
-    std::string map_id;
-    nh.getParam("/map_id", map_id);
+    std::string map_id = "car_frame";
+    //nh.getParam("/map_id", map_id);
 
-    //withgear
-    bool withgear = false;
+    ROS_ERROR_STREAM("map id is: " << map_id); //map id is null currently
     
     //Date input from Rviz
     CarSetupComHandle comh = CarSetupComHandle(argc, argv, node_name);
     comh.SimpleSetup();
     comh.SetTopicPub<geometry_msgs::PoseArray>("/hybrid_astar");
+    
+    bool withgear = false;
 
     int seq = 0;
+
+    //debug
+    std::cout << "------------------setup cleared-----------------" << std::endl;
+
     while(ros::ok()){
         //Check if the message was updated
         if(CarSetupComHandle::isUpdatedMap()){
@@ -90,17 +95,31 @@ int main(int argc, char **argv){
             int mseq = CarSetupComHandle::GetLatestMapSeq();
             int sseq = CarSetupComHandle::GetLatestStartSeq();
 
+            //DEBUG: not sure if these values are accurate (especially the start)
+            std::cout << "-------------------debug-----------------" << std::endl;
+            std::cout << "goal sequence: " << gseq << std::endl;
+            std::cout << "map sequence: " << mseq << std::endl;
+            std::cout << "start sequence: " << sseq << std::endl;
+            std::cout << "----------------debug end-----------------" << std::endl;
+
             nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq); 
             
             //Error exception for empty map
             if(input_map == NULL){
-              ROS_ERROR_STREAM("map input is empty");
+              ROS_ERROR_STREAM("map input is empty"); //current map is empty
               break;
             } 
             
             //Set dimensions and bounds for the input map
             int map_length = input_map->info.height;
             int map_width = input_map->info.width;
+
+            //DEBUG: length and width inputs are working fine
+            std::cout << "-------------------debug-----------------" << std::endl;
+            std::cout << "map length: " << map_length << std::endl;
+            std::cout << "map width: " << map_width << std::endl;
+            std::cout << "----------------debug end-----------------" << std::endl;
+
             ob::RealVectorBounds map_bounds(2);
             map_bounds.setLow(0, -map_length);
             map_bounds.setLow(1, -map_width);
@@ -114,15 +133,18 @@ int main(int argc, char **argv){
             //Setup state validity checker using the isStateValid function within 
             //CarSetupComHandle header and bounds
             space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
-            ss.setStateValidityChecker([map_id, mseq, space](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
-            
+            space_info->setStateValidityChecker([map_id, mseq, space](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
+            space_info->setStateValidityCheckingResolution(0.005);
             //setting up rest of the planner and the goal points
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
             ss.setOptimizationObjective(obj);
             planner->setup();
             ss.setPlanner(planner);
             ss.setStartAndGoalStates(*start, *goal);
+            ss.getSpaceInformation()->setStateValidityCheckingResolution(0.005);
             ss.setup();
+            std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
+            ss.print();
 
             ob::PlannerStatus solved = ss.solve(1);
             //=======================================UNTIL HERE =====================================
@@ -133,7 +155,7 @@ int main(int argc, char **argv){
                     comh.PublishPath(map_id, mseq, path, withgear);
                 }
             } else {
-                std::cout << "No path found" << std::endl;
+                std::cout << "NO PATH FOUND" << std::endl;
             }
         }
         

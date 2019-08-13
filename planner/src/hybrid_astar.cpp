@@ -49,6 +49,21 @@ namespace ompl{
       //Initialize Start States
       base::State *start = pdef_->getStartState(pdef_->getStartStateCount()-1);
 
+      //DEBUG: Currently, the start state is equal to the goal state
+      double goal_x = goal->as<base::SE2StateSpace::StateType>()->getX();
+      double goal_y = goal->as<base::SE2StateSpace::StateType>()->getY();
+      double goal_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
+      
+      double start_x = goal->as<base::SE2StateSpace::StateType>()->getX();
+      double start_y = goal->as<base::SE2StateSpace::StateType>()->getY();
+      double start_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
+
+      std::cout << "-------------------debug-----------------" << std::endl;
+      std::cout << "start state:" << start_x << ", " << start_y << ", " << start_theta << std::endl;
+      std::cout << "goal state:" << goal_x << ", " << goal_y << ", " << goal_theta << std::endl;
+      std::cout << "----------------debug end-----------------" << std::endl;
+
+
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
       base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si_); 

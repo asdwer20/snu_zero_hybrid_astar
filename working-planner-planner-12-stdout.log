@@ -1,0 +1,1180 @@
+CarSetupComHandle with node name "path_planner" created
+Subscribing StartPoint as topic name "/initial_pose"
+Subscribing GoalPoint as topic name "/goal_pose"
+Subscribing BaseFrame as topic name "/tf"
+Subscribing Map as topic name "/local_map"
+Subscribing Point as topic name "/clicked_point"
+Publishing Path as topic name "/path"
+Publishing somthing as topic name "/tree"
+goal_initialized
+goal_seq number : 0, goal id : car_frame
+map_initialized
+map_seq number : 0, map id : car_frame
+planning sequence number : 0
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.484
+  - average length of a valid motion: 2.65416
+  - average number of samples drawn per second: sampleUniform()=2.64866e+07 sampleUniformNear()=2.21813e+07 sampleGaussian()=7.34063e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x173fe00
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+4 paths are found
+Info:    Solution found in 1.010084 seconds
+/tree published
+Found solution:
+Path published : 0
+basefrom_global_ref_to_car_frame_initialized
+basefrom_global_ref_to_car_frame_seq number : 0, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_initialized
+basefrom_car_frame_to_camera_seq number : 0, base id : camera, parent_id : car_frame
+map_seq number : 1, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 1, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 1, base id : camera, parent_id : car_frame
+goal_seq number : 1, goal id : car_frame
+goal_seq number : 2, goal id : car_frame
+map_seq number : 2, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 2, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 2, base id : camera, parent_id : car_frame
+goal_seq number : 3, goal id : car_frame
+map_seq number : 3, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 3, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 3, base id : camera, parent_id : car_frame
+goal_seq number : 4, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 4, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 4, base id : camera, parent_id : car_frame
+map_seq number : 4, map id : car_frame
+map_seq number : 5, map id : car_frame
+goal_seq number : 5, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 5, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 5, base id : camera, parent_id : car_frame
+goal_seq number : 6, goal id : car_frame
+map_seq number : 6, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 6, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 6, base id : camera, parent_id : car_frame
+goal_seq number : 7, goal id : car_frame
+map_seq number : 7, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 7, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 7, base id : camera, parent_id : car_frame
+goal_seq number : 8, goal id : car_frame
+map_seq number : 8, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 8, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 8, base id : camera, parent_id : car_frame
+goal_seq number : 9, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 9, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 9, base id : camera, parent_id : car_frame
+map_seq number : 9, map id : car_frame
+goal_seq number : 10, goal id : car_frame
+map_seq number : 10, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 10, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 10, base id : camera, parent_id : car_frame
+planning sequence number : 10
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.486
+  - average length of a valid motion: 2.51197
+  - average number of samples drawn per second: sampleUniform()=1.17295e+07 sampleUniformNear()=1.05118e+07 sampleGaussian()=4.79566e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1741950
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+8 paths are found
+Info:    Solution found in 1.010393 seconds
+/tree published
+Found solution:
+Path published : 10
+goal_seq number : 11, goal id : car_frame
+map_seq number : 11, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 11, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 11, base id : camera, parent_id : car_frame
+goal_seq number : 12, goal id : car_frame
+map_seq number : 12, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 12, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 12, base id : camera, parent_id : car_frame
+goal_seq number : 13, goal id : car_frame
+map_seq number : 13, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 13, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 13, base id : camera, parent_id : car_frame
+goal_seq number : 14, goal id : car_frame
+map_seq number : 14, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 14, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 14, base id : camera, parent_id : car_frame
+goal_seq number : 15, goal id : car_frame
+map_seq number : 15, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 15, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 15, base id : camera, parent_id : car_frame
+map_seq number : 16, map id : car_frame
+goal_seq number : 16, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 16, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 16, base id : camera, parent_id : car_frame
+map_seq number : 17, map id : car_frame
+goal_seq number : 17, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 17, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 17, base id : camera, parent_id : car_frame
+goal_seq number : 18, goal id : car_frame
+map_seq number : 18, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 18, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 18, base id : camera, parent_id : car_frame
+goal_seq number : 19, goal id : car_frame
+map_seq number : 19, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 19, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 19, base id : camera, parent_id : car_frame
+goal_seq number : 20, goal id : car_frame
+map_seq number : 20, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 20, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 20, base id : camera, parent_id : car_frame
+planning sequence number : 20
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.523
+  - average length of a valid motion: 2.86574
+  - average number of samples drawn per second: sampleUniform()=1.8356e+07 sampleUniformNear()=1.84342e+07 sampleGaussian()=7.52072e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1747720
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+16 paths are found
+Info:    Solution found in 1.002826 seconds
+/tree published
+Found solution:
+Path published : 20
+goal_seq number : 21, goal id : car_frame
+map_seq number : 21, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 21, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 21, base id : camera, parent_id : car_frame
+goal_seq number : 22, goal id : car_frame
+map_seq number : 22, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 22, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 22, base id : camera, parent_id : car_frame
+map_seq number : 23, map id : car_frame
+goal_seq number : 23, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 23, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 23, base id : camera, parent_id : car_frame
+goal_seq number : 24, goal id : car_frame
+map_seq number : 24, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 24, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 24, base id : camera, parent_id : car_frame
+goal_seq number : 25, goal id : car_frame
+map_seq number : 25, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 25, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 25, base id : camera, parent_id : car_frame
+goal_seq number : 26, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 26, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 26, base id : camera, parent_id : car_frame
+map_seq number : 26, map id : car_frame
+goal_seq number : 27, goal id : car_frame
+map_seq number : 27, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 27, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 27, base id : camera, parent_id : car_frame
+goal_seq number : 28, goal id : car_frame
+map_seq number : 28, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 28, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 28, base id : camera, parent_id : car_frame
+goal_seq number : 29, goal id : car_frame
+map_seq number : 29, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 29, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 29, base id : camera, parent_id : car_frame
+goal_seq number : 30, goal id : car_frame
+map_seq number : 30, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 30, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 30, base id : camera, parent_id : car_frame
+planning sequence number : 30
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.499
+  - average length of a valid motion: 2.43427
+  - average number of samples drawn per second: sampleUniform()=2.23969e+07 sampleUniformNear()=1.90317e+07 sampleGaussian()=7.72589e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x193b8c0
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+8 paths are found
+Info:    Solution found in 1.001185 seconds
+/tree published
+Found solution:
+Path published : 30
+goal_seq number : 31, goal id : car_frame
+map_seq number : 31, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 31, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 31, base id : camera, parent_id : car_frame
+goal_seq number : 32, goal id : car_frame
+map_seq number : 32, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 32, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 32, base id : camera, parent_id : car_frame
+goal_seq number : 33, goal id : car_frame
+map_seq number : 33, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 33, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 33, base id : camera, parent_id : car_frame
+map_seq number : 34, map id : car_frame
+goal_seq number : 34, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 34, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 34, base id : camera, parent_id : car_frame
+goal_seq number : 35, goal id : car_frame
+map_seq number : 35, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 35, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 35, base id : camera, parent_id : car_frame
+goal_seq number : 36, goal id : car_frame
+map_seq number : 36, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 36, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 36, base id : camera, parent_id : car_frame
+goal_seq number : 37, goal id : car_frame
+map_seq number : 37, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 37, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 37, base id : camera, parent_id : car_frame
+goal_seq number : 38, goal id : car_frame
+map_seq number : 38, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 38, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 38, base id : camera, parent_id : car_frame
+goal_seq number : 39, goal id : car_frame
+map_seq number : 39, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 39, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 39, base id : camera, parent_id : car_frame
+goal_seq number : 40, goal id : car_frame
+map_seq number : 40, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 40, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 40, base id : camera, parent_id : car_frame
+planning sequence number : 40
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.498
+  - average length of a valid motion: 2.76127
+  - average number of samples drawn per second: sampleUniform()=2.24085e+07 sampleUniformNear()=1.82665e+07 sampleGaussian()=7.36057e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1a1f630
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+9 paths are found
+Info:    Solution found in 1.010447 seconds
+/tree published
+Found solution:
+Path published : 40
+goal_seq number : 41, goal id : car_frame
+map_seq number : 41, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 41, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 41, base id : camera, parent_id : car_frame
+goal_seq number : 42, goal id : car_frame
+map_seq number : 42, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 42, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 42, base id : camera, parent_id : car_frame
+goal_seq number : 43, goal id : car_frame
+map_seq number : 43, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 43, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 43, base id : camera, parent_id : car_frame
+goal_seq number : 44, goal id : car_frame
+map_seq number : 44, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 44, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 44, base id : camera, parent_id : car_frame
+goal_seq number : 45, goal id : car_frame
+map_seq number : 45, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 45, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 45, base id : camera, parent_id : car_frame
+goal_seq number : 46, goal id : car_frame
+map_seq number : 46, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 46, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 46, base id : camera, parent_id : car_frame
+goal_seq number : 47, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 47, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 47, base id : camera, parent_id : car_frame
+map_seq number : 47, map id : car_frame
+goal_seq number : 48, goal id : car_frame
+map_seq number : 48, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 48, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 48, base id : camera, parent_id : car_frame
+goal_seq number : 49, goal id : car_frame
+map_seq number : 49, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 49, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 49, base id : camera, parent_id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 50, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 50, base id : camera, parent_id : car_frame
+map_seq number : 50, map id : car_frame
+goal_seq number : 50, goal id : car_frame
+planning sequence number : 50
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.512
+  - average length of a valid motion: 3.08282
+  - average number of samples drawn per second: sampleUniform()=2.2719e+07 sampleUniformNear()=1.8488e+07 sampleGaussian()=7.5291e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1bc5910
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+10 paths are found
+Info:    Solution found in 1.003178 seconds
+/tree published
+Found solution:
+Path published : 50
+goal_seq number : 51, goal id : car_frame
+map_seq number : 51, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 51, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 51, base id : camera, parent_id : car_frame
+goal_seq number : 52, goal id : car_frame
+map_seq number : 52, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 52, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 52, base id : camera, parent_id : car_frame
+goal_seq number : 53, goal id : car_frame
+map_seq number : 53, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 53, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 53, base id : camera, parent_id : car_frame
+map_seq number : 54, map id : car_frame
+goal_seq number : 54, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 54, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 54, base id : camera, parent_id : car_frame
+map_seq number : 55, map id : car_frame
+goal_seq number : 55, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 55, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 55, base id : camera, parent_id : car_frame
+goal_seq number : 56, goal id : car_frame
+map_seq number : 56, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 56, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 56, base id : camera, parent_id : car_frame
+map_seq number : 57, map id : car_frame
+goal_seq number : 57, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 57, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 57, base id : camera, parent_id : car_frame
+goal_seq number : 58, goal id : car_frame
+map_seq number : 58, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 58, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 58, base id : camera, parent_id : car_frame
+goal_seq number : 59, goal id : car_frame
+map_seq number : 59, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 59, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 59, base id : camera, parent_id : car_frame
+map_seq number : 60, map id : car_frame
+goal_seq number : 60, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 60, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 60, base id : camera, parent_id : car_frame
+planning sequence number : 60
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.495
+  - average length of a valid motion: 2.91245
+  - average number of samples drawn per second: sampleUniform()=2.12337e+07 sampleUniformNear()=1.76246e+07 sampleGaussian()=7.25895e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1aa7440
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+8 paths are found
+Info:    Solution found in 1.001585 seconds
+/tree published
+Found solution:
+Path published : 60
+goal_seq number : 61, goal id : car_frame
+map_seq number : 61, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 61, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 61, base id : camera, parent_id : car_frame
+map_seq number : 62, map id : car_frame
+goal_seq number : 62, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 62, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 62, base id : camera, parent_id : car_frame
+goal_seq number : 63, goal id : car_frame
+map_seq number : 63, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 63, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 63, base id : camera, parent_id : car_frame
+goal_seq number : 64, goal id : car_frame
+map_seq number : 64, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 64, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 64, base id : camera, parent_id : car_frame
+goal_seq number : 65, goal id : car_frame
+map_seq number : 65, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 65, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 65, base id : camera, parent_id : car_frame
+map_seq number : 66, map id : car_frame
+goal_seq number : 66, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 66, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 66, base id : camera, parent_id : car_frame
+goal_seq number : 67, goal id : car_frame
+map_seq number : 67, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 67, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 67, base id : camera, parent_id : car_frame
+goal_seq number : 68, goal id : car_frame
+map_seq number : 68, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 68, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 68, base id : camera, parent_id : car_frame
+goal_seq number : 69, goal id : car_frame
+map_seq number : 69, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 69, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 69, base id : camera, parent_id : car_frame
+map_seq number : 70, map id : car_frame
+goal_seq number : 70, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 70, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 70, base id : camera, parent_id : car_frame
+planning sequence number : 70
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.49
+  - average length of a valid motion: 2.62798
+  - average number of samples drawn per second: sampleUniform()=2.22573e+07 sampleUniformNear()=1.82979e+07 sampleGaussian()=7.37664e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1e62bc0
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+10 paths are found
+Info:    Solution found in 1.007974 seconds
+/tree published
+Found solution:
+Path published : 70
+goal_seq number : 71, goal id : car_frame
+map_seq number : 71, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 71, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 71, base id : camera, parent_id : car_frame
+goal_seq number : 72, goal id : car_frame
+map_seq number : 72, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 72, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 72, base id : camera, parent_id : car_frame
+goal_seq number : 73, goal id : car_frame
+map_seq number : 73, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 73, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 73, base id : camera, parent_id : car_frame
+map_seq number : 74, map id : car_frame
+goal_seq number : 74, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 74, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 74, base id : camera, parent_id : car_frame
+map_seq number : 75, map id : car_frame
+goal_seq number : 75, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 75, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 75, base id : camera, parent_id : car_frame
+map_seq number : 76, map id : car_frame
+goal_seq number : 76, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 76, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 76, base id : camera, parent_id : car_frame
+goal_seq number : 77, goal id : car_frame
+map_seq number : 77, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 77, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 77, base id : camera, parent_id : car_frame
+goal_seq number : 78, goal id : car_frame
+map_seq number : 78, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 78, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 78, base id : camera, parent_id : car_frame
+goal_seq number : 79, goal id : car_frame
+map_seq number : 79, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 79, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 79, base id : camera, parent_id : car_frame
+goal_seq number : 80, goal id : car_frame
+map_seq number : 80, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 80, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 80, base id : camera, parent_id : car_frame
+goal_seq number : 81, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 81, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 81, base id : camera, parent_id : car_frame
+map_seq number : 81, map id : car_frame
+planning sequence number : 81
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.506
+  - average length of a valid motion: 2.91102
+  - average number of samples drawn per second: sampleUniform()=2.28269e+07 sampleUniformNear()=1.85529e+07 sampleGaussian()=7.58697e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1cf1600
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+14 paths are found
+Info:    Solution found in 1.007127 seconds
+/tree published
+Found solution:
+Path published : 81
+goal_seq number : 82, goal id : car_frame
+map_seq number : 82, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 82, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 82, base id : camera, parent_id : car_frame
+goal_seq number : 83, goal id : car_frame
+map_seq number : 83, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 83, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 83, base id : camera, parent_id : car_frame
+goal_seq number : 84, goal id : car_frame
+map_seq number : 84, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 84, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 84, base id : camera, parent_id : car_frame
+goal_seq number : 85, goal id : car_frame
+map_seq number : 85, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 85, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 85, base id : camera, parent_id : car_frame
+map_seq number : 86, map id : car_frame
+goal_seq number : 86, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 86, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 86, base id : camera, parent_id : car_frame
+goal_seq number : 87, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 87, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 87, base id : camera, parent_id : car_frame
+map_seq number : 87, map id : car_frame
+goal_seq number : 88, goal id : car_frame
+map_seq number : 88, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 88, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 88, base id : camera, parent_id : car_frame
+goal_seq number : 89, goal id : car_frame
+map_seq number : 89, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 89, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 89, base id : camera, parent_id : car_frame
+goal_seq number : 90, goal id : car_frame
+map_seq number : 90, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 90, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 90, base id : camera, parent_id : car_frame
+goal_seq number : 91, goal id : car_frame
+map_seq number : 91, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 91, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 91, base id : camera, parent_id : car_frame
+planning sequence number : 91
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.493
+  - average length of a valid motion: 2.6086
+  - average number of samples drawn per second: sampleUniform()=1.26748e+07 sampleUniformNear()=1.09331e+07 sampleGaussian()=5.11619e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x1e62bc0
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+4 paths are found
+Info:    Solution found in 1.010486 seconds
+/tree published
+Found solution:
+Path published : 91
+map_seq number : 92, map id : car_frame
+goal_seq number : 92, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 92, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 92, base id : camera, parent_id : car_frame
+goal_seq number : 93, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 93, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 93, base id : camera, parent_id : car_frame
+map_seq number : 93, map id : car_frame
+map_seq number : 94, map id : car_frame
+goal_seq number : 94, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 94, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 94, base id : camera, parent_id : car_frame
+map_seq number : 95, map id : car_frame
+goal_seq number : 95, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 95, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 95, base id : camera, parent_id : car_frame
+goal_seq number : 96, goal id : car_frame
+map_seq number : 96, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 96, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 96, base id : camera, parent_id : car_frame
+goal_seq number : 97, goal id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 97, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 97, base id : camera, parent_id : car_frame
+map_seq number : 97, map id : car_frame
+goal_seq number : 98, goal id : car_frame
+map_seq number : 98, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 98, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 98, base id : camera, parent_id : car_frame
+goal_seq number : 99, goal id : car_frame
+map_seq number : 99, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 99, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 99, base id : camera, parent_id : car_frame
+goal_seq number : 100, goal id : car_frame
+map_seq number : 100, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 100, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 100, base id : camera, parent_id : car_frame
+goal_seq number : 101, goal id : car_frame
+map_seq number : 101, map id : car_frame
+basefrom_global_ref_to_car_frame_seq number : 101, base id : car_frame, parent_id : global_ref
+basefrom_car_frame_to_camera_seq number : 101, base id : camera, parent_id : car_frame
+planning sequence number : 101
+Start:No id found : car_frame
+Info:    doRRT: Space information setup was not yet called. Calling now.
+------------------------SimpleSetup-------------------------
+Properties of the state space 'SE2CompoundSpace0'
+  - signature: 6 4 3 1 2 2 1 
+  - dimension: 3
+  - extent: 10.0561
+  - sanity checks for state space passed
+  - probability of valid states: 0.478
+  - average length of a valid motion: 2.82947
+  - average number of samples drawn per second: sampleUniform()=2.32537e+07 sampleUniformNear()=1.90002e+07 sampleGaussian()=7.71742e+06
+Settings for the state space 'SE2CompoundSpace0'
+  - state validity check resolution: 0.5%
+  - valid segment count factor: 1
+  - state space:
+Compound state space 'SE2CompoundSpace0' of dimension 3 (locked) [
+Real vector state space 'RealVectorSpace1' of dimension 2 with bounds: 
+  - min: -3 -0.5 
+  - max: 3 5.5 
+ of weight 1
+SO2 state space 'SO2Space2'
+ of weight 0.5
+]
+Registered projections:
+  - <default>
+Projection of dimension 2
+Cell sizes (computed defaults): [0.3 0.3]
+
+Declared parameters:
+longest_valid_segment_fraction = 0.0050000000000000001
+projection.cellsize.0 = 0.29999999999999999
+projection.cellsize.1 = 0.29999999999999999
+projection.cellsize_factor = 
+valid_segment_count_factor = 1
+Valid state sampler named uniform with parameters:
+nr_attempts = 100
+  - control space:
+Real vector control space 'RealVectorControl[SE2CompoundSpace0]' with bounds: 
+  - min: 0 -1 
+  - max: 1 1 
+  - can propagate backward: yes
+  - propagation step size: 0.01
+  - propagation duration: [1, 10]
+Planner doRRT specs:
+Multithreaded:                 No
+Reports approximate solutions: Yes
+Can optimize solutions:        Yes
+Aware of the following parameters:
+Declared parameters for planner doRRT:
+Start states:
+Compound state [
+RealVectorState [0 0]
+SO2State [1.5708]
+]
+Goal state, threshold = 2.22045e-16, memory address = 0x1741f90, state = 
+Compound state [
+RealVectorState [0 2]
+SO2State [0]
+]
+Optimization Objective: Path Length @0x203f560
+Optimization Threshold: 0
+Average state cost: 0
+There are 0 solutions
+7 paths are found
+Info:    Solution found in 1.002155 seconds
+/tree published
+Found solution:
+Path published : 101
+destructing CarSetupComHandle of "path_planner" node
