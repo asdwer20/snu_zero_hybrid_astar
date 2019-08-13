@@ -57,10 +57,7 @@ int main(int argc, char **argv){
     ob::SpaceInformationPtr space_info(std::make_shared<ob::SpaceInformation>(space));
     og::SimpleSetup ss(space_info);
     ros::init(argc, argv, node_name);
-    ros::NodeHandle nh;
-        
-    //Setting up StateSpace using the OMPL Library
-   
+    ros::NodeHandle nh;   
 
     //Get activeness from active_nodes
     ros::Subscriber activenode = nh.subscribe("/active_nodes", 1000, activecb);
@@ -72,8 +69,6 @@ int main(int argc, char **argv){
     std::string map_id = "car_frame";
     //nh.getParam("/map_id", map_id);
 
-    ROS_ERROR_STREAM("map id is: " << map_id); //map id is null currently
-    
     //Date input from Rviz
     CarSetupComHandle comh = CarSetupComHandle(argc, argv, node_name);
     comh.SimpleSetup();
@@ -128,6 +123,16 @@ int main(int argc, char **argv){
             
             ob::ScopedStatePtr start = CarSetupComHandle::GetStart(space, map_id, sseq);
             ob::ScopedStatePtr goal = CarSetupComHandle::GetGoal(space, map_id, gseq);
+
+            //DEBUG print start and goal states:: Doesnt work 
+            std::cout << "start state: ";
+            start->print(std::cout);
+            std::cout << std::endl;
+
+            std::cout << "goal state: ";
+            goal->print(std::cout);
+            std::cout << std::endl;            
+
 
             /*=================================== WORK ON FROM HERE ============================= */
             //Setup state validity checker using the isStateValid function within 
