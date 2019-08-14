@@ -78,9 +78,6 @@ int main(int argc, char **argv){
 
     int seq = 0;
 
-    //debug
-    std::cout << "------------------setup cleared-----------------" << std::endl;
-
     while(ros::ok()){
         //Check if the message was updated
         if(CarSetupComHandle::isUpdatedMap()){
