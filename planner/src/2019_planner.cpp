@@ -83,7 +83,6 @@ int main(int argc, char **argv){
     int seq = 0;
 
 
-    std::cout << "---Hello ros::ok---" << std::endl;
     while(ros::ok()){
         //Check if the message was updated
         if(CarSetupComHandle::isUpdatedMap()){
@@ -111,6 +110,15 @@ int main(int argc, char **argv){
             //Set dimensions and bounds for the input map
             int map_length = input_map->info.height;
             int map_width = input_map->info.width;
+            float map_len_res = input_map->info.resolution;
+            float map_len_fix = input_map->info.height * input_map->info.resolution;
+            float map_wid_fix = input_map->info.width * input_map->info.resolution;
+            std::cout << "--info.resolution--" << std::endl;
+            std::cout << map_len_res << std::endl;
+            std::cout << "--info.origin.position.x--" << std::endl;
+            std::cout << input_map->info.origin.position.x << std::endl;
+            std::cout << "--info.origin.position.y--" << std::endl;
+            std::cout << input_map->info.origin.position.y << std::endl;
 
             //DEBUG: length and width inputs are working fine
             std::cout << "-------------------debug-----------------" << std::endl;
@@ -119,10 +127,10 @@ int main(int argc, char **argv){
             std::cout << "----------------debug end-----------------" << std::endl;
 
             ob::RealVectorBounds map_bounds(2);
-            map_bounds.setLow(0, -map_length);
-            map_bounds.setLow(1, -map_width);
-            map_bounds.setHigh(0, map_length);
-            map_bounds.setHigh(1, map_width);
+            map_bounds.setLow(0, input_map->info.origin.position.x-map_len_fix);
+            map_bounds.setLow(1, input_map->info.origin.position.y-map_wid_fix);
+            map_bounds.setHigh(0, input_map->info.origin.position.x+map_len_fix);
+            map_bounds.setHigh(1, input_map->info.origin.position.y+map_wid_fix);
             space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
             
@@ -145,6 +153,7 @@ int main(int argc, char **argv){
             //CarSetupComHandle header and bounds
             space_info->setStateValidityChecker([map_id, mseq, space](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
             space_info->setStateValidityCheckingResolution(0.005);
+            
             //setting up rest of the planner and the goal points
             ss.setOptimizationObjective(obj);
             planner->setup();
