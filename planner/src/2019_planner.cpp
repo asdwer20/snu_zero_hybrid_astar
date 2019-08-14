@@ -163,8 +163,9 @@ int main(int argc, char **argv){
             ss.setup();
             std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
             ss.print();
-
+            std::cout << "checkpoint 1" << std::endl;
             ob::PlannerStatus solved = ss.solve(1);
+            std::cout << "checkpoint 2" << std::endl;
             //=======================================UNTIL HERE =====================================
             if(solved){
                 std::cout << "Path found" << std::endl;
