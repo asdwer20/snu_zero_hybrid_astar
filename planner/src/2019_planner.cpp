@@ -137,20 +137,7 @@ int main(int argc, char **argv){
 
             ob::ScopedStatePtr start = CarSetupComHandle::GetStart(space, map_id, sseq);
             ob::ScopedStatePtr goal = CarSetupComHandle::GetGoal(space, map_id, gseq);
-
-            //DEBUG print start and goal states:: Doesnt work 
-            std::cout << "start state: ";
-            start->print(std::cout);
-            std::cout << std::endl;
-
-            std::cout << "goal state: ";
-            goal->print(std::cout);
-            std::cout << std::endl;            
-
-
-            /*=================================== WORK ON FROM HERE ============================= */
-            //Setup state validity checker using the isStateValid function within 
-            //CarSetupComHandle header and bounds
+        
             space_info->setStateValidityChecker([map_id, mseq, space](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
             space_info->setStateValidityCheckingResolution(0.005);
             
@@ -163,10 +150,8 @@ int main(int argc, char **argv){
             ss.setup();
             std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
             ss.print();
-            std::cout << "checkpoint 1" << std::endl;
-            ob::PlannerStatus solved = ss.solve(1);
-            std::cout << "checkpoint 2" << std::endl;
-            //=======================================UNTIL HERE =====================================
+            ob::PlannerStatus solved = ss.solve(10);
+
             if(solved){
                 std::cout << "Path found" << std::endl;
                 og::PathGeometric path = ss.getSolutionPath();
