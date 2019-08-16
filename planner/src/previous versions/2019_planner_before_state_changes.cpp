@@ -170,10 +170,8 @@ int main(int argc, char **argv){
             if(solved){
                 std::cout << "Path found" << std::endl;
                 og::PathGeometric path = ss.getSolutionPath();
-                std::cout << "TEST1" << std::endl;
                 if(nodeactivation){
                     comh.PublishPath(map_id, mseq, path, withgear);
-                    std::cout << "TEST2" << std::endl;
                 }
             } else {
                 std::cout << "NO PATH FOUND" << std::endl;

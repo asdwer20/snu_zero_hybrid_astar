@@ -32,7 +32,7 @@ namespace ompl{
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
       checkValidity(); //not declared in this scope
       bool PATH_FOUND = false;        
-      std::vector<base::Path *> open;
+      std::vector<geometric::PathGeometric> open;
       std::vector<base::State *> closed;   
       std::vector<double> cost_vector;
       //Debugging open and closed
@@ -53,7 +53,7 @@ namespace ompl{
 
       //Initialize Start States
       base::State *start = pdef_->getStartState(pdef_->getStartStateCount()-1);
-
+      
       //DEBUG: Currently working fine
       double goal_x = goal->as<base::SE2StateSpace::StateType>()->getX();
       double goal_y = goal->as<base::SE2StateSpace::StateType>()->getY();
@@ -63,90 +63,89 @@ namespace ompl{
       double start_y = start->as<base::SE2StateSpace::StateType>()->getY();
       double start_theta = start->as<base::SE2StateSpace::StateType>()->getYaw();
 
-      std::cout << "-------------------debug-----------------" << std::endl;
-      std::cout << "start state:" << start_x << ", " << start_y << ", " << start_theta << std::endl;
-      std::cout << "goal state:" << goal_x << ", " << goal_y << ", " << goal_theta << std::endl;
-      std::cout << "----------------debug end-----------------" << std::endl;
-
-
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
       base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si_); 
-      base::Path *current_path;
-      base::Path *next_path;
-      
-      //Log appears not produce anything beyond this point
-      //current_path->as<geometric::PathGeometric>()->append(start); // This line doesn't work
-      //double l = current_path->length();
+
+      geometric::PathGeometric next_path(si_, start);
+      geometric::PathGeometric current_path(si_, start);
       
       double path_cost = calculate_cost(start, goal, 1);
       cost_vector.push_back(path_cost);
       open.push_back(current_path);
       double s = open.size();
-       std::cout << "-------------------debug-----------------" << std::endl; 
-       std::cout << "size of current cost after appending start: " << path_cost << std::endl;
+      // std::cout << "-------------------debug-----------------" << std::endl; 
+      // std::cout << "size of current cost after appending start: " << l << std::endl;
       // std::cout << "cost of current path: " << c << std::endl;
-       std::cout << "length of open after appending current path: "<< s << std::endl;
-      base::State *current_state = start;
-      base::State *discrete_state;
-      base::State *next_state;
+      // std::cout << "length of open after appending current path: "<< s << std::endl;
+      base::State *current_state(si_->allocState());
+      current_state = start;
+      base::State *discrete_state(si_->allocState());
+      base::State *next_state(si_->allocState());
+
+      std::cout << "CHECKPOINT 1" << std::endl;
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
         if(open.size() == 0){
           OMPL_ERROR("%s: There are no possible paths", getName().c_str());
           ptc.terminate();
-          break;
+          return base::PlannerStatus(true, false);
         } 
          
         int index = 0;
         index = return_lowest_cost_path(cost_vector);
+        std::cout << "CHECKPOINT 1.5" << std::endl;
         current_path = open[index];
+        std::cout << "CHECKPOINT 2" << std::endl;
 
-        //DEBUGGING
-        std::cout << "CHECKPOINT 1" << std::endl;
-        //current_state = current_path->as<geometric::PathGeometric>()->getState(current_path->as<geometric::PathGeometric>()->getStateCount()-1);
+        current_state = current_path.getState(current_path.getStateCount()-1);
         
         open.erase(open.begin() + index);
         cost_vector.erase(cost_vector.begin() + index);
+       
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
         double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
         std::vector<double> disc_coord = return_discrete(current_x, current_y);
+        std::cout << "CHECKPOINT 2.5" << std::endl;
 
-        //ANOTHER PROBLEM LINE
-        //discrete_state->as<base::SE2StateSpace::StateType>()->setXY(disc_coord[0], disc_coord[1]); //DOESNT WORK
-        
+        //This line doesnt work 
+        const auto ds = discrete_state->as<base::SE2StateSpace::StateType>();
+    
+        double ds_X = disc_coord[0];
+        double ds_Y = disc_coord[1];
+        ds->setXY(ds_X, ds_Y); //THIS DOESNT WORK
         closed.push_back(discrete_state);
-
-        //DEBUGGING
-        std::cout << "CHECKPOINT 2" << std::endl;
         
         //Condition of the current state examined is the goal state
         if(state_compare(current_state, goal)){ 
           std::cout << "path found" << std::endl;
-          current_path->print(std::cout);
           std::cout << "CHECKPOINT FIN" << std::endl;
-          break;
+          current_path.print(std::cout);
+          //base::Path *solution = current_path;
+          base::PlannerSolution psol(current_path.as<base::Path>());
+          psol.setPlannerName(getName());
+          pdef_->addSolutionPath(psol);
+          std::cout << std::endl << std::endl << std::endl;
+          return base::PlannerStatus(true,true);
         }
         for(int i = 0; i < heading_changes.size()-1; i++){
-          next_state->as<base::SE2StateSpace::StateType>()->setX(
-            current_state->as<base::SE2StateSpace::StateType>()->getX() + 
-            drive_distance*cos(current_state->as<base::SE2StateSpace::StateType>()->getYaw())
-          );
-          std::cout << "CHECKPOINT 3.0" << std::endl;
-          next_state->as<base::SE2StateSpace::StateType>()->setY(
-            current_state->as<base::SE2StateSpace::StateType>()->getY() + 
-            drive_distance*sin(current_state->as<base::SE2StateSpace::StateType>()->getYaw())
-          );
-          std::cout << "CHECKPOINT 3.5" << std::endl;
-          next_state->as<base::SE2StateSpace::StateType>()->setYaw(
-            current_state->as<base::SE2StateSpace::StateType>()->getYaw()+heading_changes[i]
-          );
+          std::cout << "CHECKPOINT 3" << std::endl;
+          const auto ns = next_state->as<base::SE2StateSpace::StateType>();
+          const auto cs = current_state->as<base::SE2StateSpace::StateType>();
           
+          double new_X = cs->getX() + drive_distance*cos(cs->getYaw());
+          double new_Y = cs->getY() + drive_distance*sin(cs->getYaw());
+          double new_Yaw = cs->getYaw()+heading_changes[i];
+          ns->setX(new_X);
+          std::cout << "CHECKPOINT 3.5" << std::endl;
+          ns->setY(new_Y);
+          ns->setYaw(new_Yaw);
+
           if(si_->isValid(next_state) && vector_contains(closed, next_state) == false){
             cost = calculate_cost(next_state, goal, i);
             next_path = current_path; 
             std::cout << "CHECKPOINT 4" << std::endl;
-            next_path->as<geometric::PathGeometric>()->append(next_state); 
+            next_path.append(next_state); 
             open.push_back(next_path);
             cost_vector.push_back(cost);
           }
