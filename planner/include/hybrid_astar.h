@@ -19,8 +19,6 @@ namespace ompl {
         ~hybridASTAR(void) override;
         
         base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc) override;
-        
-        int return_lowest_cost_path(std::vector<base::Path*> input, base::OptimizationObjectivePtr obj);
        
         double drive_distance = sqrt(2);
         double cost;
@@ -31,12 +29,13 @@ namespace ompl {
         void freeMemory();
 
         double euclidean_distance(base::State *state, base::State *goal);
-        
+        double calculate_cost(base::State *start, base::State *goal, int turn_index);
+
         std::vector<double> return_discrete(double x, double y);
         std::vector<double> heading_changes = {-pi/4, 0, pi/4};
-        std::vector<base::Path *> sort_vectors(std::vector<base::Path *> input);
+
+        int return_lowest_cost_path(std::vector<double> input);
         
-        bool compare_path_costs(const base::Path &v1, const base::Path &v2);
         bool vector_contains(std::vector<base::State *> input, base::State *item);
         bool state_compare(base::State* input, base::State* goal);
     
