@@ -92,12 +92,12 @@ int main(int argc, char **argv){
             int mseq = CarSetupComHandle::GetLatestMapSeq();
             int sseq = CarSetupComHandle::GetLatestStartSeq();
 
-            //DEBUG: not sure if these values are accurate (especially the start)
-            std::cout << "-------------------debug-----------------" << std::endl;
-            std::cout << "goal sequence: " << gseq << std::endl;
-            std::cout << "map sequence: " << mseq << std::endl;
-            std::cout << "start sequence: " << sseq << std::endl;
-            std::cout << "----------------debug end-----------------" << std::endl;
+            // //DEBUG: not sure if these values are accurate (especially the start)
+            // std::cout << "-------------------debug-----------------" << std::endl;
+            // std::cout << "goal sequence: " << gseq << std::endl;
+            // std::cout << "map sequence: " << mseq << std::endl;
+            // std::cout << "start sequence: " << sseq << std::endl;
+            // std::cout << "----------------debug end-----------------" << std::endl;
 
             nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq); 
             
@@ -120,17 +120,21 @@ int main(int argc, char **argv){
             std::cout << "--info.origin.position.y--" << std::endl;
             std::cout << input_map->info.origin.position.y << std::endl;
 
-            //DEBUG: length and width inputs are working fine
-            std::cout << "-------------------debug-----------------" << std::endl;
-            std::cout << "map length: " << map_length << std::endl;
-            std::cout << "map width: " << map_width << std::endl;
-            std::cout << "----------------debug end-----------------" << std::endl;
+            // //DEBUG: length and width inputs are working fine
+            // std::cout << "-------------------debug-----------------" << std::endl;
+            // std::cout << "map length: " << map_length << std::endl;
+            // std::cout << "map width: " << map_width << std::endl;
+            // std::cout << "----------------debug end-----------------" << std::endl;
 
             ob::RealVectorBounds map_bounds(2);
             map_bounds.setLow(0, input_map->info.origin.position.x-map_len_fix);
             map_bounds.setLow(1, input_map->info.origin.position.y-map_wid_fix);
             map_bounds.setHigh(0, input_map->info.origin.position.x+map_len_fix);
             map_bounds.setHigh(1, input_map->info.origin.position.y+map_wid_fix);
+
+            std::cout << "X Bounds: " << map_bounds.low[0] << ", " << map_bounds.high[0] << std::endl;
+            std::cout << "Y Bounds: " << map_bounds.low[1] << ", " << map_bounds.high[1] << std::endl;
+
             space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
             
@@ -155,10 +159,8 @@ int main(int argc, char **argv){
             if(solved){
                 std::cout << "Path found" << std::endl;
                 og::PathGeometric path = ss.getSolutionPath();
-                std::cout << "TEST1" << std::endl;
                 if(nodeactivation){
                     comh.PublishPath(map_id, mseq, path, withgear);
-                    std::cout << "TEST2" << std::endl;
                 }
             } else {
                 std::cout << "NO PATH FOUND" << std::endl;

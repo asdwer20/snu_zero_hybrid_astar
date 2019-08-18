@@ -75,13 +75,11 @@ namespace ompl{
       base::State *discrete_state(si_->allocState());
       base::State *next_state(si_->allocState());
 
-      std::cout << "CHECKPOINT 1" << std::endl;
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
         if(open.size() == 0){
           OMPL_ERROR("%s: There are no possible paths", getName().c_str());
-          ptc.terminate();
-          return base::PlannerStatus(true, false);
+          return base::PlannerStatus::ABORT;
         } 
          
         int index = 0;
@@ -91,16 +89,17 @@ namespace ompl{
         
         open.erase(open.begin() + index);
         cost_vector.erase(cost_vector.begin() + index);
-       
+
+        //Convert current state coordinates to discrete
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
         double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
         std::vector<double> disc_coord = return_discrete(current_x, current_y);
 
-        const auto ds = discrete_state->as<base::SE2StateSpace::StateType>();
+        
         double ds_X = disc_coord[0];
         double ds_Y = disc_coord[1];
 
-        ds->setXY(ds_X, ds_Y); 
+        discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
         closed.push_back(discrete_state);
         
         //Condition of the current state examined is the goal state
@@ -113,21 +112,22 @@ namespace ompl{
           psol.setPlannerName(getName());
           pdef_->addSolutionPath(psol);
           std::cout << std::endl << std::endl << std::endl;
-          return base::PlannerStatus(true,true);
+          return base::PlannerStatus::EXACT_SOLUTION;
         }
-        for(int i = 0; i < heading_changes.size()-1; i++){
-          std::cout << "CHECKPOINT 3" << std::endl;
-          const auto ns = next_state->as<base::SE2StateSpace::StateType>();
+        for(int i = 0; i < heading_changes.size(); i++){
           const auto cs = current_state->as<base::SE2StateSpace::StateType>();
-          
+          std::cout << "=========================debug======================" << std::endl;
+          std::cout << "current state: " << cs->getX() <<", " << cs->getY() << ", " << cs->getYaw() << std::endl;
           double new_X = cs->getX() + drive_distance*cos(cs->getYaw());
           double new_Y = cs->getY() + drive_distance*sin(cs->getYaw());
           double new_Yaw = cs->getYaw()+heading_changes[i];
-          ns->setX(new_X);
-          std::cout << "CHECKPOINT 3.5" << std::endl;
-          ns->setY(new_Y);
-          ns->setYaw(new_Yaw);
+          std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
+          std::cout << "index: " << i << std::endl;
 
+          next_state->as<base::SE2StateSpace::StateType>()->setX(new_X);
+          next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
+          next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
+          
           if(si_->isValid(next_state) && vector_contains(closed, next_state) == false){
             cost = calculate_cost(next_state, goal, i);
             next_path = current_path; 
@@ -162,7 +162,7 @@ namespace ompl{
 
     bool hybridASTAR::vector_contains(std::vector<base::State *> input, base::State *item){
       bool FOUND = false;
-      for(int i = 0; i< input.size() -1; i++){
+      for(int i = 0; i< input.size(); i++){
         if(input[i] == item){
           FOUND = true;
           break;

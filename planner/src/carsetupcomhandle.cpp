@@ -556,19 +556,33 @@ bool CarSetupComHandle::CheckonMap (const std::string id, int seq, double x, dou
         double yaw = q.getAngle();
         double fx = cos(yaw) * px + sin(yaw) * py;
         double fy = -sin(yaw) * px + cos(yaw) * py;
+        std::cout << "yaw: " << yaw << std::endl;
+        std::cout << "fx: " << fx << std::endl;
+        std::cout << "fy: " << fy << std::endl;
         if (fx < 0 || fy < 0)
             return false;
         int j = (int)(fx/res);
         int i = (int)(fy/res);
         int w = mp -> info.width;
+        std::cout << "i: " << i << " j: " << j << " w: " << w << std::endl;
+        std::cout << "map coor: " << w*i+j << std::endl;
         if (i < mp->info.height && j < mp->info.width ) {
-            if (mp->data[w*i+j] == 0)
+            if (mp->data[w*i+j] == 0){
+                std::cout << "Valid state" << std::endl;
+                std::cout << "=====================================================" << std::endl;
                 return true;
-            else
+            }
+            else {
+                std::cout << "occupied space" << std::endl;
+                std::cout << "=====================================================" << std::endl;
                 return false;
+            }
         }
-        else
+        else{
+            std::cout << "out of map bounds" << std::endl;
+            std::cout << "=====================================================" << std::endl;
             return false;
+        }
     }
 }
 bool CarSetupComHandle::isStateValid (std::string id, int seq, const ob::StateSpacePtr &space, const ob::State *state) {
@@ -576,10 +590,15 @@ bool CarSetupComHandle::isStateValid (std::string id, int seq, const ob::StateSp
     double x = s->getX();
     double y = s->getY();
     ob::RealVectorBounds bounds = space->as<ob::SE2StateSpace>()->getBounds();
-    if(x<bounds.low[0] || x>bounds.high[0])
+    if(x<bounds.low[0] || x>bounds.high[0]){
+        std::cout << "X IS OFF" << std::endl;
         return false;
-    if(y<bounds.low[1] || y>bounds.high[1])
+    }
+    if(y<bounds.low[1] || y>bounds.high[1]){
+        std::cout << "Y IS OFF" << std::endl;
         return false;
+    }
+    //std::cout << "COORS ARE FINE" << std::endl;
     return CarSetupComHandle::CheckonMap(id, seq, x, y);
 }
 
