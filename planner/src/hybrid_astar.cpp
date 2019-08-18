@@ -100,7 +100,7 @@ namespace ompl{
           std::cout << std::endl << std::endl << std::endl;
           return base::PlannerStatus::EXACT_SOLUTION;
         }
-        
+
         open.erase(open.begin() + index);
         cost_vector.erase(cost_vector.begin() + index);
 
@@ -196,13 +196,13 @@ namespace ompl{
     bool hybridASTAR::state_compare(base::State *input, base::State *goal){
       double x1 = input->as<base::SE2StateSpace::StateType>()->getX();
       double y1 = input->as<base::SE2StateSpace::StateType>()->getY();
-      std::vector<double> dis_input = return_discrete(x1, y1);
+      std::cout << "input X: " << x1 << " Y: " << y1 << std::endl;
 
       double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
-      std::vector<double> dis_goal = return_discrete(x_goal, y_goal);
+      std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
 
-      if(dis_input == dis_goal){
+      if(abs(x1 - x_goal) <= 0.5 && abs(y1 - y_goal) <= 0.5){
         return true;
       } else {
         return false;
