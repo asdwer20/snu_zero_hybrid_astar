@@ -29,6 +29,7 @@ namespace ompl{
 
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
       checkValidity(); 
+      std::vector<double> heading_changes = {-pi/4, 0, pi/4};
       bool PATH_FOUND = false;        
       std::vector<geometric::PathGeometric> open;
       std::vector<base::State *> closed;   
@@ -87,6 +88,19 @@ namespace ompl{
         current_path = open[index];
         current_state = current_path.getState(current_path.getStateCount()-1);
         
+        //Condition of the current state examined is the goal state
+        if(state_compare(current_state, goal)){ 
+          std::cout << "path found" << std::endl;
+          current_path.print(std::cout);
+          auto cp(std::make_shared<geometric::PathGeometric>(si_));
+          cp->append(current_path);
+          base::PlannerSolution psol(cp);
+          psol.setPlannerName(getName());
+          pdef_->addSolutionPath(psol);
+          std::cout << std::endl << std::endl << std::endl;
+          return base::PlannerStatus::EXACT_SOLUTION;
+        }
+        
         open.erase(open.begin() + index);
         cost_vector.erase(cost_vector.begin() + index);
 
@@ -102,25 +116,16 @@ namespace ompl{
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
         closed.push_back(discrete_state);
         
-        //Condition of the current state examined is the goal state
-        if(state_compare(current_state, goal)){ 
-          std::cout << "path found" << std::endl;
-          current_path.print(std::cout);
-          auto cp(std::make_shared<geometric::PathGeometric>(si_));
-          cp->append(current_path);
-          base::PlannerSolution psol(cp);
-          psol.setPlannerName(getName());
-          pdef_->addSolutionPath(psol);
-          std::cout << std::endl << std::endl << std::endl;
-          return base::PlannerStatus::EXACT_SOLUTION;
-        }
+        
         for(int i = 0; i < heading_changes.size(); i++){
           const auto cs = current_state->as<base::SE2StateSpace::StateType>();
           std::cout << "=========================debug======================" << std::endl;
           std::cout << "current state: " << cs->getX() <<", " << cs->getY() << ", " << cs->getYaw() << std::endl;
-          double new_X = cs->getX() + drive_distance*cos(cs->getYaw());
-          double new_Y = cs->getY() + drive_distance*sin(cs->getYaw());
           double new_Yaw = cs->getYaw()+heading_changes[i];
+          double new_X = cs->getX() + drive_distance*cos(new_Yaw);
+          double new_Y = cs->getY() + drive_distance*sin(new_Yaw);
+          
+          std::cout << "dx = " << drive_distance*cos(new_Yaw) << " dy = " << drive_distance*sin(new_Yaw) << std::endl;
           std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
           std::cout << "index: " << i << std::endl;
 
@@ -206,7 +211,7 @@ namespace ompl{
 
     double hybridASTAR::calculate_cost(base::State *start, base::State *goal, int turn_index){
       double distance = euclidean_distance(start, goal);
-      double turn_weight = 10;
+      double turn_weight = 0;
       if(turn_index != 1){
         distance = distance + turn_weight;
       }
