@@ -57,8 +57,6 @@ namespace ompl{
       double start_y = start->as<base::SE2StateSpace::StateType>()->getY();
       double start_theta = start->as<base::SE2StateSpace::StateType>()->getYaw();
 
-      std::cout << "start state: " << start_x << ", " << start_y << ", " << start_theta << std::endl;
-      std::cout << "goal state: " << goal_x << ", " << goal_y << ", " << goal_theta << std::endl;
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
       base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si_); 
@@ -125,10 +123,9 @@ namespace ompl{
           double new_X = cs->getX() + drive_distance*cos(new_Yaw);
           double new_Y = cs->getY() + drive_distance*sin(new_Yaw);
           
-          std::cout << "dx = " << drive_distance*cos(new_Yaw) << " dy = " << drive_distance*sin(new_Yaw) << std::endl;
           std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
           std::cout << "index: " << i << std::endl;
-
+          std::cout << "===============================================" << std::endl;
           next_state->as<base::SE2StateSpace::StateType>()->setX(new_X);
           next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
           next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
@@ -136,7 +133,6 @@ namespace ompl{
           if(si_->isValid(next_state) && vector_contains(closed, next_state) == false){
             cost = calculate_cost(next_state, goal, i);
             next_path = current_path; 
-            std::cout << "CHECKPOINT 4" << std::endl;
             next_path.append(next_state); 
             open.push_back(next_path);
             cost_vector.push_back(cost);
@@ -202,7 +198,7 @@ namespace ompl{
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
       std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
 
-      if(abs(x1 - x_goal) <= 0.5 && abs(y1 - y_goal) <= 0.5){
+      if((abs(x1 - x_goal)<=0.05) and (abs(y1 - y_goal)<=0.05)){
         return true;
       } else {
         return false;

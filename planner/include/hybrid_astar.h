@@ -32,7 +32,7 @@ namespace ompl {
         double calculate_cost(base::State *start, base::State *goal, int turn_index);
 
         std::vector<double> return_discrete(double x, double y);
-        std::vector<double> heading_changes = {-pi/4, 0, pi/4};
+        std::vector<double> heading_changes = {-3*pi/12, -2*pi/12, -pi/12, 0, pi/12, 2*pi/12, 3*pi/12};
 
         int return_lowest_cost_path(std::vector<double> input);
         
