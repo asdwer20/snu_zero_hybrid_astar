@@ -21,10 +21,6 @@
 #include "core_msgs/ActiveNode.h"
 #include "geometry_msgs/PoseArray.h"
 
-#include <ompl/control/SimpleSetup.h>
-#include <ompl/control/SpaceInformation.h>
-#include <ompl/control/spaces/RealVectorControlSpace.h>
-
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 namespace oc = ompl::control;
@@ -58,9 +54,6 @@ void activecb(core_msgs::ActiveNode::ConstPtr msg) {
 int main(int argc, char **argv){
     std::string node_name = "hybrid_astar_planner";
     ob::StateSpacePtr space(std::make_shared<ob::SE2StateSpace>());
-    //oc::ControlSpacePtr cspace(std::make_shared<oc::RealVectorControlSpace>(space, 2)); 
-    //oc::SpaceInformationPtr space_info(std::make_shared<oc::SpaceInformation>(space, cspace));
-
     ob::SpaceInformationPtr space_info(std::make_shared<ob::SpaceInformation>(space));
     og::SimpleSetup ss(space_info);
     ros::init(argc, argv, node_name);
@@ -69,19 +62,21 @@ int main(int argc, char **argv){
     //Get activeness from active_nodes
     ros::Subscriber activenode = nh.subscribe("/active_nodes", 1000, activecb);
 
+    //setup planner
+    ompl::hybridASTARPtr planner(std::make_shared<ompl::hybridASTAR>(space_info));
     
     //Get map date from Nodehandle
     std::string map_id = "car_frame";
     //nh.getParam("/map_id", map_id);
-    bool withgear = false;
+
     //Date input from Rviz
     CarSetupComHandle comh = CarSetupComHandle(argc, argv, node_name);
     comh.SimpleSetup();
     comh.SetTopicPub<geometry_msgs::PoseArray>("/hybrid_astar");
-    //setup planner
-    ompl::hybridASTARPtr planner(std::make_shared<ompl::hybridASTAR>(space_info));
-    int seq = 0;
+    
+    bool withgear = false;
 
+    int seq = 0;
 
     while(ros::ok()){
         //Check if the message was updated
@@ -92,12 +87,12 @@ int main(int argc, char **argv){
             int mseq = CarSetupComHandle::GetLatestMapSeq();
             int sseq = CarSetupComHandle::GetLatestStartSeq();
 
-            // //DEBUG: not sure if these values are accurate (especially the start)
-            // std::cout << "-------------------debug-----------------" << std::endl;
-            // std::cout << "goal sequence: " << gseq << std::endl;
-            // std::cout << "map sequence: " << mseq << std::endl;
-            // std::cout << "start sequence: " << sseq << std::endl;
-            // std::cout << "----------------debug end-----------------" << std::endl;
+            //DEBUG: not sure if these values are accurate (especially the start)
+            std::cout << "-------------------debug-----------------" << std::endl;
+            std::cout << "goal sequence: " << gseq << std::endl;
+            std::cout << "map sequence: " << mseq << std::endl;
+            std::cout << "start sequence: " << sseq << std::endl;
+            std::cout << "----------------debug end-----------------" << std::endl;
 
             nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq); 
             
@@ -110,46 +105,40 @@ int main(int argc, char **argv){
             //Set dimensions and bounds for the input map
             int map_length = input_map->info.height;
             int map_width = input_map->info.width;
-            float map_len_res = input_map->info.resolution;
-            float map_len_fix = input_map->info.height * input_map->info.resolution;
-            float map_wid_fix = input_map->info.width * input_map->info.resolution;
-            std::cout << "--info.resolution--" << std::endl;
-            std::cout << map_len_res << std::endl;
-            std::cout << "--info.origin.position.x--" << std::endl;
-            std::cout << input_map->info.origin.position.x << std::endl;
-            std::cout << "--info.origin.position.y--" << std::endl;
-            std::cout << input_map->info.origin.position.y << std::endl;
 
-            // //DEBUG: length and width inputs are working fine
-            // std::cout << "-------------------debug-----------------" << std::endl;
-            // std::cout << "map length: " << map_length << std::endl;
-            // std::cout << "map width: " << map_width << std::endl;
-            // std::cout << "----------------debug end-----------------" << std::endl;
+            //DEBUG: length and width inputs are working fine
+            std::cout << "-------------------debug-----------------" << std::endl;
+            std::cout << "map length: " << map_length << std::endl;
+            std::cout << "map width: " << map_width << std::endl;
+            std::cout << "----------------debug end-----------------" << std::endl;
 
             ob::RealVectorBounds map_bounds(2);
-            map_bounds.setLow(0, input_map->info.origin.position.x-map_len_fix);
-            map_bounds.setLow(1, input_map->info.origin.position.y-map_wid_fix);
-            map_bounds.setHigh(0, input_map->info.origin.position.x+map_len_fix);
-            map_bounds.setHigh(1, input_map->info.origin.position.y+map_wid_fix);
-            //map_bounds.setLow(0, -3);
-            //map_bounds.setLow(1, -3);
-            //map_bounds.setHigh(0, 3);
-            //map_bounds.setHigh(1, 3);
-
-            std::cout << "X Bounds: " << map_bounds.low[0] << ", " << map_bounds.high[0] << std::endl;
-            std::cout << "Y Bounds: " << map_bounds.low[1] << ", " << map_bounds.high[1] << std::endl;
-
-            space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
-            ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
+            map_bounds.setLow(0, -map_length);
+            map_bounds.setLow(1, -map_width);
+            map_bounds.setHigh(0, map_length);
+            map_bounds.setHigh(1, map_width);
             
-
             ob::ScopedStatePtr start = CarSetupComHandle::GetStart(space, map_id, sseq);
             ob::ScopedStatePtr goal = CarSetupComHandle::GetGoal(space, map_id, gseq);
-        
+
+            //DEBUG print start and goal states:: Doesnt work 
+            std::cout << "start state: ";
+            start->print(std::cout);
+            std::cout << std::endl;
+
+            std::cout << "goal state: ";
+            goal->print(std::cout);
+            std::cout << std::endl;            
+
+
+            /*=================================== WORK ON FROM HERE ============================= */
+            //Setup state validity checker using the isStateValid function within 
+            //CarSetupComHandle header and bounds
+            space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
             space_info->setStateValidityChecker([map_id, mseq, space](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
             space_info->setStateValidityCheckingResolution(0.005);
-            
             //setting up rest of the planner and the goal points
+            ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
             ss.setOptimizationObjective(obj);
             planner->setup();
             ss.setPlanner(planner);
@@ -158,8 +147,9 @@ int main(int argc, char **argv){
             ss.setup();
             std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
             ss.print();
-            ob::PlannerStatus solved = ss.solve(10);
 
+            ob::PlannerStatus solved = ss.solve(1);
+            //=======================================UNTIL HERE =====================================
             if(solved){
                 std::cout << "Path found" << std::endl;
                 og::PathGeometric path = ss.getSolutionPath();

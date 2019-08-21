@@ -29,7 +29,7 @@ namespace ompl{
 
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
       checkValidity(); 
-      std::vector<double> heading_changes = {-pi/4, 0, pi/4};
+      std::vector<double> heading_changes = {-pi/4, -pi/6, -pi/8, 0, pi/8, pi/4};
       bool PATH_FOUND = false;        
       std::vector<geometric::PathGeometric> open;
       std::vector<base::State *> closed;   
@@ -198,16 +198,21 @@ namespace ompl{
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
       std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
 
-      if((abs(x1 - x_goal)<=0.05) and (abs(y1 - y_goal)<=0.05)){
+      double x_diff = std::abs(x1 - x_goal);
+      double y_diff = std::abs(y1-y_goal);
+
+      if(x_diff <= 0.2 && y_diff <= 0.2){
+        std::cout << "Difference: " << x_diff << ", " << y_diff << "-> POSSIBLE" << std::endl;
         return true;
       } else {
+        std::cout << "Difference: " << x_diff << ", " << y_diff << "-> IMPOSSIBLE" << std::endl;
         return false;
       }
     }
 
     double hybridASTAR::calculate_cost(base::State *start, base::State *goal, int turn_index){
       double distance = euclidean_distance(start, goal);
-      double turn_weight = 0;
+      double turn_weight = 3;
       if(turn_index != 1){
         distance = distance + turn_weight;
       }

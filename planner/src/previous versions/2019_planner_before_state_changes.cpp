@@ -92,12 +92,12 @@ int main(int argc, char **argv){
             int mseq = CarSetupComHandle::GetLatestMapSeq();
             int sseq = CarSetupComHandle::GetLatestStartSeq();
 
-            // //DEBUG: not sure if these values are accurate (especially the start)
-            // std::cout << "-------------------debug-----------------" << std::endl;
-            // std::cout << "goal sequence: " << gseq << std::endl;
-            // std::cout << "map sequence: " << mseq << std::endl;
-            // std::cout << "start sequence: " << sseq << std::endl;
-            // std::cout << "----------------debug end-----------------" << std::endl;
+            //DEBUG: not sure if these values are accurate (especially the start)
+            std::cout << "-------------------debug-----------------" << std::endl;
+            std::cout << "goal sequence: " << gseq << std::endl;
+            std::cout << "map sequence: " << mseq << std::endl;
+            std::cout << "start sequence: " << sseq << std::endl;
+            std::cout << "----------------debug end-----------------" << std::endl;
 
             nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq); 
             
@@ -120,32 +120,37 @@ int main(int argc, char **argv){
             std::cout << "--info.origin.position.y--" << std::endl;
             std::cout << input_map->info.origin.position.y << std::endl;
 
-            // //DEBUG: length and width inputs are working fine
-            // std::cout << "-------------------debug-----------------" << std::endl;
-            // std::cout << "map length: " << map_length << std::endl;
-            // std::cout << "map width: " << map_width << std::endl;
-            // std::cout << "----------------debug end-----------------" << std::endl;
+            //DEBUG: length and width inputs are working fine
+            std::cout << "-------------------debug-----------------" << std::endl;
+            std::cout << "map length: " << map_length << std::endl;
+            std::cout << "map width: " << map_width << std::endl;
+            std::cout << "----------------debug end-----------------" << std::endl;
 
             ob::RealVectorBounds map_bounds(2);
             map_bounds.setLow(0, input_map->info.origin.position.x-map_len_fix);
             map_bounds.setLow(1, input_map->info.origin.position.y-map_wid_fix);
             map_bounds.setHigh(0, input_map->info.origin.position.x+map_len_fix);
             map_bounds.setHigh(1, input_map->info.origin.position.y+map_wid_fix);
-            //map_bounds.setLow(0, -3);
-            //map_bounds.setLow(1, -3);
-            //map_bounds.setHigh(0, 3);
-            //map_bounds.setHigh(1, 3);
-
-            std::cout << "X Bounds: " << map_bounds.low[0] << ", " << map_bounds.high[0] << std::endl;
-            std::cout << "Y Bounds: " << map_bounds.low[1] << ", " << map_bounds.high[1] << std::endl;
-
             space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
             
 
             ob::ScopedStatePtr start = CarSetupComHandle::GetStart(space, map_id, sseq);
             ob::ScopedStatePtr goal = CarSetupComHandle::GetGoal(space, map_id, gseq);
-        
+
+            //DEBUG print start and goal states:: Doesnt work 
+            std::cout << "start state: ";
+            start->print(std::cout);
+            std::cout << std::endl;
+
+            std::cout << "goal state: ";
+            goal->print(std::cout);
+            std::cout << std::endl;            
+
+
+            /*=================================== WORK ON FROM HERE ============================= */
+            //Setup state validity checker using the isStateValid function within 
+            //CarSetupComHandle header and bounds
             space_info->setStateValidityChecker([map_id, mseq, space](const ob::State *state) {return CarSetupComHandle::isStateValid(map_id, mseq, space, state);});
             space_info->setStateValidityCheckingResolution(0.005);
             
@@ -158,8 +163,10 @@ int main(int argc, char **argv){
             ss.setup();
             std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
             ss.print();
-            ob::PlannerStatus solved = ss.solve(10);
-
+            std::cout << "checkpoint 1" << std::endl;
+            ob::PlannerStatus solved = ss.solve(1);
+            std::cout << "checkpoint 2" << std::endl;
+            //=======================================UNTIL HERE =====================================
             if(solved){
                 std::cout << "Path found" << std::endl;
                 og::PathGeometric path = ss.getSolutionPath();
