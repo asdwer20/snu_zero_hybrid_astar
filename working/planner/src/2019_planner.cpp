@@ -110,15 +110,15 @@ int main(int argc, char **argv){
             //Set dimensions and bounds for the input map
             int map_length = input_map->info.height;
             int map_width = input_map->info.width;
-            //float map_len_res = input_map->info.resolution;
-            //float map_len_fix = input_map->info.height * input_map->info.resolution;
-            //float map_wid_fix = input_map->info.width * input_map->info.resolution;
-            // std::cout << "--info.resolution--" << std::endl;
-            // std::cout << map_len_res << std::endl;
-            // std::cout << "--info.origin.position.x--" << std::endl;
-            // std::cout << input_map->info.origin.position.x << std::endl;
-            // std::cout << "--info.origin.position.y--" << std::endl;
-            // std::cout << input_map->info.origin.position.y << std::endl;
+            float map_len_res = input_map->info.resolution;
+            float map_len_fix = input_map->info.height * input_map->info.resolution;
+            float map_wid_fix = input_map->info.width * input_map->info.resolution;
+            std::cout << "--info.resolution--" << std::endl;
+            std::cout << map_len_res << std::endl;
+            std::cout << "--info.origin.position.x--" << std::endl;
+            std::cout << input_map->info.origin.position.x << std::endl;
+            std::cout << "--info.origin.position.y--" << std::endl;
+            std::cout << input_map->info.origin.position.y << std::endl;
 
             // //DEBUG: length and width inputs are working fine
             // std::cout << "-------------------debug-----------------" << std::endl;
@@ -127,10 +127,10 @@ int main(int argc, char **argv){
             // std::cout << "----------------debug end-----------------" << std::endl;
 
             ob::RealVectorBounds map_bounds(2);
-            map_bounds.setLow(0, input_map->info.origin.position.x-map_length/2);
-            map_bounds.setLow(1, input_map->info.origin.position.y-map_width/2);
-            map_bounds.setHigh(0, input_map->info.origin.position.x+map_length/2);
-            map_bounds.setHigh(1, input_map->info.origin.position.y+map_width/2);
+            map_bounds.setLow(0, input_map->info.origin.position.x-map_len_fix/2);
+            map_bounds.setLow(1, input_map->info.origin.position.y-map_wid_fix/2);
+            map_bounds.setHigh(0, input_map->info.origin.position.x+map_len_fix/2);
+            map_bounds.setHigh(1, input_map->info.origin.position.y+map_wid_fix/2);
             //map_bounds.setLow(0, -3);
             //map_bounds.setLow(1, -3);
             //map_bounds.setHigh(0, 3);

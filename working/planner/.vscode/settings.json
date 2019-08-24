@@ -42,6 +42,13 @@
         "cinttypes": "cpp",
         "type_traits": "cpp",
         "tuple": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "cstdarg": "cpp",
+        "bitset": "cpp",
+        "list": "cpp",
+        "algorithm": "cpp",
+        "iomanip": "cpp",
+        "memory": "cpp",
+        "cfenv": "cpp"
     }
 }

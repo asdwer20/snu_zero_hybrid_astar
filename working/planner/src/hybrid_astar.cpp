@@ -82,8 +82,10 @@ namespace ompl{
         } 
          
         int index = 0;
+        
         index = return_lowest_cost_path(cost_vector);
         current_path = open[index];
+        current_cost = cost_vector[index];
         current_state = current_path.getState(current_path.getStateCount()-1);
         
         //Condition of the current state examined is the goal state
@@ -122,6 +124,7 @@ namespace ompl{
           double new_Yaw = cs->getYaw()+heading_changes[i];
           double new_X = cs->getX() + drive_distance*cos(new_Yaw);
           double new_Y = cs->getY() + drive_distance*sin(new_Yaw);
+          std::cout << "cost: " << current_cost << std::endl;
           
           std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
           std::cout << "index: " << i << std::endl;
@@ -130,8 +133,10 @@ namespace ompl{
           next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
           next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
           
+          std::cout << "CHECKPOINT1" <<std::endl;
           if(si_->isValid(next_state) && vector_contains(closed, next_state) == false){
             cost = calculate_cost(next_state, goal, i);
+            std::cout << "NEW COST: " << cost << std::endl;
             next_path = current_path; 
             next_path.append(next_state); 
             open.push_back(next_path);
@@ -153,10 +158,12 @@ namespace ompl{
     }
 
     std::vector<double> hybridASTAR::return_discrete(double x, double y){
-      double dis_x = round(x);
-      double dis_y = round(y);
-
-      std::vector<double> discrete_coord = {dis_x, dis_y};
+      double resolution = 0.03;
+      //double dis_x = round(x);
+      //double dis_y = round(y);
+      double round_x = resolution*round(x/resolution);
+      double round_y = resolution*round(y/resolution);
+      std::vector<double> discrete_coord = {round_x, round_y};
 
       return discrete_coord;
     }
@@ -198,7 +205,7 @@ namespace ompl{
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
       std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
 
-      if((abs(x1 - x_goal)<=0.05) and (abs(y1 - y_goal)<=0.05)){
+      if((std::abs(x1 - x_goal)<=0.5) and (std::abs(y1 - y_goal)<=0.5)){
         return true;
       } else {
         return false;
@@ -207,7 +214,7 @@ namespace ompl{
 
     double hybridASTAR::calculate_cost(base::State *start, base::State *goal, int turn_index){
       double distance = euclidean_distance(start, goal);
-      double turn_weight = 3;
+      double turn_weight = 0;
       if(turn_index != 1){
         distance = distance + turn_weight;
       }

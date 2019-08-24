@@ -32,7 +32,7 @@ class fakemap :
         qmap = tf_conversions.transformations.quaternion_from_euler(0, 0, 0)
         self.simplemap = OccupancyGrid()
         self.simplemap.header.frame_id = "car_frame"
-        self.simplemap.info.resolution = 0.03 #0.5
+        self.simplemap.info.resolution = resolution #0.5
         self.simplemap.info.width = 200 #100
         self.simplemap.info.height = 200 #100
         self.simplemap.info.origin.position.x = -3 #-25

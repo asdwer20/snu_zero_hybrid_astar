@@ -556,20 +556,23 @@ bool CarSetupComHandle::CheckonMap (const std::string id, int seq, double x, dou
         double yaw = q.getAngle();
         double fx = cos(yaw) * px + sin(yaw) * py;
         double fy = -sin(yaw) * px + cos(yaw) * py;
-        if (fx < 0 || fy < 0)
-            return false;
-        int j =100 + (int)(fx);
-        int i =100 + (int)(fy);
+        //if (fx < 0 || fy < 0)
+            //return false;
+        int j =100 + (int)(fx/res);
+        int i =100 + (int)(fy/res);
         int w = mp -> info.width;
         if (i < mp->info.height && j < mp->info.width ) {
             if (mp->data[w*i+j] == 0){
+                std::cout << "VALID STATE " << std::endl;
                 return true;
             }
             else {
+                std::cout << "OCCUPIED STATE" << std::endl;
                 return false;
             }
         }
         else{
+            std::cout <<" OUT OF BOUNDS" << std::endl;
             return false;
         }
     }
@@ -580,9 +583,11 @@ bool CarSetupComHandle::isStateValid (std::string id, int seq, const ob::StateSp
     double y = s->getY();
     ob::RealVectorBounds bounds = space->as<ob::SE2StateSpace>()->getBounds();
     if(x<bounds.low[0] || x>bounds.high[0]){
+        std::cout <<" OUT OF BOUNDS (X)" << std::endl;
         return false;
     }
     if(y<bounds.low[1] || y>bounds.high[1]){
+        std::cout <<" OUT OF BOUNDS (Y)" << std::endl;
         return false;
     }
     return CarSetupComHandle::CheckonMap(id, seq, x, y);

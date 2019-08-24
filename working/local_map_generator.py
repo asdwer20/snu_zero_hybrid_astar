@@ -41,8 +41,8 @@ def mainloop():
     rate = rospy.Rate(10) # 10hz
 
     goal = PoseStamped()
-    goal.pose.position.x = 80
-    goal.pose.position.y = 80
+    goal.pose.position.x = 2.8
+    goal.pose.position.y = 1.24
     goal.pose.orientation.w = 1
     goal.header.frame_id = "car_frame"
 
@@ -55,8 +55,8 @@ def mainloop():
     simplemap.info.resolution = 0.03 #0.5
     simplemap.info.width = 200 #100
     simplemap.info.height = 200 #100
-    simplemap.info.origin.position.x = 0 #-25
-    simplemap.info.origin.position.y = 0 #-25
+    simplemap.info.origin.position.x = 0.0 #-25
+    simplemap.info.origin.position.y = 0.0 #-25
     simplemap.info.origin.orientation.x = qmap[0]
     simplemap.info.origin.orientation.y = qmap[1]
     simplemap.info.origin.orientation.z = qmap[2]
@@ -114,18 +114,33 @@ def rlmcb(data) :
 
 def makemap(height, width) :
     zrs = np.zeros([height, width])
-    for k in range(20, 30):
-        for l in range(0, 60):
+    for i in range(height) :
+        zrs[i][0] = 100
+        zrs[i][1] = 100
+        zrs[i][2] = 100
+        zrs[i][3] = 100
+        zrs[i][4] = 100
+        zrs[i][-1] = 100
+        zrs[i][-2] = 100
+        zrs[i][-3] = 100
+        zrs[i][-4] = 100
+        zrs[i][-5] = 100
+    for i in range(width) :
+        zrs[0][i] = 100
+        zrs[1][i] = 100
+        zrs[2][i] = 100
+        zrs[3][i] = 100
+        zrs[4][i] = 100
+        zrs[-1][i] = 100
+        zrs[-2][i] = 100
+        zrs[-3][i] = 100
+        zrs[-4][i] = 100
+        zrs[-5][i] = 100
+    for k in range(130, 150):
+        for l in range(50, 180):
             zrs[l][k]=100
-    #for i in range(height) :
-    #    zrs[i][-1] = 100
-    #    zrs[i][-2] = 100
-    #    zrs[i][-3] = 100
-    #for k in range(40, 45):
-    #    for l in range(0, 200):
-    #        zrs[l][k]=100
-    #for k in range(130, 135):
-    #    for l in range(0, 200):
+    #for k in range(85, 140):
+    #    for l in range(50, 55):
     #        zrs[l][k]=100
     '''
     zrs[height/2 : -1]=100

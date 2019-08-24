@@ -20,8 +20,9 @@ namespace ompl {
         
         base::PlannerStatus solve(const base::PlannerTerminationCondition &ptc) override;
        
-        double drive_distance = sqrt(2)+0.1;
+        double drive_distance = sqrt(2)*0.03+0.015;
         double cost;
+        double current_cost;
         double pi = 3.14159265;
         
         void clear(void) override;
