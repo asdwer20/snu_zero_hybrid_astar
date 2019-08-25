@@ -163,8 +163,9 @@ namespace ompl{
     }
 
     std::vector<double> hybridASTAR::return_discrete(double x, double y){
-      double dis_x = round(x);
-      double dis_y = round(y);
+      double res = 0.03;
+      double dis_x = res*round(x/res);
+      double dis_y = res*round(y/res);
 
       std::vector<double> discrete_coord = {dis_x, dis_y};
 
