@@ -22,7 +22,7 @@ namespace ompl {
        
         double drive_distance = sqrt(2)*0.03+0.015;
         double cost;
-        double current_cost;
+        double current_travel_distance;
         double pi = 3.14159265;
         
         void clear(void) override;
@@ -36,7 +36,7 @@ namespace ompl {
 
         int return_lowest_cost_path(std::vector<double> input);
         
-        bool vector_contains(std::vector<std::vector<double>> closed, std::vector<double> input);
+        bool vector_contains(std::vector<base::State *> input, base::State *item);
         bool state_compare(base::State* input, base::State* goal);
     
         float heuristic;

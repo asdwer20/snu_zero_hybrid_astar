@@ -41,8 +41,8 @@ def mainloop():
     rate = rospy.Rate(10) # 10hz
 
     goal = PoseStamped()
-    goal.pose.position.x = 2.8
-    goal.pose.position.y = 1.24
+    goal.pose.position.x = 0
+    goal.pose.position.y = 2.9
     goal.pose.orientation.w = 1
     goal.header.frame_id = "car_frame"
 
@@ -136,8 +136,11 @@ def makemap(height, width) :
         zrs[-3][i] = 100
         zrs[-4][i] = 100
         zrs[-5][i] = 100
-    for k in range(130, 150):
-        for l in range(50, 180):
+    for k in range(80, 110):
+        for l in range(125, 130):
+            zrs[l][k]=100
+    for k in range(90, 120):
+        for l in range(160, 165):
             zrs[l][k]=100
     #for k in range(85, 140):
     #    for l in range(50, 55):

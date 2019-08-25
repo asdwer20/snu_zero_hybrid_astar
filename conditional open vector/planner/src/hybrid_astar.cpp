@@ -32,9 +32,8 @@ namespace ompl{
       std::vector<double> heading_changes = {-pi/4, -pi/6, -pi/8, 0, pi/8, pi/4};
       bool PATH_FOUND = false;        
       std::vector<geometric::PathGeometric> open;
-      std::vector<std::vector<double>> closed;   
+      std::vector<base::State *> closed;   
       std::vector<double> cost_vector;
-      std::vector<double> dis_goal;
 
       //Initialize Goal States
       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); 
@@ -53,8 +52,6 @@ namespace ompl{
       double goal_x = goal->as<base::SE2StateSpace::StateType>()->getX();
       double goal_y = goal->as<base::SE2StateSpace::StateType>()->getY();
       double goal_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
-
-      dis_goal = return_discrete(goal_x, goal_y);
       
       double start_x = start->as<base::SE2StateSpace::StateType>()->getX();
       double start_y = start->as<base::SE2StateSpace::StateType>()->getY();
@@ -70,13 +67,12 @@ namespace ompl{
       double path_cost = 0;
       cost_vector.push_back(path_cost);
       open.push_back(current_path);
-      closed.push_back(dis_goal);
-      double s = open.size();
 
       base::State *current_state(si_->allocState());
       current_state = start;
       base::State *discrete_state(si_->allocState());
       base::State *next_state(si_->allocState());
+      base::State *test(si_->allocState());
 
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
@@ -117,38 +113,70 @@ namespace ompl{
         double ds_Y = disc_coord[1];
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
-        closed.push_back(disc_coord);
-        //std::cout << "OPEN SIZE: " << open.size() << " COST SIZE: " << cost_vector.size() << std::endl;
+        closed.push_back(discrete_state);
+        
         
         for(int i = 0; i < heading_changes.size(); i++){
           const auto cs = current_state->as<base::SE2StateSpace::StateType>();
-          //std::cout << "=========================debug======================" << std::endl;
-          //std::cout << "current state: " << cs->getX() <<", " << cs->getY() << ", " << cs->getYaw() << std::endl;
+          std::cout << "=========================debug======================" << std::endl;
+          std::cout << "current state: " << cs->getX() <<", " << cs->getY() << ", " << cs->getYaw() << std::endl;
           double new_Yaw = cs->getYaw()+heading_changes[i];
           double new_X = cs->getX() + drive_distance*cos(new_Yaw);
           double new_Y = cs->getY() + drive_distance*sin(new_Yaw);
           
-          //std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
-          //std::cout << "index: " << i << std::endl;
+          std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
+          std::cout << "index: " << i << std::endl << std::endl;
+          
           next_state->as<base::SE2StateSpace::StateType>()->setX(new_X);
           next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
           next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
-
-          std::vector<double> discrete_next = return_discrete(new_X, new_Y);
-        
-          if(si_->isValid(next_state) && vector_contains(closed, discrete_next) == false){
-            //std::cout << "VALID STATE" << std::endl;
+          
+          std::cout << "CHECKPOINT1" <<std::endl;
+          if(si_->isValid(next_state) && vector_contains(closed, next_state) == false){
             next_path = current_path; 
-            next_path.append(next_state); 
+            next_path.append(next_state);
+            
+            current_travel_distance = next_path.length()*drive_distance;
+            cost = current_travel_distance + euclidean_distance(next_state, goal);
 
-            cost = next_path.length()*drive_distance + euclidean_distance(next_state, goal);
-            //std::cout << "NEW COST: " << cost << std::endl;
+            std::cout << "CHECKPOINT 2" << std::endl;
 
-            open.push_back(next_path);
-            cost_vector.push_back(cost);
+            //if there already exists a path that leads to the same point
+            for(int c = 0; c < open.size(); c++){
+              std::cout << "CHECKPOINT 2.5" << std::endl;
+              int last_index = open[c].length()-1;
+              test = current_state;
+              std::cout <<"CHECKPOINT 3" <<std::endl;
+              test = open[c].getState(last_index);
+              double open_x = test->as<base::SE2StateSpace::StateType>()->getX();
+              double open_y = test->as<base::SE2StateSpace::StateType>()->getY();
+              std::cout << "OPEN X: " << open_x << " OPEN_Y: " << open_y << std::endl;
+
+              double next_x = next_state->as<base::SE2StateSpace::StateType>()->getX();
+              double next_y = next_state->as<base::SE2StateSpace::StateType>()->getY();
+              std::cout << "NEXT X: " << next_x << " NEXT Y: " << next_y << std::endl;
+
+              if(open_x == next_x && open_y == next_y){
+                std::cout << "NEXT EXISTS IN OPEN" <<std::endl;
+                if(cost_vector[c] > cost){
+                  open.erase(open.begin()+i);
+                  cost_vector.erase(cost_vector.begin()+i);
+                  open.push_back(next_path);
+                  cost_vector.push_back(cost);
+                  std::cout << "STATE REPLACED" << std::endl;
+                } else {
+                  continue;
+                }
+              } else {
+                  std::cout << "STATE ADDED" << std::endl;
+                  open.push_back(next_path);
+                  cost_vector.push_back(cost);
+              }
+            }
+            
           }
-          //std::cout << "===============================================" << std::endl;
         }
+        std::cout << "===============================================" << std::endl;
       }
     }
 
@@ -174,10 +202,10 @@ namespace ompl{
       return discrete_coord;
     }
 
-    bool hybridASTAR::vector_contains(std::vector<std::vector<double>> closed, std::vector<double> input){
+    bool hybridASTAR::vector_contains(std::vector<base::State *> input, base::State *item){
       bool FOUND = false;
-      for(int i = 0; i< closed.size(); i++){
-        if(closed[i] == input){
+      for(int i = 0; i< input.size(); i++){
+        if(input[i] == item){
           FOUND = true;
           break;
         }
@@ -209,9 +237,9 @@ namespace ompl{
 
       double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
-      //std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
+      std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
 
-      if((std::abs(x1 - x_goal)<=0.1) and (std::abs(y1 - y_goal)<=0.1)){
+      if((std::abs(x1 - x_goal)<=0.015) and (std::abs(y1 - y_goal)<=0.015)){
         return true;
       } else {
         return false;

@@ -17,6 +17,8 @@
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
 
+//WORK ON: apparently when debugging, there is no definiton of pdef_ and checkValidity() function, which are both true, but for some reason
+//I cannot find the equivalents in the past code 
 namespace ompl{
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
@@ -28,18 +30,21 @@ namespace ompl{
     }
 
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
-      checkValidity(); 
-      std::vector<double> heading_changes = {-pi/4, -pi/6, -pi/8, 0, pi/8, pi/4};
+      checkValidity(); //not declared in this scope
       bool PATH_FOUND = false;        
-      std::vector<geometric::PathGeometric> open;
-      std::vector<std::vector<double>> closed;   
+      std::vector<base::Path *> open;
+      std::vector<base::State *> closed;   
       std::vector<double> cost_vector;
-      std::vector<double> dis_goal;
+      //Debugging open and closed
+      // std::cout << "-------------------debug-----------------" << std::endl;
+      // std::cout << "size of open = " << open.size() << std::endl;
+      // std::cout << "size of closed = " << closed.size() << std::endl;
+      // std::cout << "----------------debug end-----------------" << std::endl;
 
       //Initialize Goal States
-      base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); 
+      base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); //pdef_ not declared in this scope
       if(pdef_->getStartStateCount() == 0){
-        OMPL_ERROR("%s: There are no valid initial states", getName().c_str()); 
+        OMPL_ERROR("%s: There are no valid initial states", getName().c_str()); //getName is not declared
         return base::PlannerStatus::INVALID_START;
       } else if(pdef_->getStartStateCount() > 1){
         OMPL_ERROR("%s: There are too many valid initial states", getName().c_str());
@@ -53,101 +58,99 @@ namespace ompl{
       double goal_x = goal->as<base::SE2StateSpace::StateType>()->getX();
       double goal_y = goal->as<base::SE2StateSpace::StateType>()->getY();
       double goal_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
-
-      dis_goal = return_discrete(goal_x, goal_y);
       
       double start_x = start->as<base::SE2StateSpace::StateType>()->getX();
       double start_y = start->as<base::SE2StateSpace::StateType>()->getY();
       double start_theta = start->as<base::SE2StateSpace::StateType>()->getYaw();
 
+      std::cout << "-------------------debug-----------------" << std::endl;
+      std::cout << "start state:" << start_x << ", " << start_y << ", " << start_theta << std::endl;
+      std::cout << "goal state:" << goal_x << ", " << goal_y << ", " << goal_theta << std::endl;
+      std::cout << "----------------debug end-----------------" << std::endl;
+
+
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
       base::OptimizationObjectivePtr obj = std::make_shared<base::PathLengthOptimizationObjective>(si_); 
-
-      geometric::PathGeometric next_path(si_, start);
-      geometric::PathGeometric current_path(si_, start);
+      base::Path *current_path(si_);
+      base::Path *next_path(si_);
       
-      double path_cost = 0;
+      //Log appears not produce anything beyond this point
+      //current_path->as<geometric::PathGeometric>()->append(start); // This line doesn't work
+      //double l = current_path->length();
+      
+      double path_cost = calculate_cost(start, goal, 1);
       cost_vector.push_back(path_cost);
       open.push_back(current_path);
-      closed.push_back(dis_goal);
       double s = open.size();
-
-      base::State *current_state(si_->allocState());
-      current_state = start;
-      base::State *discrete_state(si_->allocState());
-      base::State *next_state(si_->allocState());
-
+       std::cout << "-------------------debug-----------------" << std::endl; 
+       std::cout << "size of current cost after appending start: " << path_cost << std::endl;
+      // std::cout << "cost of current path: " << c << std::endl;
+       std::cout << "length of open after appending current path: "<< s << std::endl;
+      base::State *current_state = 
+      start;
+      base::State *discrete_state;
+      base::State *next_state;
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
         if(open.size() == 0){
           OMPL_ERROR("%s: There are no possible paths", getName().c_str());
-          return base::PlannerStatus::ABORT;
+          ptc.terminate();
+          break;
         } 
          
         int index = 0;
-        
         index = return_lowest_cost_path(cost_vector);
         current_path = open[index];
-        current_state = current_path.getState(current_path.getStateCount()-1);
-        
-        //Condition of the current state examined is the goal state
-        if(state_compare(current_state, goal)){ 
-          std::cout << "path found" << std::endl;
-          current_path.print(std::cout);
-          auto cp(std::make_shared<geometric::PathGeometric>(si_));
-          cp->append(current_path);
-          base::PlannerSolution psol(cp);
-          psol.setPlannerName(getName());
-          pdef_->addSolutionPath(psol);
-          std::cout << std::endl << std::endl << std::endl;
-          return base::PlannerStatus::EXACT_SOLUTION;
-        }
 
+        //DEBUGGING
+        std::cout << "CHECKPOINT 1" << std::endl;
+        current_state = current_path->as<geometric::PathGeometric>()->getState(current_path->as<geometric::PathGeometric>()->getStateCount()-1);
+        
         open.erase(open.begin() + index);
         cost_vector.erase(cost_vector.begin() + index);
-
-        //Convert current state coordinates to discrete
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
         double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
         std::vector<double> disc_coord = return_discrete(current_x, current_y);
 
+        //ANOTHER PROBLEM LINE
+        //discrete_state->as<base::SE2StateSpace::StateType>()->setXY(disc_coord[0], disc_coord[1]); //DOESNT WORK
         
-        double ds_X = disc_coord[0];
-        double ds_Y = disc_coord[1];
+        closed.push_back(discrete_state);
 
-        discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
-        closed.push_back(disc_coord);
-        //std::cout << "OPEN SIZE: " << open.size() << " COST SIZE: " << cost_vector.size() << std::endl;
+        //DEBUGGING
+        std::cout << "CHECKPOINT 2" << std::endl;
         
-        for(int i = 0; i < heading_changes.size(); i++){
-          const auto cs = current_state->as<base::SE2StateSpace::StateType>();
-          //std::cout << "=========================debug======================" << std::endl;
-          //std::cout << "current state: " << cs->getX() <<", " << cs->getY() << ", " << cs->getYaw() << std::endl;
-          double new_Yaw = cs->getYaw()+heading_changes[i];
-          double new_X = cs->getX() + drive_distance*cos(new_Yaw);
-          double new_Y = cs->getY() + drive_distance*sin(new_Yaw);
+        //Condition of the current state examined is the goal state
+        if(state_compare(current_state, goal)){ 
+          std::cout << "path found" << std::endl;
+          current_path->print(std::cout);
+          std::cout << "CHECKPOINT FIN" << std::endl;
+          break;
+        }
+        for(int i = 0; i < heading_changes.size()-1; i++){
+          next_state->as<base::SE2StateSpace::StateType>()->setX(
+            current_state->as<base::SE2StateSpace::StateType>()->getX() + 
+            drive_distance*cos(current_state->as<base::SE2StateSpace::StateType>()->getYaw())
+          );
+          std::cout << "CHECKPOINT 3.0" << std::endl;
+          next_state->as<base::SE2StateSpace::StateType>()->setY(
+            current_state->as<base::SE2StateSpace::StateType>()->getY() + 
+            drive_distance*sin(current_state->as<base::SE2StateSpace::StateType>()->getYaw())
+          );
+          std::cout << "CHECKPOINT 3.5" << std::endl;
+          next_state->as<base::SE2StateSpace::StateType>()->setYaw(
+            current_state->as<base::SE2StateSpace::StateType>()->getYaw()+heading_changes[i]
+          );
           
-          //std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
-          //std::cout << "index: " << i << std::endl;
-          next_state->as<base::SE2StateSpace::StateType>()->setX(new_X);
-          next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
-          next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
-
-          std::vector<double> discrete_next = return_discrete(new_X, new_Y);
-        
-          if(si_->isValid(next_state) && vector_contains(closed, discrete_next) == false){
-            //std::cout << "VALID STATE" << std::endl;
+          if(si_->isValid(next_state) && vector_contains(closed, next_state) == false){
+            cost = calculate_cost(next_state, goal, i);
             next_path = current_path; 
-            next_path.append(next_state); 
-
-            cost = next_path.length()*drive_distance + euclidean_distance(next_state, goal);
-            //std::cout << "NEW COST: " << cost << std::endl;
-
+            std::cout << "CHECKPOINT 4" << std::endl;
+            next_path->as<geometric::PathGeometric>()->append(next_state); 
             open.push_back(next_path);
             cost_vector.push_back(cost);
           }
-          //std::cout << "===============================================" << std::endl;
         }
       }
     }
@@ -164,20 +167,18 @@ namespace ompl{
     }
 
     std::vector<double> hybridASTAR::return_discrete(double x, double y){
-      double resolution = 0.03;
-      //double dis_x = round(x);
-      //double dis_y = round(y);
-      double round_x = resolution*round(x/resolution);
-      double round_y = resolution*round(y/resolution);
-      std::vector<double> discrete_coord = {round_x, round_y};
+      double dis_x = round(x);
+      double dis_y = round(y);
+
+      std::vector<double> discrete_coord = {dis_x, dis_y};
 
       return discrete_coord;
     }
 
-    bool hybridASTAR::vector_contains(std::vector<std::vector<double>> closed, std::vector<double> input){
+    bool hybridASTAR::vector_contains(std::vector<base::State *> input, base::State *item){
       bool FOUND = false;
-      for(int i = 0; i< closed.size(); i++){
-        if(closed[i] == input){
+      for(int i = 0; i< input.size() -1; i++){
+        if(input[i] == item){
           FOUND = true;
           break;
         }
@@ -205,21 +206,32 @@ namespace ompl{
     bool hybridASTAR::state_compare(base::State *input, base::State *goal){
       double x1 = input->as<base::SE2StateSpace::StateType>()->getX();
       double y1 = input->as<base::SE2StateSpace::StateType>()->getY();
-      std::cout << "input X: " << x1 << " Y: " << y1 << std::endl;
+      std::vector<double> dis_input = return_discrete(x1, y1);
 
       double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
-      //std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
+      std::vector<double> dis_goal = return_discrete(x_goal, y_goal);
 
-      if((std::abs(x1 - x_goal)<=0.1) and (std::abs(y1 - y_goal)<=0.1)){
+      if(dis_input == dis_goal){
         return true;
       } else {
         return false;
       }
     }
 
+    double hybridASTAR::calculate_cost(base::State *start, base::State *goal, int turn_index){
+      double distance = euclidean_distance(start, goal);
+      double turn_weight = 10;
+      if(turn_index != 1){
+        distance = distance + turn_weight;
+      }
+      return distance + drive_distance;
+    }
+
     void hybridASTAR::setup(void) {
         Planner::setup();
+        //mtree_.freeMemory();
+        //timeflags_.clear();
     }
     void hybridASTAR::clear(void) {
 
