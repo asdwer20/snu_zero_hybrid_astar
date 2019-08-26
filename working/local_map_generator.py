@@ -41,6 +41,7 @@ def mainloop():
     rate = rospy.Rate(10) # 10hz
 
     goal = PoseStamped()
+    # IMPORTANT: CHANGE goal.pose here.
     goal.pose.position.x = 0
     goal.pose.position.y = 2.9
     goal.pose.orientation.w = 1
@@ -52,9 +53,9 @@ def mainloop():
     qmap = tf_conversions.transformations.quaternion_from_euler(0, 0, 0)
     simplemap = OccupancyGrid()
     simplemap.header.frame_id = "car_frame"
-    simplemap.info.resolution = 0.03 #0.5
-    simplemap.info.width = 200 #100
-    simplemap.info.height = 200 #100
+    simplemap.info.resolution = 0.03
+    simplemap.info.width = 200
+    simplemap.info.height = 200
     simplemap.info.origin.position.x = 0.0 #-25
     simplemap.info.origin.position.y = 0.0 #-25
     simplemap.info.origin.orientation.x = qmap[0]
@@ -114,6 +115,7 @@ def rlmcb(data) :
 
 def makemap(height, width) :
     zrs = np.zeros([height, width])
+    # IMPORTANT: CHANGE zrs here.
     for i in range(height) :
         zrs[i][0] = 100
         zrs[i][1] = 100
@@ -142,24 +144,6 @@ def makemap(height, width) :
     for k in range(90, 120):
         for l in range(160, 165):
             zrs[l][k]=100
-    #for k in range(85, 140):
-    #    for l in range(50, 55):
-    #        zrs[l][k]=100
-    '''
-    zrs[height/2 : -1]=100
-    for k in range(25, 30):
-        for l in range(0, 80):
-            zrs[l][k]=100
-    for k in range(50, 55):
-        for l in range(20, 100):
-            zrs[l][k]=100
-    for k in range(75, 80):
-        for l in range(0, 80):
-            zrs[l][k]=100
-    for k in range(100, 105):
-        for l in range(20, 100):
-            zrs[l][k]=100
-    '''
     print zrs
     return zrs.flatten()
 
