@@ -16,6 +16,7 @@
 
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
+#include "costpath.h"
 
 namespace ompl{
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
@@ -26,23 +27,6 @@ namespace ompl{
     hybridASTAR::~hybridASTAR(void){
       hybridASTAR::freeMemory();
     }
-
-    class Costpath {
-      public:
-      geometric::PathGeometric path;
-      double cost;
-      //public:
-      Costpath(const geometric::PathGeometric x, double y);
-    };
-    Costpath::Costpath(const geometric::PathGeometric x, double y) : path(x), cost(y) {
-    }
-    class Compare {
-      public:
-      bool operator() (Costpath x, Costpath y)
-      {
-         return x.cost > y.cost; // uncertain
-      }
-    };
 
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
       checkValidity(); 
