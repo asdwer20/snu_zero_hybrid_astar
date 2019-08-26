@@ -27,13 +27,31 @@ namespace ompl{
       hybridASTAR::freeMemory();
     }
 
+    class Costpath {
+      public:
+      geometric::PathGeometric path;
+      double cost;
+      //public:
+      Costpath(const geometric::PathGeometric x, double y);
+    };
+    Costpath::Costpath(const geometric::PathGeometric x, double y) : path(x), cost(y) {
+    }
+    class Compare {
+      public:
+      bool operator() (Costpath x, Costpath y)
+      {
+         return x.cost > y.cost; // uncertain
+      }
+    };
+
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
       checkValidity(); 
       std::vector<double> heading_changes = {-pi/4, -pi/6, -pi/8, 0, pi/8, pi/4};
       bool PATH_FOUND = false;        
-      std::vector<geometric::PathGeometric> open;
+      //std::vector<geometric::PathGeometric> open;
       std::vector<std::vector<double>> closed;   
-      std::vector<double> cost_vector;
+      //std::vector<double> cost_vector;
+      std::priority_queue<Costpath, std::vector<Costpath>, Compare> costpath;
       std::vector<double> dis_goal;
 
       //Initialize Goal States
@@ -68,10 +86,12 @@ namespace ompl{
       geometric::PathGeometric current_path(si_, start);
       
       double path_cost = 0;
-      cost_vector.push_back(path_cost);
-      open.push_back(current_path);
+      costpath.push(Costpath(current_path, path_cost));
+      //cost_vector.push_back(path_cost);
+      //open.push_back(current_path);
       closed.push_back(dis_goal);
-      double s = open.size();
+      //double s = open.size();
+      double s = costpath.size();
 
       base::State *current_state(si_->allocState());
       current_state = start;
@@ -80,15 +100,16 @@ namespace ompl{
 
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
-        if(open.size() == 0){
+        if(costpath.size() == 0){
           OMPL_ERROR("%s: There are no possible paths", getName().c_str());
           return base::PlannerStatus::ABORT;
         } 
          
-        int index = 0;
-        
-        index = return_lowest_cost_path(cost_vector);
-        current_path = open[index];
+        //int index = 0;
+        Costpath cpath = costpath.top();
+        current_path = cpath.path;
+        //index = return_lowest_cost_path(cost_vector);
+        //current_path = open[index];
         current_state = current_path.getState(current_path.getStateCount()-1);
         
         //Condition of the current state examined is the goal state
@@ -104,8 +125,9 @@ namespace ompl{
           return base::PlannerStatus::EXACT_SOLUTION;
         }
 
-        open.erase(open.begin() + index);
-        cost_vector.erase(cost_vector.begin() + index);
+        costpath.pop();
+        //open.erase(open.begin() + index);
+        //cost_vector.erase(cost_vector.begin() + index);
 
         //Convert current state coordinates to discrete
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
@@ -144,8 +166,9 @@ namespace ompl{
             cost = next_path.length()*drive_distance + euclidean_distance(next_state, goal);
             //std::cout << "NEW COST: " << cost << std::endl;
 
-            open.push_back(next_path);
-            cost_vector.push_back(cost);
+            costpath.push(Costpath(next_path, cost));
+            //open.push_back(next_path);
+            //cost_vector.push_back(cost);
           }
           //std::cout << "===============================================" << std::endl;
         }
