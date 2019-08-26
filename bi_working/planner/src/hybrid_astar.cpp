@@ -17,6 +17,7 @@
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
 #include "costpath.h"
+#include "binomial_heap.h"
 
 namespace ompl{
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){

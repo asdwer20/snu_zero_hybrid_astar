@@ -26,6 +26,7 @@ set (HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/carsetupcomhandle.h
   ${CMAKE_CURRENT_SOURCE_DIR}/include/hybrid_astar.h
   ${CMAKE_CURRENT_SOURCE_DIR}/include/costpath.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/binomial_heap.h
 )
 
 
