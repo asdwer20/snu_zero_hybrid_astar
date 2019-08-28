@@ -34,10 +34,7 @@ namespace ompl{
       checkValidity(); 
       std::vector<double> heading_changes = {-pi/4, -pi/6, -pi/8, 0, pi/8, pi/4};
       bool PATH_FOUND = false;        
-      //std::vector<geometric::PathGeometric> open;
       std::vector<std::vector<double>> closed;   
-      //std::vector<double> cost_vector;
-      //std::priority_queue<Costpath, std::vector<Costpath>, Compare> costpath;
       list<Node*> costpath;
       std::vector<double> dis_goal;
 
@@ -54,7 +51,6 @@ namespace ompl{
       //Initialize Start States
       base::State *start = pdef_->getStartState(pdef_->getStartStateCount()-1);
 
-      //DEBUG: Currently working fine
       double goal_x = goal->as<base::SE2StateSpace::StateType>()->getX();
       double goal_y = goal->as<base::SE2StateSpace::StateType>()->getY();
       double goal_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
@@ -74,12 +70,7 @@ namespace ompl{
       
       double path_cost = 0;
       costpath = insert(costpath, Costpath(current_path, path_cost));
-      //costpath.push(Costpath(current_path, path_cost));
-      //cost_vector.push_back(path_cost);
-      //open.push_back(current_path);
       closed.push_back(dis_goal);
-      //double s = open.size();
-      //double s = costpath.size();
 
       base::State *current_state(si_->allocState());
       current_state = start;
@@ -93,11 +84,8 @@ namespace ompl{
           return base::PlannerStatus::ABORT;
         } 
          
-        //int index = 0;
         Costpath cpath = getMin(costpath)->data;
         current_path = cpath.path;
-        //index = return_lowest_cost_path(cost_vector);
-        //current_path = open[index];
         current_state = current_path.getState(current_path.getStateCount()-1);
         
         //Condition of the current state examined is the goal state
@@ -114,8 +102,6 @@ namespace ompl{
         }
 
         costpath = extractMin(costpath);
-        //open.erase(open.begin() + index);
-        //cost_vector.erase(cost_vector.begin() + index);
 
         //Convert current state coordinates to discrete
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
@@ -128,7 +114,6 @@ namespace ompl{
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
         closed.push_back(disc_coord);
-        //std::cout << "OPEN SIZE: " << open.size() << " COST SIZE: " << cost_vector.size() << std::endl;
         
         for(int i = 0; i < heading_changes.size(); i++){
           const auto cs = current_state->as<base::SE2StateSpace::StateType>();
@@ -139,7 +124,6 @@ namespace ompl{
           double new_Y = cs->getY() + drive_distance*sin(new_Yaw);
           
           //std::cout << "next possible state: " << new_X <<", " << new_Y << ", " << new_Yaw << std::endl;
-          //std::cout << "index: " << i << std::endl;
           next_state->as<base::SE2StateSpace::StateType>()->setX(new_X);
           next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
           next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
@@ -155,8 +139,6 @@ namespace ompl{
             //std::cout << "NEW COST: " << cost << std::endl;
 
             costpath = insert(costpath, Costpath(next_path, cost));
-            //open.push_back(next_path);
-            //cost_vector.push_back(cost);
           }
           //std::cout << "===============================================" << std::endl;
         }
@@ -176,12 +158,9 @@ namespace ompl{
 
     std::vector<double> hybridASTAR::return_discrete(double x, double y){
       double resolution = 0.03;
-      //double dis_x = round(x);
-      //double dis_y = round(y);
       double round_x = resolution*round(x/resolution);
       double round_y = resolution*round(y/resolution);
       std::vector<double> discrete_coord = {round_x, round_y};
-
       return discrete_coord;
     }
 
@@ -194,23 +173,6 @@ namespace ompl{
         }
       }
       return FOUND;
-    }
-
-    int hybridASTAR::return_lowest_cost_path(std::vector<double> input){
-      int index = 0;
-      double lowest_cost;
-      for(int i = 0; i < input.size(); i++){
-        if(i == 0){
-          index = i;
-          lowest_cost = input[i];
-        } else {
-          if(input[i] < lowest_cost){
-            index = i;
-            lowest_cost = input[i];
-          }
-        }
-      }
-      return index;
     }
 
     bool hybridASTAR::state_compare(base::State *input, base::State *goal){
