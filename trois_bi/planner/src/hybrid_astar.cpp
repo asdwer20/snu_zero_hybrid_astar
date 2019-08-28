@@ -20,6 +20,8 @@
 #include "costpath.h"
 #include "binomial_heap.h"
 
+#define RESOLUTION 0.03
+
 namespace ompl{
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
@@ -157,9 +159,8 @@ namespace ompl{
     }
 
     std::vector<double> hybridASTAR::return_discrete(double x, double y){
-      double resolution = 0.03;
-      double round_x = resolution*round(x/resolution);
-      double round_y = resolution*round(y/resolution);
+      double round_x = RESOLUTION * round(x/RESOLUTION);
+      double round_y = RESOLUTION * round(y/RESOLUTION);
       std::vector<double> discrete_coord = {round_x, round_y};
       return discrete_coord;
     }
