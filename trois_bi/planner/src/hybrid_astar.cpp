@@ -22,6 +22,7 @@
 
 #define RESOLUTION 0.03
 
+std::string map_id = "car_frame";
 namespace ompl{
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
@@ -78,6 +79,10 @@ namespace ompl{
       current_state = start;
       base::State *discrete_state(si_->allocState());
       base::State *next_state(si_->allocState());
+
+      int mseq = CarSetupComHandle::GetLatestMapSeq();
+      nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq);
+      std::cout << "For Debugging Only: " << input_map->data[0] << " ; " << std::endl;
 
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
