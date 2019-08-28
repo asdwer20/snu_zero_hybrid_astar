@@ -14,13 +14,17 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <deque>
 
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
 #include "costpath.h"
 #include "binomial_heap.h"
+#include "tf2_msgs/TFMessage.h"
 
 #define RESOLUTION 0.03
+#define MAXDIST 250
+//#define MAX(a,b) (((a)>(b))?(a):(b))
 
 std::string map_id = "car_frame";
 namespace ompl{
@@ -31,6 +35,18 @@ namespace ompl{
     }
     hybridASTAR::~hybridASTAR(void){
       hybridASTAR::freeMemory();
+    }
+
+    template<typename T> bool valid_state_check(std::vector<T> map, int width, int height, std::vector<int> state) {
+      if (state[0] >= width || state[1] >= height) {
+        return false;
+      } else if (state[0] < 0 || state[1] < 0) {
+        return false;
+      } else if (map[width*state[1]+state[0]] != 0) {
+        return false;
+      } else {
+        return true;
+      } 
     }
 
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
@@ -83,7 +99,45 @@ namespace ompl{
       int mseq = CarSetupComHandle::GetLatestMapSeq();
       nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq);
       std::vector<signed char, std::allocator<signed char>> map1d = input_map->data;
-      std::vector<int> map1d2(map1d.begin(), map1d.end()); 
+      std::vector<int> map1d2(map1d.begin(), map1d.end());
+      int map_width = input_map->info.width;
+      int map_height = input_map->info.height;
+      std::vector<int> dist(map_width*map_height, MAXDIST);
+      std::vector<int> closed_map = map1d2;
+      std::deque<std::vector<int>> open_map = {};
+
+      double curr_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
+      double curr_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
+      double res = input_map -> info.resolution;
+      double px = curr_x - input_map -> info.origin.position.x;
+      double py = curr_y - input_map -> info.origin.position.y;
+      tf2::Quaternion q(input_map -> info.origin.orientation.x, input_map -> info.origin.orientation.y, input_map -> info.origin.orientation.z, input_map -> info.origin.orientation.w);
+      double yaw = q.getAngle();
+      double fx = cos(yaw) * px + sin(yaw) * py;
+      double fy = -sin(yaw) * py + cos(yaw) * py;
+      int xj = map_width/2 + (int)(fx/res);
+      int yi = map_height/2 + (int)(fy/res);
+
+      std::vector<int> goal_state = { xj, yi };
+      if (!valid_state_check(map1d2, map_width, map_height, goal_state)) {
+        std::cout << "ERROR: Invalid Goal Pose" << std::endl;
+      } else {
+        std::cout << "GOOD: Valid Goal Pose" << std::endl;
+        open_map.push_back(goal_state);
+        dist[goal_state[0]*map_width+goal_state[1]] = 0;
+        closed_map[goal_state[0]*map_width+goal_state[1]] = 1;
+      }
+
+      while (!open_map.empty()) {
+        std::vector<int> state = open_map.front();
+        open_map.pop_front();
+        std::vector<int> stateL = { state[0]-1, state[1] };
+        std::vector<int> stateR = { state[0]+1, state[1] };
+        std::vector<int> stateD = { state[0], state[1]-1 };
+        std::vector<int> stateU = { state[0], state[1]+1 };
+      }
+
+      std::cout << "For Debugging Only: " << dist[0] << " ;" << std::endl;
 
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
