@@ -82,7 +82,8 @@ namespace ompl{
 
       int mseq = CarSetupComHandle::GetLatestMapSeq();
       nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq);
-      std::cout << "For Debugging Only: " << input_map->data[0] << " ; " << std::endl;
+      std::vector<signed char, std::allocator<signed char>> map1d = input_map->data;
+      std::vector<int> map1d2(map1d.begin(), map1d.end()); 
 
       //While termination condition is false, run the planner
       while(ptc.eval() == false){
