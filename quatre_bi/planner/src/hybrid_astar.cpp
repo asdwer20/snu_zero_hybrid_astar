@@ -284,13 +284,15 @@ namespace ompl{
     bool hybridASTAR::state_compare(base::State *input, base::State *goal){
       double x1 = input->as<base::SE2StateSpace::StateType>()->getX();
       double y1 = input->as<base::SE2StateSpace::StateType>()->getY();
-      std::cout << "input X: " << x1 << " Y: " << y1 << std::endl;
+      double theta1 = input->as<base::SE2StateSpace::StateType>()->getYaw();
+      std::cout << "input X: " << x1 << " Y: " << y1 << " Theta: " << theta1 << std::endl;
 
       double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
-      //std::cout << "goal X: " << x_goal << " Y: " << y_goal << std::endl;
+      double theta_goal = goal->as<base::SE2StateSpace::StateType>()->getYaw();
+      std::cout << "goal X: " << x_goal << " Y: " << y_goal << " Theta: " << theta_goal << " Ref: " << std::abs(std::fmod(theta1-theta_goal, 2*pi)) << std::endl;
 
-      if((std::abs(x1 - x_goal)<=0.1) and (std::abs(y1 - y_goal)<=0.1)){
+      if((std::abs(x1 - x_goal)<=0.05) and (std::abs(y1 - y_goal)<=0.05) and (std::abs(std::fmod(theta1 - theta_goal, 2*pi))<=pi/4)){ // may be wrong..
         return true;
       } else {
         return false;

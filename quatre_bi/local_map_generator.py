@@ -43,7 +43,13 @@ def mainloop():
     goal = PoseStamped()
     goal.pose.position.x = 2.8
     goal.pose.position.y = -2.5
-    goal.pose.orientation.w = 1
+
+    goalyaw = 7.853981 
+    qgoal = tf_conversions.transformations.quaternion_from_euler(0, 0, goalyaw)
+    goal.pose.orientation.x = qgoal[0]
+    goal.pose.orientation.y = qgoal[1]
+    goal.pose.orientation.z = qgoal[2]
+    goal.pose.orientation.w = qgoal[3]
     goal.header.frame_id = "car_frame"
 
     vellv = VelocityLevel()
@@ -136,11 +142,14 @@ def makemap(height, width) :
         zrs[-3][i] = 100
         zrs[-4][i] = 100
         zrs[-5][i] = 100
-    for k in range(130, 150):
-        for l in range(0, 180):
+    for k in range(30, 35):
+        for l in range(80, 190):
             zrs[l][k]=100
-    for k in range(85, 140):
-        for l in range(50, 55):
+    for k in range(125, 130):
+        for l in range(80, 180):
+            zrs[l][k]=100
+    for k in range(30, 130):
+        for l in range(80, 85):
             zrs[l][k]=100
     '''
     zrs[height/2 : -1]=100
