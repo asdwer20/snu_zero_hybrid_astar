@@ -61,7 +61,7 @@ namespace ompl{
       //Initialize Goal States
       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); 
 
-      std::cout << "GOAL Yaw: " << goal->as<base::SE2StateSpace::StateType>()->getYaw() << std::endl;
+      //std::cout << "GOAL Yaw: " << goal->as<base::SE2StateSpace::StateType>()->getYaw() << std::endl;
 
       if(pdef_->getStartStateCount() == 0){
         OMPL_ERROR("%s: There are no valid initial states", getName().c_str()); 
