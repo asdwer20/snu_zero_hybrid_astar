@@ -241,7 +241,16 @@ namespace ompl{
             double heuristic2 = dist[map_width*nyi+nxj]*res;
             double heuristic_add = std::max(heuristic1, heuristic2);
             double straightpunish = 0.02;
+            
             cost = next_path.length()*drive_distance + heuristic_add + std::abs(i-2)*straightpunish;
+
+            //Consider orientation if the current position is less than 0.3 away
+            double ori_heuristic = 0;
+            if(heuristic1 <= 0.3){
+              ori_heuristic = goal_theta - new_Yaw;
+              cost = cost + ori_heuristic;
+              std::cout << "orientation heuristic: " << ori_heuristic << std::endl;
+            }
             // cost straight?
             //std::cout << "NEW COST: " << cost << " Euclidean: " << heuristic1 << " T: " << heuristic2 << " add: " << heuristic_add << std::endl;
 
