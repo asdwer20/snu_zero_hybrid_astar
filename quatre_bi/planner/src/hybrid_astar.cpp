@@ -248,7 +248,7 @@ namespace ompl{
             double ori_heuristic = 0;
             if(heuristic1 <= 0.3){
               ori_heuristic = std::abs(goal_theta - new_Yaw);
-              cost = cost + ori_heuristic;
+              cost = cost + ori_heuristic*0.1;
               //std::cout << "orientation heuristic: " << ori_heuristic << std::endl;
             }
             // cost straight?
@@ -300,9 +300,8 @@ namespace ompl{
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
       double theta_goal = goal->as<base::SE2StateSpace::StateType>()->getYaw();
       std::cout << "goal X: " << x_goal << " Y: " << y_goal << " Theta: " << theta_goal << " Ref: " << std::abs(std::fmod(theta1-theta_goal, 2*pi)) << std::endl;
-
+      std::cout << "Orientation Difference: " << std::abs(std::fmod(theta1 - theta_goal, 2*pi)) << std::endl;
       if((std::abs(x1 - x_goal)<=0.05) and (std::abs(y1 - y_goal)<=0.05) and (std::abs(std::fmod(theta1 - theta_goal, 2*pi))<=pi/8)){ // may be wrong..
-        std::cout << "Orientation Difference: " << std::abs(std::fmod(theta1 - theta_goal, 2*pi)) << std::endl;
         return true;
       } else {
         return false;
