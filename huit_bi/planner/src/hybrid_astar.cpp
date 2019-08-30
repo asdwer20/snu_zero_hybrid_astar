@@ -53,7 +53,6 @@ namespace ompl{
       checkValidity(); 
       std::vector<double> heading_changes = {-pi/4, -pi/8, 0, pi/8, pi/4};
       bool PATH_FOUND = false;        
-      std::vector<std::vector<double>> closed;   
       list<Node*> costpath;
       std::vector<double> dis_goal;
 
@@ -89,15 +88,6 @@ namespace ompl{
 
       geometric::PathGeometric next_path(si_, start);
       geometric::PathGeometric current_path(si_, start);
-      
-      double path_cost = 0;
-      costpath = insert(costpath, Costpath(current_path, path_cost));
-      closed.push_back(dis_goal);
-
-      base::State *current_state(si_->allocState());
-      current_state = start;
-      base::State *discrete_state(si_->allocState());
-      base::State *next_state(si_->allocState());
 
       int mseq = CarSetupComHandle::GetLatestMapSeq();
       nav_msgs::OccupancyGridConstPtr input_map = CarSetupComHandle::GetMap(map_id, mseq);
@@ -105,6 +95,18 @@ namespace ompl{
       std::vector<int> map1d2(map1d.begin(), map1d.end());
       int map_width = input_map->info.width;
       int map_height = input_map->info.height;
+      std::vector<int> zerovec(map_height, 0);
+      std::vector<std::vector<int>> closed(map_width, zerovec);  
+      
+      double path_cost = 0;
+      costpath = insert(costpath, Costpath(current_path, path_cost));
+      closed[dis_goal[0]][dis_goal[1]] = 1;
+
+      base::State *current_state(si_->allocState());
+      current_state = start;
+      base::State *discrete_state(si_->allocState());
+      base::State *next_state(si_->allocState());
+
       std::vector<int> dist(map_width*map_height, MAXDIST);
       std::vector<int> closed_map = map1d2;
       std::deque<std::vector<int>> open_map = {};
@@ -209,7 +211,7 @@ namespace ompl{
         double ds_Y = disc_coord[1];
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
-        closed.push_back(disc_coord);
+        closed[disc_coord[0]][disc_coord[1]] = 1;
         
         for(int i = 0; i < heading_changes.size(); i++){
           const auto cs = current_state->as<base::SE2StateSpace::StateType>();
@@ -226,7 +228,7 @@ namespace ompl{
 
           std::vector<double> discrete_next = return_discrete(new_X, new_Y);
         
-          if(si_->isValid(next_state) && vector_contains(closed, discrete_next) == false){
+          if(si_->isValid(next_state) && closed[discrete_next[0]][discrete_next[1]] == 0){
             next_path = current_path; 
             next_path.append(next_state);
 
@@ -279,17 +281,6 @@ namespace ompl{
       double round_y = RESOLUTION * round(y/RESOLUTION);
       std::vector<double> discrete_coord = {round_x, round_y};
       return discrete_coord;
-    }
-
-    bool hybridASTAR::vector_contains(std::vector<std::vector<double>> closed, std::vector<double> input){
-      bool FOUND = false;
-      for(int i = 0; i< closed.size(); i++){
-        if(closed[i] == input){
-          FOUND = true;
-          break;
-        }
-      }
-      return FOUND;
     }
 
     bool hybridASTAR::state_compare(base::State *input, base::State *goal){
