@@ -39,7 +39,6 @@ namespace ompl{
       std::vector<int> zerovec(MAPHEIGHT, 0);
       std::vector<std::vector<int>> closed(MAPWIDTH, zerovec);
       std::vector<double> cost_vector;
-      std::vector<double> dis_goal;
 
       //Initialize Goal States
       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); 
@@ -60,6 +59,8 @@ namespace ompl{
       double goal_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
 
       dis_goal = return_discrete(goal_x, goal_y);
+      int dis_goal_x = MAPWIDTH/2 + (int)(std::floor(goal_x/RESOLUTION));
+      int dis_goal_y = MAPHEIGHT/2 + (int)(std::floor(goal_y/RESOLUTION));
       
       double start_x = start->as<base::SE2StateSpace::StateType>()->getX();
       double start_y = start->as<base::SE2StateSpace::StateType>()->getY();
@@ -75,7 +76,7 @@ namespace ompl{
       double path_cost = 0;
       cost_vector.push_back(path_cost);
       open.push_back(current_path);
-      closed.push_back(dis_goal);
+      closed[dis_goal_x][dis_goal_y] = 1;
       double s = open.size();
 
       base::State *current_state(si_->allocState());
@@ -116,13 +117,14 @@ namespace ompl{
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
         double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
         std::vector<double> disc_coord = return_discrete(current_x, current_y);
-
+        int disc_coord_x = MAPWIDTH/2 + (int)(std::floor(current_x/RESOLUTION));
+        int disc_coord_y = MAPHEIGHT/2 + (int)(std::floor(current_y/RESOLUTION));
         
         double ds_X = disc_coord[0];
         double ds_Y = disc_coord[1];
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
-        closed.push_back(disc_coord);
+        closed[disc_coord_x][disc_coord_y] = 1;
         //std::cout << "OPEN SIZE: " << open.size() << " COST SIZE: " << cost_vector.size() << std::endl;
         
         for(int i = 0; i < heading_changes.size(); i++){
@@ -139,9 +141,9 @@ namespace ompl{
           next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
           next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
 
-          std::vector<double> discrete_next = return_discrete(new_X, new_Y);
-        
-          if(si_->isValid(next_state) && vector_contains(closed, discrete_next) == false){
+          int discrete_next_x = MAPWIDTH/2 + (int)(std::floor(new_X/RESOLUTION)); 
+          int discrete_next_y = MAPHEIGHT/2 + (int)(std::floor(new_Y/RESOLUTION)); 
+          if(si_->isValid(next_state) && closed[discrete_next_x][discrete_next_y] == 0){
             //std::cout << "VALID STATE" << std::endl;
             next_path = current_path; 
             next_path.append(next_state); 
