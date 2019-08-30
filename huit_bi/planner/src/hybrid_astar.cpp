@@ -54,7 +54,7 @@ namespace ompl{
       std::vector<double> heading_changes = {-pi/4, -pi/8, 0, pi/8, pi/4};
       bool PATH_FOUND = false;        
       list<Node*> costpath;
-      std::vector<double> dis_goal;
+      //std::vector<double> dis_goal;
 
       //Initialize Goal States
       base::State* goal = pdef_->getGoal().get()->as<base::GoalState>()->getState(); 
@@ -76,8 +76,8 @@ namespace ompl{
       double goal_y = goal->as<base::SE2StateSpace::StateType>()->getY();
       double goal_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
 
-      dis_goal = return_discrete(goal_x, goal_y);
-      
+      //dis_goal = return_discrete(goal_x, goal_y);
+
       double start_x = start->as<base::SE2StateSpace::StateType>()->getX();
       double start_y = start->as<base::SE2StateSpace::StateType>()->getY();
       double start_theta = start->as<base::SE2StateSpace::StateType>()->getYaw();
@@ -95,12 +95,15 @@ namespace ompl{
       std::vector<int> map1d2(map1d.begin(), map1d.end());
       int map_width = input_map->info.width;
       int map_height = input_map->info.height;
+      double res = input_map -> info.resolution;
       std::vector<int> zerovec(map_height, 0);
       std::vector<std::vector<int>> closed(map_width, zerovec);  
+      int dis_goal_x = map_width/2 + (int)(std::floor(goal_x/res));
+      int dis_goal_y = map_height/2 + (int)(std::floor(goal_y/res));
       
       double path_cost = 0;
       costpath = insert(costpath, Costpath(current_path, path_cost));
-      closed[dis_goal[0]][dis_goal[1]] = 1;
+      closed[dis_goal_x][dis_goal_y] = 1;
 
       base::State *current_state(si_->allocState());
       current_state = start;
@@ -113,15 +116,14 @@ namespace ompl{
 
       double curr_x = goal->as<base::SE2StateSpace::StateType>()->getX();
       double curr_y = goal->as<base::SE2StateSpace::StateType>()->getY();
-      double res = input_map -> info.resolution;
       double px = curr_x - input_map -> info.origin.position.x;
       double py = curr_y - input_map -> info.origin.position.y;
       tf2::Quaternion q(input_map -> info.origin.orientation.x, input_map -> info.origin.orientation.y, input_map -> info.origin.orientation.z, input_map -> info.origin.orientation.w);
       double yaw = tf2::impl::getYaw(q);
       double fx = cos(yaw) * px + sin(yaw) * py;
       double fy = -sin(yaw) * px + cos(yaw) * py;
-      int xj = map_width/2 + (int)(fx/res);
-      int yi = map_height/2 + (int)(fy/res);
+      int xj = map_width/2 + (int)(std::floor(fx/res));
+      int yi = map_height/2 + (int)(std::floor(fy/res));
 
       std::vector<int> goal_state = { xj, yi };
       // std::cout << "x, y " << xj << " " << yi << std::endl; // for debug
@@ -205,13 +207,15 @@ namespace ompl{
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
         double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
         std::vector<double> disc_coord = return_discrete(current_x, current_y);
+        int disc_coord_x = map_width/2 + (int)(std::floor(current_x/res));
+        int disc_coord_y = map_height/2 + (int)(std::floor(current_y/res));
 
         
         double ds_X = disc_coord[0];
         double ds_Y = disc_coord[1];
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
-        closed[disc_coord[0]][disc_coord[1]] = 1;
+        closed[disc_coord_x][disc_coord_y] = 1;
         
         for(int i = 0; i < heading_changes.size(); i++){
           const auto cs = current_state->as<base::SE2StateSpace::StateType>();
@@ -226,9 +230,11 @@ namespace ompl{
           next_state->as<base::SE2StateSpace::StateType>()->setY(new_Y);
           next_state->as<base::SE2StateSpace::StateType>()->setYaw(new_Yaw);
 
-          std::vector<double> discrete_next = return_discrete(new_X, new_Y);
-        
-          if(si_->isValid(next_state) && closed[discrete_next[0]][discrete_next[1]] == 0){
+          //std::vector<double> discrete_next = return_discrete(new_X, new_Y);
+          int discrete_next_x = map_width/2 + (int)(std::floor(new_X/res));
+          int discrete_next_y = map_height/2 + (int)(std::floor(new_Y/res));
+ 
+          if(si_->isValid(next_state) && closed[discrete_next_x][discrete_next_y] == 0){
             next_path = current_path; 
             next_path.append(next_state);
 
@@ -238,14 +244,14 @@ namespace ompl{
             double npy = next_y - input_map -> info.origin.position.y;
             double nfx = cos(yaw) * npx + sin(yaw) * npy;
             double nfy = -sin(yaw) * npx + cos(yaw) * npy;
-            int nxj = map_width/2 + (int)(nfx/res);
-            int nyi = map_height/2 + (int)(nfy/res);
+            int nxj = map_width/2 + (int)(std::floor(nfx/res));
+            int nyi = map_height/2 + (int)(std::floor(nfy/res));
 
             double heuristic1 = euclidean_distance(next_state, goal);
             double heuristic2 = dist[map_width*nyi+nxj]*res;
             double heuristic3 = 0.0;
-            double ori_weight = 0.1;
-            double close_dist = 0.15;
+            double ori_weight = 0.2;
+            double close_dist = 0.2;
             if (heuristic2 <= close_dist) {
               heuristic3 = ori_weight*std::abs(goal_theta - new_Yaw);
             } else {
