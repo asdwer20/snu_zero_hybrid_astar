@@ -37,7 +37,7 @@ std::map<std::string, bool> CarSetupComHandle::is_updated;
 
 CarSetupComHandle::CarSetupComHandle(int argc, char **argv, std::string nodename) {
     CarSetupComHandle::nodename = nodename;
-    std::cout << "CarSetupComHandle with node name \"" << nodename << "\" created\n";
+    //std::cout << "CarSetupComHandle with node name \"" << nodename << "\" created\n";
     this -> isinitialized["start"] = false;
     this -> isinitialized["goal"] = false;
     this -> isinitialized["map"] = false;
@@ -45,7 +45,7 @@ CarSetupComHandle::CarSetupComHandle(int argc, char **argv, std::string nodename
 
 }
 void CarSetupComHandle::SetStart(const std::string topic) {
-    std::cout << "Subscribing StartPoint as topic name \"" << topic << "\"\n";
+    //std::cout << "Subscribing StartPoint as topic name \"" << topic << "\"\n";
     ros::NodeHandle nh;
     this->start_subs = nh.subscribe(topic, 1000, &CarSetupComHandle::StartCB, this);
     if(latest_seq.count("start") < 1) {
@@ -56,7 +56,7 @@ void CarSetupComHandle::StartCB(const geometry_msgs::PoseWithCovarianceStamped::
     if (!this->isinitialized["start"]) {
         this->seqbias["start"] = init->header.seq;
         this->isinitialized["start"] = true;
-        std::cout << "start_initialized" << std::endl;
+        //std::cout << "start_initialized" << std::endl;
     }
     std::cout << "start_seq number : " << init-> header.seq - this->seqbias["start"] << ", map id : " << init->header.frame_id << std::endl;
     start[init->header.frame_id][init->header.seq - this->seqbias["start"]] = init;
@@ -89,7 +89,7 @@ ob::ScopedStatePtr CarSetupComHandle::GetStart(const ob::StateSpacePtr& space, s
 
 
 void CarSetupComHandle::SetGoal(const std::string topic) {
-    std::cout << "Subscribing GoalPoint as topic name \"" << topic << "\"\n";
+    //std::cout << "Subscribing GoalPoint as topic name \"" << topic << "\"\n";
     ros::NodeHandle nh;
     this->goal_subs = nh.subscribe(topic, 1000, &CarSetupComHandle::GoalCB, this);
     if(latest_seq.count("goal") < 1) {
@@ -134,7 +134,7 @@ ob::ScopedStatePtr CarSetupComHandle::GetGoal(const ob::StateSpacePtr &space, st
 }
 
 void CarSetupComHandle::SetBase(const std::string topic) {
-    std::cout << "Subscribing BaseFrame as topic name \"" << topic << "\"\n";
+    //std::cout << "Subscribing BaseFrame as topic name \"" << topic << "\"\n";
     ros::NodeHandle nh;
     this->base_subs = nh.subscribe(topic, 1000, &CarSetupComHandle::BaseCB, this);
     if(latest_seq.count("base") < 1) {
@@ -175,7 +175,7 @@ geometry_msgs::TransformStamped::ConstPtr CarSetupComHandle::GetBase(std::string
 }
 
 void CarSetupComHandle::SetMap(const std::string topic) {
-    std::cout << "Subscribing Map as topic name \"" << topic << "\"\n";
+    //std::cout << "Subscribing Map as topic name \"" << topic << "\"\n";
     ros::NodeHandle nh;
     this->map_subs = nh.subscribe(topic, 1000, &CarSetupComHandle::MapCB, this);
     if(latest_seq.count("map") < 1) {
@@ -208,7 +208,7 @@ nav_msgs::OccupancyGrid::ConstPtr CarSetupComHandle::GetMap(std::string id, int 
 }
 
 void CarSetupComHandle::SetPoint(const std::string topic) {
-    std::cout << "Subscribing Point as topic name \"" << topic << "\"\n";
+    //std::cout << "Subscribing Point as topic name \"" << topic << "\"\n";
     ros::NodeHandle nh;
     this->point_subs = nh.subscribe(topic, 1000, &CarSetupComHandle::PointCB, this);
     if(latest_seq.count("point") < 1) {
@@ -245,7 +245,7 @@ geometry_msgs::PointStamped::ConstPtr CarSetupComHandle::GetPoint(std::string id
 }
 
 void CarSetupComHandle::SetPath(const std::string topic) {
-    std::cout << "Publishing Path as topic name \"" << topic << "\"\n";
+    //std::cout << "Publishing Path as topic name \"" << topic << "\"\n";
     ros::NodeHandle nh;
     this->path_pubs = nh.advertise<nav_msgs::Path>(topic, 1000);
 }

@@ -93,14 +93,14 @@ namespace ompl{
         
         //Condition of the current state examined is the goal state
         if(state_compare(current_state, goal)){ 
-          std::cout << "path found" << std::endl;
-          current_path.print(std::cout);
+          //std::cout << "path found" << std::endl;
+          //current_path.print(std::cout);
           auto cp(std::make_shared<geometric::PathGeometric>(si_));
           cp->append(current_path);
           base::PlannerSolution psol(cp);
           psol.setPlannerName(getName());
           pdef_->addSolutionPath(psol);
-          std::cout << std::endl << std::endl << std::endl;
+          std::cout << std::endl << std::endl;
           return base::PlannerStatus::EXACT_SOLUTION;
         }
 
@@ -205,7 +205,7 @@ namespace ompl{
     bool hybridASTAR::state_compare(base::State *input, base::State *goal){
       double x1 = input->as<base::SE2StateSpace::StateType>()->getX();
       double y1 = input->as<base::SE2StateSpace::StateType>()->getY();
-      std::cout << "input X: " << x1 << " Y: " << y1 << std::endl;
+      //std::cout << "input X: " << x1 << " Y: " << y1 << std::endl;
 
       double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
