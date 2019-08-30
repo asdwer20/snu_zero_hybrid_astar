@@ -17,6 +17,10 @@
 #include "carsetupcomhandle.h"
 #include "hybrid_astar.h"
 
+#define RESOLUTION 0.03
+#define MAPWIDTH 200
+#define MAPHEIGHT 200
+
 namespace ompl{
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
@@ -32,7 +36,8 @@ namespace ompl{
       std::vector<double> heading_changes = {-pi/4, 0, pi/4};
       bool PATH_FOUND = false;        
       std::vector<geometric::PathGeometric> open;
-      std::vector<std::vector<double>> closed;   
+      std::vector<int> zerovec(MAPHEIGHT, 0);
+      std::vector<std::vector<int>> closed(MAPWIDTH, zerovec);
       std::vector<double> cost_vector;
       std::vector<double> dis_goal;
 
@@ -164,11 +169,8 @@ namespace ompl{
     }
 
     std::vector<double> hybridASTAR::return_discrete(double x, double y){
-      double resolution = 0.03;
-      //double dis_x = round(x);
-      //double dis_y = round(y);
-      double round_x = resolution*round(x/resolution);
-      double round_y = resolution*round(y/resolution);
+      double round_x = RESOLUTION*round(x/RESOLUTION);
+      double round_y = RESOLUTION*round(y/RESOLUTION);
       std::vector<double> discrete_coord = {round_x, round_y};
 
       return discrete_coord;
