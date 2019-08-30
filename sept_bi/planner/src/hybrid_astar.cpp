@@ -25,7 +25,6 @@
 
 #define RESOLUTION 0.03
 #define MAXDIST 6000 
-//#define MAX(a,b) (((a)>(b))?(a):(b))
 
 std::string map_id = "car_frame";
 namespace ompl{
@@ -228,7 +227,6 @@ namespace ompl{
           std::vector<double> discrete_next = return_discrete(new_X, new_Y);
         
           if(si_->isValid(next_state) && vector_contains(closed, discrete_next) == false){
-            //std::cout << "VALID STATE" << std::endl;
             next_path = current_path; 
             next_path.append(next_state);
 
@@ -243,22 +241,21 @@ namespace ompl{
 
             double heuristic1 = euclidean_distance(next_state, goal);
             double heuristic2 = dist[map_width*nyi+nxj]*res;
-            double heuristic_add = std::max(heuristic1, heuristic2);
+            double heuristic3 = 0.0;
+            double ori_weight = 0.1;
+            double close_dist = 0.15;
+            if (heuristic2 <= close_dist) {
+              heuristic3 = ori_weight*std::abs(goal_theta - new_Yaw);
+            } else {
+              heuristic3 = ori_weight*pi;
+            } 
+            
+            double heuristic_add = std::max(heuristic1, heuristic2)+heuristic3;
             double straightpunish = 0.02;
 
             cost = next_path.length()*drive_distance + heuristic_add + std::abs(i-2)*straightpunish;
 
-            // Consider orientation if the current position is less than 0.3 away
-            double ori_heuristic = 0.0;
-            double ori_weight = 0.1;
-            if (heuristic2 <= 0.15) {
-              ori_heuristic = std::abs(goal_theta - new_Yaw);
-              cost = cost + ori_heuristic*ori_weight;
-              //std::cout << "orientation heuristic: " << ori_heuristic << std::endl;
-            } else {
-              cost = cost + ori_heuristic*pi;
-            } 
-            // cost straight?
+            cost = cost + heuristic3;
             //std::cout << "NEW COST: " << cost << " Euclidean: " << heuristic1 << " T: " << heuristic2 << " add: " << heuristic_add << std::endl;
 
             costpath = insert(costpath, Costpath(next_path, cost));
@@ -308,7 +305,7 @@ namespace ompl{
       double theta_goal = goal->as<base::SE2StateSpace::StateType>()->getYaw();
       std::cout << "goal X: " << x_goal << " Y: " << y_goal << " Theta: " << theta_goal << " Ref: " << std::abs(std::fmod(theta1-theta_goal, 2*pi)) << std::endl;
       std::cout << "Orientation Difference: " << std::abs(std::fmod(theta1 - theta_goal, 2*pi)) << std::endl;
-      if((std::abs(x1 - x_goal)<=0.05) and (std::abs(y1 - y_goal)<=0.05) and (std::abs(std::fmod(theta1 - theta_goal, 2*pi))<=pi/6)){ // may be wrong..
+      if((std::abs(x1 - x_goal)<=0.05) and (std::abs(y1 - y_goal)<=0.05) and (std::abs(std::fmod(theta1 - theta_goal, 2*pi))<=pi/6)){
         return true;
       } else {
         return false;
