@@ -13,6 +13,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <cmath>
 
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
@@ -20,9 +21,6 @@
 #include <ompl/geometric/SimpleSetup.h>
 #include <ompl/control/PathControl.h>
 #include <ompl/geometric/PathGeometric.h>
-
-#include <cmath>
-
 
 std::string CarSetupComHandle::nodename;
 std::map<std::string,std::map<int, geometry_msgs::PoseWithCovarianceStamped::ConstPtr>> CarSetupComHandle::start;
@@ -558,8 +556,8 @@ bool CarSetupComHandle::CheckonMap (const std::string id, int seq, double x, dou
         double fy = -sin(yaw) * px + cos(yaw) * py;
         //if (fx < 0 || fy < 0)
             //return false;
-        int j = mp->info.width/2 + (int)(fx/res);
-        int i = mp->info.height/2 + (int)(fy/res);
+        int j = mp->info.width/2 + (int)(std::floor(fx/res));
+        int i = mp->info.height/2 + (int)(std::floor(fy/res));
         int w = mp -> info.width;
         if (i < mp->info.height && j < mp->info.width ) {
             if (mp->data[w*i+j] == 0){
