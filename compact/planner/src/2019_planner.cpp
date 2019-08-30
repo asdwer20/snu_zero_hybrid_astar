@@ -156,12 +156,12 @@ int main(int argc, char **argv){
             ss.setStartAndGoalStates(*start, *goal);
             ss.getSpaceInformation()->setStateValidityCheckingResolution(0.005);
             ss.setup();
-            std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
-            ss.print();
-            ob::PlannerStatus solved = ss.solve(100000);
+            //std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
+            //ss.print();
+            ob::PlannerStatus solved = ss.solve(5);
 
             if(solved){
-                std::cout << "Path found" << std::endl;
+                //std::cout << "Path found" << std::endl;
                 og::PathGeometric path = ss.getSolutionPath();
                 if(nodeactivation){
                     comh.PublishPath(map_id, mseq, path, withgear);
