@@ -58,7 +58,6 @@ namespace ompl{
       double goal_y = goal->as<base::SE2StateSpace::StateType>()->getY();
       double goal_theta = goal->as<base::SE2StateSpace::StateType>()->getYaw();
 
-      dis_goal = return_discrete(goal_x, goal_y);
       int dis_goal_x = MAPWIDTH/2 + (int)(std::floor(goal_x/RESOLUTION));
       int dis_goal_y = MAPHEIGHT/2 + (int)(std::floor(goal_y/RESOLUTION));
       
