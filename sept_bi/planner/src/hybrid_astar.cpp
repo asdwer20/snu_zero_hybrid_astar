@@ -254,8 +254,6 @@ namespace ompl{
             double straightpunish = 0.02;
 
             cost = next_path.length()*drive_distance + heuristic_add + std::abs(i-2)*straightpunish;
-
-            cost = cost + heuristic3;
             //std::cout << "NEW COST: " << cost << " Euclidean: " << heuristic1 << " T: " << heuristic2 << " add: " << heuristic_add << std::endl;
 
             costpath = insert(costpath, Costpath(next_path, cost));
