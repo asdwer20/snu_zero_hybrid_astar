@@ -250,8 +250,8 @@ namespace ompl{
             double heuristic1 = euclidean_distance(next_state, goal);
             double heuristic2 = dist[map_width*nyi+nxj]*res;
             double heuristic3 = 0.0;
-            double ori_weight = 0.2;
-            double close_dist = 0.2;
+            double ori_weight = 0.1;
+            double close_dist = 0.3;
             if (heuristic2 <= close_dist) {
               heuristic3 = ori_weight*std::abs(goal_theta - new_Yaw);
             } else {

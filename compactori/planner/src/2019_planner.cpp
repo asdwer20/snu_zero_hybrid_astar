@@ -127,10 +127,10 @@ int main(int argc, char **argv){
             // std::cout << "----------------debug end-----------------" << std::endl;
 
             ob::RealVectorBounds map_bounds(2);
-            map_bounds.setLow(0, -map_len_fix/2);
-            map_bounds.setLow(1, -map_wid_fix/2);
-            map_bounds.setHigh(0, +map_len_fix/2);
-            map_bounds.setHigh(1, +map_wid_fix/2);
+            map_bounds.setLow(0, input_map->info.origin.position.x);
+            map_bounds.setLow(1, input_map->info.origin.position.y);
+            map_bounds.setHigh(0, input_map->info.origin.position.x + map_wid_fix);
+            map_bounds.setHigh(1, input_map->info.origin.position.y + map_len_fix);
             //map_bounds.setLow(0, -3);
             //map_bounds.setLow(1, -3);
             //map_bounds.setHigh(0, 3);
