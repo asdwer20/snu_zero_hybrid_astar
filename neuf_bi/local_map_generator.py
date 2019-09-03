@@ -43,8 +43,8 @@ def mainloop():
     rate = rospy.Rate(10) # 10hz
 
     goal = PoseStamped()
-    goal.pose.position.x = -0.5
-    goal.pose.position.y = -2.5
+    goal.pose.position.x = 0.0
+    goal.pose.position.y = 5.0
 
     goalyaw = -0.7853981 
     qgoal = tf_conversions.transformations.quaternion_from_euler(0, 0, goalyaw)
@@ -70,7 +70,7 @@ def mainloop():
     simplemap.info.resolution = 0.03 #0.5
     simplemap.info.width = 200 #100
     simplemap.info.height = 200 #100
-    simplemap.info.origin.position.x = 0.0 #-25
+    simplemap.info.origin.position.x = -3.0 #-25
     simplemap.info.origin.position.y = 0.0 #-25
     simplemap.info.origin.orientation.x = qmap[0]
     simplemap.info.origin.orientation.y = qmap[1]
@@ -133,48 +133,16 @@ def makemap(height, width) :
         zrs[i][0] = 100
         zrs[i][1] = 100
         zrs[i][2] = 100
-        zrs[i][3] = 100
-        zrs[i][4] = 100
         zrs[i][-1] = 100
         zrs[i][-2] = 100
         zrs[i][-3] = 100
-        zrs[i][-4] = 100
-        zrs[i][-5] = 100
     for i in range(width) :
         zrs[0][i] = 100
         zrs[1][i] = 100
         zrs[2][i] = 100
-        zrs[3][i] = 100
-        zrs[4][i] = 100
         zrs[-1][i] = 100
         zrs[-2][i] = 100
         zrs[-3][i] = 100
-        zrs[-4][i] = 100
-        zrs[-5][i] = 100
-    for k in range(30, 35):
-       for l in range(80, 190):
-            zrs[l][k]=100
-    for k in range(125, 130):
-        for l in range(80, 180):
-            zrs[l][k]=100
-    for k in range(30, 130):
-        for l in range(80, 85):
-            zrs[l][k]=100
-    '''
-    zrs[height/2 : -1]=100
-    for k in range(25, 30):
-        for l in range(0, 80):
-            zrs[l][k]=100
-    for k in range(50, 55):
-        for l in range(20, 100):
-            zrs[l][k]=100
-    for k in range(75, 80):
-        for l in range(0, 80):
-            zrs[l][k]=100
-    for k in range(100, 105):
-        for l in range(20, 100):
-            zrs[l][k]=100
-    '''
     print zrs
     return zrs.flatten()
 
