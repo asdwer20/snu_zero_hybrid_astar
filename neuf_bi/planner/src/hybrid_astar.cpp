@@ -250,12 +250,14 @@ namespace ompl{
             double heuristic1 = euclidean_distance(next_state, goal);
             double heuristic2 = dist[map_width*nyi+nxj]*res;
             double heuristic3 = 0.0;
-            double ori_weight = 0.1;
-            double close_dist = 0.3;
+            double ori_weight = 0.2;
+            double close_dist = 0.2;
             if (heuristic2 <= close_dist) {
+              std::cout << "<<<<<<<<<<<< Orientation Heuristic ON <<<<<<<<<<<<<<<<" << std::endl;
               heuristic3 = ori_weight*std::abs(goal_theta - new_Yaw);
             } else {
-              heuristic3 = ori_weight*pi;
+              //heuristic3 = ori_weight*pi;
+              heuristic3 = 0;
             } 
             
             double heuristic_add = std::max(heuristic1, heuristic2)+heuristic3;
@@ -293,13 +295,15 @@ namespace ompl{
       double x1 = input->as<base::SE2StateSpace::StateType>()->getX();
       double y1 = input->as<base::SE2StateSpace::StateType>()->getY();
       double theta1 = input->as<base::SE2StateSpace::StateType>()->getYaw();
-      std::cout << "input X: " << x1 << " Y: " << y1 << " Theta: " << theta1 << std::endl;
+      std::cout <<"======================================================================" << std::endl;
+      std::cout << "INPUT X: " << x1 << " Y: " << y1 << " Theta: " << theta1 << std::endl;
 
       double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
       double theta_goal = goal->as<base::SE2StateSpace::StateType>()->getYaw();
-      std::cout << "goal X: " << x_goal << " Y: " << y_goal << " Theta: " << theta_goal << " Ref: " << std::abs(std::fmod(theta1-theta_goal, 2*pi)) << std::endl;
+      std::cout << "GOAL X: " << x_goal << " Y: " << y_goal << " Theta: " << theta_goal << " Ref: " << std::abs(std::fmod(theta1-theta_goal, 2*pi)) << std::endl;
       std::cout << "Orientation Difference: " << std::abs(std::fmod(theta1 - theta_goal, 2*pi)) << std::endl;
+      std::cout <<"======================================================================" << std::endl;
       if((std::abs(x1 - x_goal)<=0.05) and (std::abs(y1 - y_goal)<=0.05) and (std::abs(std::fmod(theta1 - theta_goal, 2*pi))<=pi/6)){
         return true;
       } else {

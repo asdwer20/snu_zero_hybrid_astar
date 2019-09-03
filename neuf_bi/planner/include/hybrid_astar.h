@@ -32,7 +32,7 @@ namespace ompl {
         double euclidean_distance(base::State *state, base::State *goal);
 
         std::vector<double> return_discrete(double x, double y);
-        std::vector<double> heading_changes = {-3*pi/12, -2*pi/12, -pi/12, 0, pi/12, 2*pi/12, 3*pi/12};
+        std::vector<double> heading_changes = {-3*pi/12, -2*pi/12, -1.5*pi/12, -pi/12, 0, pi/12, 1.5*pi/12, 2*pi/12, 3*pi/12};
 
         int return_lowest_cost_path(std::vector<double> input);
         

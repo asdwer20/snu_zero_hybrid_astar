@@ -43,7 +43,7 @@ def mainloop():
     rate = rospy.Rate(10) # 10hz
 
     goal = PoseStamped()
-    goal.pose.position.x = 2.8
+    goal.pose.position.x = -0.5
     goal.pose.position.y = -2.5
 
     goalyaw = -0.7853981 
@@ -152,7 +152,7 @@ def makemap(height, width) :
         zrs[-4][i] = 100
         zrs[-5][i] = 100
     for k in range(30, 35):
-        for l in range(80, 190):
+       for l in range(80, 190):
             zrs[l][k]=100
     for k in range(125, 130):
         for l in range(80, 180):
