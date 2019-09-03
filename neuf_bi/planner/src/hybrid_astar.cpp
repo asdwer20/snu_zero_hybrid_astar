@@ -99,7 +99,7 @@ namespace ompl{
       std::vector<int> zerovec(map_height, 0);
       std::vector<std::vector<int>> closed(map_width, zerovec);  
       int dis_goal_x = map_width/2 + (int)(std::floor(goal_x/res));
-      int dis_goal_y = map_height/2 + (int)(std::floor(goal_y/res));
+      int dis_goal_y = (int)(std::floor(goal_y/res));
       
       double path_cost = 0;
       costpath = insert(costpath, Costpath(current_path, path_cost));
@@ -123,7 +123,7 @@ namespace ompl{
       double fx = cos(yaw) * px + sin(yaw) * py;
       double fy = -sin(yaw) * px + cos(yaw) * py;
       int xj = map_width/2 + (int)(std::floor(fx/res));
-      int yi = map_height/2 + (int)(std::floor(fy/res));
+      int yi = (int)(std::floor(fy/res));
 
       std::vector<int> goal_state = { xj, yi };
       // std::cout << "x, y " << xj << " " << yi << std::endl; // for debug
@@ -208,7 +208,7 @@ namespace ompl{
         double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
         std::vector<double> disc_coord = return_discrete(current_x, current_y);
         int disc_coord_x = map_width/2 + (int)(std::floor(current_x/res));
-        int disc_coord_y = map_height/2 + (int)(std::floor(current_y/res));
+        int disc_coord_y = (int)(std::floor(current_y/res));
 
         
         double ds_X = disc_coord[0];
@@ -232,7 +232,7 @@ namespace ompl{
 
           //std::vector<double> discrete_next = return_discrete(new_X, new_Y);
           int discrete_next_x = map_width/2 + (int)(std::floor(new_X/res));
-          int discrete_next_y = map_height/2 + (int)(std::floor(new_Y/res));
+          int discrete_next_y = (int)(std::floor(new_Y/res));
  
           if(si_->isValid(next_state) && closed[discrete_next_x][discrete_next_y] == 0){
             next_path = current_path; 
@@ -245,7 +245,7 @@ namespace ompl{
             double nfx = cos(yaw) * npx + sin(yaw) * npy;
             double nfy = -sin(yaw) * npx + cos(yaw) * npy;
             int nxj = map_width/2 + (int)(std::floor(nfx/res));
-            int nyi = map_height/2 + (int)(std::floor(nfy/res));
+            int nyi = (int)(std::floor(nfy/res));
 
             double heuristic1 = euclidean_distance(next_state, goal);
             double heuristic2 = dist[map_width*nyi+nxj]*res;
