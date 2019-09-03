@@ -116,21 +116,24 @@ namespace ompl{
 
       double curr_x = goal->as<base::SE2StateSpace::StateType>()->getX();
       double curr_y = goal->as<base::SE2StateSpace::StateType>()->getY();
+      //std::cout << "curr_x: " << curr_x << " curr_y: " << curr_y << std::endl;
       double px = curr_x - input_map -> info.origin.position.x;
       double py = curr_y - input_map -> info.origin.position.y;
+      //std::cout << "px: " << px << " py: " << py << std::endl;
       tf2::Quaternion q(input_map -> info.origin.orientation.x, input_map -> info.origin.orientation.y, input_map -> info.origin.orientation.z, input_map -> info.origin.orientation.w);
       double yaw = tf2::impl::getYaw(q);
       double fx = cos(yaw) * px + sin(yaw) * py;
       double fy = -sin(yaw) * px + cos(yaw) * py;
-      int xj = map_width/2 + (int)(std::floor(fx/res));
+      //std::cout << "fx: " << fx << " fy: " << fy << std::endl;
+      int xj = (int)(std::floor(fx/res));
       int yi = (int)(std::floor(fy/res));
 
       std::vector<int> goal_state = { xj, yi };
-      // std::cout << "x, y " << xj << " " << yi << std::endl; // for debug
+      //std::cout << "x, y " << xj << " " << yi << std::endl; // for debug
       if (!valid_state_check(map1d2, map_width, map_height, goal_state)) {
         std::cout << "ERROR: Invalid Goal Pose" << std::endl;
       } else {
-        std::cout << "GOOD: Valid Goal Pose" << std::endl;
+        //std::cout << "GOOD: Valid Goal Pose" << std::endl;
         open_map.push_back(goal_state);
         dist[goal_state[0]+map_width*goal_state[1]] = 0;
         closed_map[goal_state[0]+map_width*goal_state[1]] = 1;
@@ -190,14 +193,14 @@ namespace ompl{
         
         //Condition of the current state examined is the goal state
         if(state_compare(current_state, goal)){ 
-          std::cout << "path found" << std::endl;
-          current_path.print(std::cout);
+          //std::cout << "path found" << std::endl;
+          //current_path.print(std::cout);
           auto cp(std::make_shared<geometric::PathGeometric>(si_));
           cp->append(current_path);
           base::PlannerSolution psol(cp);
           psol.setPlannerName(getName());
           pdef_->addSolutionPath(psol);
-          std::cout << std::endl << std::endl << std::endl;
+          //std::cout << std::endl << std::endl << std::endl;
           return base::PlannerStatus::EXACT_SOLUTION;
         }
 
@@ -244,7 +247,7 @@ namespace ompl{
             double npy = next_y - input_map -> info.origin.position.y;
             double nfx = cos(yaw) * npx + sin(yaw) * npy;
             double nfy = -sin(yaw) * npx + cos(yaw) * npy;
-            int nxj = map_width/2 + (int)(std::floor(nfx/res));
+            int nxj = (int)(std::floor(nfx/res));
             int nyi = (int)(std::floor(nfy/res));
 
             double heuristic1 = euclidean_distance(next_state, goal);
@@ -294,13 +297,13 @@ namespace ompl{
       double x1 = input->as<base::SE2StateSpace::StateType>()->getX();
       double y1 = input->as<base::SE2StateSpace::StateType>()->getY();
       double theta1 = input->as<base::SE2StateSpace::StateType>()->getYaw();
-      std::cout << "input X: " << x1 << " Y: " << y1 << " Theta: " << theta1 << std::endl;
+      //std::cout << "input X: " << x1 << " Y: " << y1 << " Theta: " << theta1 << std::endl;
 
       double x_goal = goal->as<base::SE2StateSpace::StateType>()->getX();
       double y_goal = goal->as<base::SE2StateSpace::StateType>()->getY();
       double theta_goal = goal->as<base::SE2StateSpace::StateType>()->getYaw();
-      std::cout << "goal X: " << x_goal << " Y: " << y_goal << " Theta: " << theta_goal << " Ref: " << std::abs(std::fmod(theta1-theta_goal, 2*pi)) << std::endl;
-      std::cout << "Orientation Difference: " << std::abs(std::fmod(theta1 - theta_goal, 2*pi)) << std::endl;
+      //std::cout << "goal X: " << x_goal << " Y: " << y_goal << " Theta: " << theta_goal << " Ref: " << std::abs(std::fmod(theta1-theta_goal, 2*pi)) << std::endl;
+      //std::cout << "Orientation Difference: " << std::abs(std::fmod(theta1 - theta_goal, 2*pi)) << std::endl;
       if((std::abs(x1 - x_goal)<=0.05) and (std::abs(y1 - y_goal)<=0.05) and (std::abs(std::fmod(theta1 - theta_goal, 2*pi))<=pi/6)){
         return true;
       } else {

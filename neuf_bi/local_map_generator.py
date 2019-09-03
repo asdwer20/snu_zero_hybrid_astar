@@ -129,6 +129,7 @@ def rlmcb(data) :
 
 def makemap(height, width) :
     zrs = np.zeros([height, width])
+    '''
     for i in range(height) :
         zrs[i][0] = 100
         zrs[i][1] = 100
@@ -143,6 +144,7 @@ def makemap(height, width) :
         zrs[-1][i] = 100
         zrs[-2][i] = 100
         zrs[-3][i] = 100
+    '''
     print zrs
     return zrs.flatten()
 
