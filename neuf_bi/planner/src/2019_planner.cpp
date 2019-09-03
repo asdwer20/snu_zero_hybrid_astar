@@ -136,8 +136,8 @@ int main(int argc, char **argv){
             //map_bounds.setHigh(0, 3);
             //map_bounds.setHigh(1, 3);
 
-            std::cout << "X Bounds: " << map_bounds.low[0] << ", " << map_bounds.high[0] << std::endl;
-            std::cout << "Y Bounds: " << map_bounds.low[1] << ", " << map_bounds.high[1] << std::endl;
+            //std::cout << "X Bounds: " << map_bounds.low[0] << ", " << map_bounds.high[0] << std::endl;
+            //std::cout << "Y Bounds: " << map_bounds.low[1] << ", " << map_bounds.high[1] << std::endl;
 
             space->as<ob::SE2StateSpace>()->setBounds(map_bounds);
             ob::OptimizationObjectivePtr obj = std::make_shared<ob::PathLengthOptimizationObjective>(space_info);
@@ -156,12 +156,12 @@ int main(int argc, char **argv){
             ss.setStartAndGoalStates(*start, *goal);
             ss.getSpaceInformation()->setStateValidityCheckingResolution(0.005);
             ss.setup();
-            std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
-            ss.print();
+            //std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
+            //ss.print();
             ob::PlannerStatus solved = ss.solve(10);
 
             if(solved){
-                std::cout << "Path found" << std::endl;
+                //std::cout << "Path found" << std::endl;
                 og::PathGeometric path = ss.getSolutionPath();
                 if(nodeactivation){
                     comh.PublishPath(map_id, mseq, path, withgear);
