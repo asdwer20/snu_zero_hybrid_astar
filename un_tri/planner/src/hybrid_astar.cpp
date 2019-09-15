@@ -25,9 +25,11 @@
 
 #define RESOLUTION 0.03
 #define MAXDIST 6000 
+#define ANGLE 24 
 
 std::string map_id = "car_frame";
 namespace ompl{
+
     hybridASTAR::hybridASTAR(const base::SpaceInformationPtr &si) : base::Planner(si, "hybrid astar"){
       specs_.approximateSolutions = true;
       specs_.optimizingPaths = true;
@@ -49,9 +51,13 @@ namespace ompl{
       } 
     }
 
+    double real_mod(double x, double y) {
+      return x - y * std::floor(x / y);
+    }
+
     base::PlannerStatus hybridASTAR::solve(const base::PlannerTerminationCondition &ptc){
       checkValidity(); 
-      std::vector<double> heading_changes = {-pi/4, -pi/8, 0, pi/8, pi/4};
+      std::vector<double> heading_changes = {-pi/4, -pi/8, 0, pi/8, pi/4, pi};
       bool PATH_FOUND = false;        
       list<Node*> costpath;
       //std::vector<double> dis_goal;
@@ -81,6 +87,7 @@ namespace ompl{
       double start_x = start->as<base::SE2StateSpace::StateType>()->getX();
       double start_y = start->as<base::SE2StateSpace::StateType>()->getY();
       double start_theta = start->as<base::SE2StateSpace::StateType>()->getYaw();
+      bool forth = true;
 
       //The open and closed states are slightly different from before as they are now complete 
       //paths instead of just single points
@@ -97,13 +104,15 @@ namespace ompl{
       int map_height = input_map->info.height;
       double res = input_map -> info.resolution;
       std::vector<int> zerovec(map_height, 0);
-      std::vector<std::vector<int>> closed(map_width, zerovec);  
+      std::vector<std::vector<int>> zerozerovec(map_width, zerovec);
+      std::vector<std::vector<std::vector<int>>> closed(ANGLE, zerozerovec); 
       int dis_goal_x = map_width/2 + (int)(std::floor(goal_x/res));
       int dis_goal_y = (int)(std::floor(goal_y/res));
+      int dis_goal_theta = std::max(0, (int)(std::floor(real_mod(goal_theta, 2*pi)/(2*pi)*ANGLE)));
       
       double path_cost = 0;
       costpath = insert(costpath, Costpath(current_path, path_cost));
-      closed[dis_goal_x][dis_goal_y] = 1;
+      closed[dis_goal_theta][dis_goal_x][dis_goal_y] = 1;
 
       base::State *current_state(si_->allocState());
       current_state = start;
@@ -190,6 +199,7 @@ namespace ompl{
         Costpath cpath = getMin(costpath)->data;
         current_path = cpath.path;
         current_state = current_path.getState(current_path.getStateCount()-1);
+        // if current_path == ...? forth != forth
         
         //Condition of the current state examined is the goal state
         if(state_compare(current_state, goal)){ 
@@ -209,17 +219,19 @@ namespace ompl{
         //Convert current state coordinates to discrete
         double current_x = current_state->as<base::SE2StateSpace::StateType>()->getX();
         double current_y = current_state->as<base::SE2StateSpace::StateType>()->getY();
+        double current_theta = current_state->as<base::SE2StateSpace::StateType>()->getYaw();
         std::vector<double> disc_coord = return_discrete(current_x, current_y);
         int disc_coord_x = map_width/2 + (int)(std::floor(current_x/res));
         int disc_coord_y = (int)(std::floor(current_y/res));
-
+        int disc_coord_theta = std::max(0, (int)(std::floor(real_mod(current_theta, 2*pi)/(2*pi)*ANGLE))); 
         
         double ds_X = disc_coord[0];
         double ds_Y = disc_coord[1];
 
         discrete_state->as<base::SE2StateSpace::StateType>()->setXY(ds_X, ds_Y); 
-        closed[disc_coord_x][disc_coord_y] = 1;
-        
+        closed[disc_coord_theta][disc_coord_x][disc_coord_y] = 1;
+
+        // if forth then only some of those 
         for(int i = 0; i < heading_changes.size(); i++){
           const auto cs = current_state->as<base::SE2StateSpace::StateType>();
           //std::cout << "=========================debug======================" << std::endl;
@@ -236,8 +248,9 @@ namespace ompl{
           //std::vector<double> discrete_next = return_discrete(new_X, new_Y);
           int discrete_next_x = map_width/2 + (int)(std::floor(new_X/res));
           int discrete_next_y = (int)(std::floor(new_Y/res));
+          int discrete_next_theta = std::max(0, (int)(std::floor(real_mod(new_Yaw, 2*pi)/(2*pi)*ANGLE)));
  
-          if(si_->isValid(next_state) && closed[discrete_next_x][discrete_next_y] == 0){
+          if(si_->isValid(next_state) && closed[discrete_next_theta][discrete_next_x][discrete_next_y] == 0){
             next_path = current_path; 
             next_path.append(next_state);
 
@@ -256,7 +269,7 @@ namespace ompl{
             double ori_weight = 0.1;
             double close_dist = 0.3;
             if (heuristic2 <= close_dist) {
-              heuristic3 = ori_weight*std::abs(goal_theta - new_Yaw);
+              heuristic3 = ori_weight*std::abs(std::fmod(goal_theta - new_Yaw, 2*pi));
             } else {
               //heuristic3 = ori_weight*pi;
               heuristic3 = 0.0;

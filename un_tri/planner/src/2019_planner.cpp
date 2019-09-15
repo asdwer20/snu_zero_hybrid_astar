@@ -158,7 +158,7 @@ int main(int argc, char **argv){
             ss.setup();
             //std::cout << "-------------------------------------SimpleSetup----------------------"<<std::endl;
             //ss.print();
-            ob::PlannerStatus solved = ss.solve(10);
+            ob::PlannerStatus solved = ss.solve(20);
 
             if(solved){
                 //std::cout << "Path found" << std::endl;
